@@ -50,19 +50,52 @@ const DumyBookmark = [
     }
 ];
 
+const dumyTags = [
+    {id:11, name:'개발'},
+    {id:6, name:'프랑스'},
+    {id:4, name: '외국'},
+]
+const TagComponent = (props: any) => {
+    const tag = props.tag;
+    return (
+        <button>{tag.name}</button>
+    )
+}
+//이거 북마크 태그 컴포넌트와 얼만큼 겹치는지?
+const Tags = (props: any) => {
+    const tags = props.tags
+    return (
+        <div>{tags.map((tag: Bookmark) => (
+            <TagComponent tag={tag} key={tag.id} />
+        ))}</div>
+    )
+}
+const EditTags = (props:any) => {
+    return (
+        <div><Tags tags={props.tags}/></div>
+    )
+}
 
+const BookMarkEdit = () => {
+    return(<div>
+        <textarea defaultValue={'북마크가 여기 써져있어야 함'}></textarea> 
+        <div>
+        <EditTags tags={dumyTags}/>
+        </div>
+    </div>)
+}
 
-
-const BookMark = () => {
+export const BookMark = () => {
     const bookmarks: Bookmark[] = DumyBookmark
     return (
         <div>
             <div>BookMark</div>
             <div>
+                <div>북마크 추가 블럭</div>
                 <Bookmarks bookmarks={bookmarks}/>
             </div>
         </div>
     )
 }
 
-export default BookMark
+//export default BookMark

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import BookMark from "../componenets/pages/main/bookmark.page";
+import { BookMark } from "../componenets/pages";
 
 
 export const LoggedInRouter = () => {
