@@ -1,6 +1,3 @@
-import { Bookmark } from "../../../interface/bookmark";
-import Bookmarks from "../../blocks/bookmark/bookmarks";
-
 
 
 export const userInfo = () => {

@@ -1,3 +1,7 @@
+import styled from 'styled-components';
+export const HeaderContainer = styled.div`
+    border: 1px solid;
+`
 const Header = () => {
     const MypageButton = () => {
         return (<button>마이페이지</button>)
@@ -10,12 +14,12 @@ const Header = () => {
         return tempCondition ? <MainButton /> : <MypageButton />
     }
     return (
-        <div>
+        <HeaderContainer>
             <span>Header Block</span> 
             <span>로그인시만 가능 - 태그검색</span>
             <span>{ButtonHandle()}</span>
             <button>로그아웃</button>
-        </div>
+        </HeaderContainer>
     )
 }
 
