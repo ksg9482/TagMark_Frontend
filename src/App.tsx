@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import AppRouter from "./routers/router";
 import './App.css';
 import Header from './componenets/blocks/header/header';
