@@ -1,60 +1,10 @@
+import styled from "styled-components";
+import { dumyBookmark } from "../../../dumy/dumy-bookmarks";
+import { dumyTags } from "../../../dumy/dumy-tags";
 import { Bookmark } from "../../../interface/bookmark";
 import Bookmarks from "../../blocks/bookmark/bookmarks";
+import SideBar from "../../blocks/sidebar/sidebar";
 
-const DumyBookmark = [
-    {
-        id: 1,
-        domain: 'https://www.naver.com',
-        path: '/temp/test',
-        tags: [
-            {
-                id: 1,
-                name: '요리'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 4,
-                name: '외국'
-            }
-        ]
-    },
-    {
-        id: 2,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
-        tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
-        ]
-    }
-];
-
-const dumyTags = [
-    {id:11, name:'개발'},
-    {id:6, name:'프랑스'},
-    {id:4, name: '외국'},
-]
 const TagComponent = (props: any) => {
     const tag = props.tag;
     return (
@@ -70,32 +20,37 @@ const Tags = (props: any) => {
         ))}</div>
     )
 }
-const EditTags = (props:any) => {
+const EditTags = (props: any) => {
     return (
-        <div><Tags tags={props.tags}/></div>
+        <div><Tags tags={props.tags} /></div>
     )
 }
 
 const BookMarkEdit = () => {
-    return(<div>
-        <textarea defaultValue={'북마크가 여기 써져있어야 함'}></textarea> 
+    return (<div>
+        <textarea defaultValue={'북마크가 여기 써져있어야 함'}></textarea>
         <div>
-        <EditTags tags={dumyTags}/>
+            <EditTags tags={dumyTags} />
         </div>
     </div>)
 }
 
+const BookmarkContainer = styled.div`
+  display: grid;
+  grid-template-columns: 20% auto;
+`;
+
+
 export const BookMark = () => {
-    const bookmarks: Bookmark[] = DumyBookmark
+    const bookmarks: Bookmark[] = dumyBookmark
     return (
-        <div>
-            <div>BookMark</div>
-            <div>
-                <div>북마크 추가 블럭</div>
-                <Bookmarks bookmarks={bookmarks}/>
-            </div>
-        </div>
+        <BookmarkContainer>
+            <SideBar />
+            <Bookmarks bookmarks={bookmarks} />
+        </BookmarkContainer>
     )
 }
+
+
 
 //export default BookMark
