@@ -1,47 +1,59 @@
+import styled from "styled-components";
+
 const EmailInput = () => {
     return (
-        <div>
+        <SignupInput>
             <div>이메일</div>
             <input type="email" required />
-        </div>
+        </SignupInput>
     )
 };
 
 const PasswordInput = () => {
     return (
-        <div>
+        <SignupInput>
             <div>비밀번호</div>
             <input type="password" required />
-        </div>
+        </SignupInput>
     )
 };
 
 const PasswordCheckInput = () => {
     return (
-        <div>
+        <SignupInput>
             <div>비밀번호확인</div>
             <input type="password" required />
-        </div>
+        </SignupInput>
     )
 };
 
 const SignUpButtonBlock = () => {
     return (
         <div>
-            <button>수정</button>
-            <button>삭제</button>
+            <button>취소</button>
+            <button>가입</button>
         </div>
     )
 }
 
+const SignupInput = styled.div`
+    display: grid;
+    grid-template-columns: 100px auto;
+`;
+const SignupContainer = styled.div`
+    display: grid;
+    gap: 5px;
+    justify-content: center;
+`;
+
 //모달 변경되게
 export const Signup = () => {
     return (
-        <div>
+        <SignupContainer>
             <EmailInput />
             <PasswordInput />
             <PasswordCheckInput />
             <SignUpButtonBlock />
-        </div>
+        </SignupContainer>
     )
 }

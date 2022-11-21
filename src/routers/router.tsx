@@ -10,8 +10,14 @@ const Router = (isLoggedIn: boolean) => {
     return isOauthLoggedIn || isLoggedIn ? true : false
   }
   useEffect(() => {
-  },[isOauthLoggedIn])
-  return loginCheck()? <LoggedInRouter /> : <LoggedOutRouter oauthLoginIsTrue={oauthLoginIsTrue}/>;
+  },
+    [isOauthLoggedIn])
+
+  return (
+    loginCheck()
+      ? <LoggedInRouter />
+      : <LoggedOutRouter oauthLoginIsTrue={oauthLoginIsTrue} />
+  );
 }
 
 export default Router;
