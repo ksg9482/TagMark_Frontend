@@ -19,12 +19,12 @@ const TagComponenet = (props:any) => {
         </div>
     )
 }
-const Tags = (props:any) => {
+const SideBarTags = (props:any) => {
     const tags:Tag[] = props.tags;
     return(
         <div>
             {tags.map((tag)=>(
-                <TagComponenet tag={tag}/>
+                <TagComponenet tag={tag} key={tag.name}/>
             ))}
         </div>
     )
@@ -42,7 +42,7 @@ const SideBar = () => {
     return (
         <SideBarContainer>
             <span>태그 검색[ㅁㄴㅇㄴ]</span>
-            <Tags tags={dumyTags}/>
+            <SideBarTags tags={dumyTags}/>
         </SideBarContainer>
     )
 }

@@ -1,8 +1,33 @@
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { ModalPage, UseModal } from '../../pages';
+import { ModalPage } from '../../pages';
 
+export interface UseModal {
+    isShowModal: boolean;
+    openModal:Function;
+    closeModal:Function;
+    toggleModal:Function;
+};
 
 const Header = () => {
+    const UseModal = () => {
+        const [isShowModal, setIsShowModal] = useState(false);
+
+        const openModal = useCallback(() => {
+            setIsShowModal(true);
+        }, [setIsShowModal]);
+
+        const closeModal = useCallback(() => {
+            setIsShowModal(false);
+        }, [setIsShowModal]);
+
+        const toggleModal = useCallback(() => {
+            setIsShowModal(prev => !prev);
+        }, [setIsShowModal]);
+
+        return { isShowModal, openModal, closeModal, toggleModal };
+    }
+    const useModal = UseModal()
     const MypageButton = () => {
         return (<button>마이페이지</button>)
     }
@@ -14,13 +39,12 @@ const Header = () => {
         return tempCondition ? <MainButton /> : <MypageButton />
     }
     const onlogin = () => {
-        // const test = UseModal().openModal()
-        // console.log(test)
+        useModal.openModal();
     }
     return (
         <HeaderContainer>
-            {/* {ModalPage().signupModal()} */}
-            <span>Header Block</span> 
+            {useModal.isShowModal ? <ModalPage useModal={useModal}/>: null}
+            <span>Header Block</span>
             <span>로그인시만 가능 - 태그검색</span>
             <span>{ButtonHandle()}</span>
             <button onClick={onlogin}>로그인/회원가입</button>

@@ -24,7 +24,7 @@ const ModalContentContainer = styled.div`
 `;
 
 
-export const ModalPage = (props:any) => {
+export const BookmarkModalPage = (props:any) => {
   const useModal = props.useModal
   const onSignup = ()=>{
     setModalContent(<Signup useModal={useModal}/>)

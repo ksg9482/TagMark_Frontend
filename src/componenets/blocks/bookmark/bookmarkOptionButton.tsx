@@ -6,6 +6,7 @@ const BookmarkButtonContainer = styled.div`
     grid-template-rows: 1fr 1fr;
 `
 const BookmarkOptionButton = styled.button`
+    border: none;
     border-radius: 5px;
     width: fit-content;
 `

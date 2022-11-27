@@ -1,508 +1,222 @@
 export const dumyBookmark = [
     {
         id: 1,
-        domain: 'https://www.naver.com',
-        path: '/temp/test',
+        url: 'https://www.naver.com/temp/testasdasdadasdasdasdasdasdasdasdasdsadasdasdasdsa',
         tags: [
-            {
-                id: 1,
-                name: '요리'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 4,
-                name: '외국'
-            }
+            { id: 1, name: '요리' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 4, name: '외국' }
         ]
     },
     {
         id: 2,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 3,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/213rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 4,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/23arr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 5,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/234rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 6,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/23zrr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 7,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/a23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 8,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temfp/2s3rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 9,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/tvemp/2z3rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 10,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temsp/2g3rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 11,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/tzemp/23qrr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 12,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/tsemp/23rhr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 13,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temps23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 14,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temasdp/23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 15,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/temp/qq3rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 16,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/tem23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 17,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/tezxcxzr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 18,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/teqwe3rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 19,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/tem7863rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 20,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/te1123rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 21,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/te1111mp/23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
     {
         id: 22,
-        domain: 'https://www.naver.com',
-        path: '/temp/23rr',
+        url: 'https://www.naver.com/te778mp/23rr',
         tags: [
-            {
-                id: 5,
-                name: '비건'
-            },
-            {
-                id: 2,
-                name: '야채'
-            },
-            {
-                id: 3,
-                name: '철판'
-            },
-            {
-                id: 6,
-                name: '프랑스'
-            }
+            { id: 5, name: '비건' },
+            { id: 2, name: '야채' },
+            { id: 3, name: '철판' },
+            { id: 6, name: '프랑스' }
         ]
     },
 ];

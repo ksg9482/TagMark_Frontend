@@ -1,5 +1,12 @@
 import styled from "styled-components";
+import { UseModal } from "../../../blocks/header/header";
 
+
+
+//모달 변경되게
+export const Login = (props:any) => {
+    const useModal:UseModal = props.useModal;
+    const onSignup = props.onSignup;
 const EmailInput = () => {
     return (
         <LoginInput>
@@ -19,13 +26,31 @@ const PasswordInput = () => {
 };
 
 
-
+const onClose = ()=>{
+    useModal.closeModal()
+    //useModal.closeModal()
+}
 const OAuthButtonBlock = () => {
     return (
         <div>
             <button>구글</button>
             <button>카카오</button>
         </div>
+    )
+}
+    return (
+        <LoginContainer>
+            <div>로고</div>
+            <LoginContainer>
+                <EmailInput />
+                <PasswordInput />
+                <button>로그인</button>
+                <button onClick={onClose}>취소</button>
+
+            </LoginContainer>
+            <div onClick={onSignup}>회원가입은 여기 클릭</div>
+            <OAuthButtonBlock />
+        </LoginContainer>
     )
 }
 const LoginInput = styled.div`
@@ -38,19 +63,3 @@ const LoginContainer = styled.div`
     gap: 5px;
     justify-content: center;
 `;
-
-//모달 변경되게
-export const Login = () => {
-    return (
-        <LoginContainer>
-            <div>로고</div>
-            <LoginContainer>
-                <EmailInput />
-                <PasswordInput />
-                <button>로그인</button>
-            </LoginContainer>
-            <div>회원가입은 여기 클릭</div>
-            <OAuthButtonBlock />
-        </LoginContainer>
-    )
-}
