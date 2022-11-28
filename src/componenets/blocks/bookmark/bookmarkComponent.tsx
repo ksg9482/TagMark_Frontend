@@ -16,7 +16,7 @@ const BookmarkComponent = (props: any) => {
             <BookmarkComponentInner>
                 <div className="main">
                     <UrlCintainer>{url}</UrlCintainer>
-                    <Tags tags={tags}/>
+                    <Tags tags={tags} getTagBookmark={props.getTagBookmark}/>
                 </div>
                 {focused ? <BookmarkButtonBlock/> : null}
             </BookmarkComponentInner>

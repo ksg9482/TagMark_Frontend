@@ -12,7 +12,7 @@ const Tags = (props: any) => {
     return (
         <TagsContainer>
             {tags.map((tag: Tag) => (
-            <TagComponent tag={tag} key={tag.name} />
+            <TagComponent tag={tag} key={tag.name} getTagBookmark={props.getTagBookmark}/>
         ))}
         </TagsContainer>
     )

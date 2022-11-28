@@ -51,7 +51,7 @@ const BookmarkManagebuttonContainer = styled.div`
   grid-template-columns: 50% 25% 25%;
 `;
 
-export const BookMark = (props:any) => {
+export const BookMark = (props: any) => {
     const isLogin = false//props.isLogin 
     //let bookmarks: Bookmark[];
     const [bookmarks, setBookmarks] = useState(
@@ -64,25 +64,41 @@ export const BookMark = (props:any) => {
             }]
         }]
     );
+    const getTagBookmark = (targetTags: string[]) => {
+        //태그 눌러가면서 원하는거 좁혀가려면?
+        const localBookmarks: Bookmark[] = JSON.parse(localStorage.getItem('local-bookmark-storage')!)
+        const bookmarkFilter = localBookmarks.filter((bookmark) => {
+            const tagFilter = bookmark.tags.filter((tag) => {
+                return targetTags.includes(tag.name)
+            })
+            if(1 <= tagFilter.length) return tagFilter
+        })
+        return setBookmarks(bookmarkFilter)
+    }
 
-    const getBookmark = async (isLogin:boolean) =>{
+    const getBookmark = async (isLogin: boolean) => {
         //로컬 스토리지에서
-        if(!isLogin) {
-            return setBookmarks(dumyBookmark)
-        } 
+        const localBookmarks: Bookmark[] = JSON.parse(localStorage.getItem('local-bookmark-storage')!)
+        if (!isLogin) {
+            return setBookmarks(localBookmarks)
+        }
         else {
             //서버 연결
             return setBookmarks(dumyBookmark)
         }
     }
 
-    
-    useEffect(()=>{
+
+    useEffect(() => {
+        //이거 리덕스로 옮겨서 관리? 아니면 최상단으로 올려서 프롭스로 내릴까?
+        if (!isLogin && !localStorage.getItem('local-bookmark-storage')) {
+            localStorage.setItem('local-bookmark-storage', JSON.stringify(dumyBookmark))
+        }
         getBookmark(isLogin)
-    })
+    }, [])
     return (
         <BookmarkContainer>
-            <SideBar />
+            <SideBar getTagBookmark={getTagBookmark}/>
             <div></div>
             <BookmarkManageContainer>
                 <BookmarkManagebuttonContainer>
@@ -90,7 +106,7 @@ export const BookMark = (props:any) => {
                     <button>북마크 전체보기</button>
                     <button>북마크 생성</button>
                 </BookmarkManagebuttonContainer>
-                <Bookmarks bookmarks={bookmarks} />
+                <Bookmarks bookmarks={bookmarks} getTagBookmark={getTagBookmark} />
             </BookmarkManageContainer>
         </BookmarkContainer>
     )

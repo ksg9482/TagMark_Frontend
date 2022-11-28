@@ -14,7 +14,7 @@ const Bookmarks = (props: any) => {
     return (
         <BookmarksContainer>
             {bookmarks.map((bookmark: Bookmark) => (
-                <BookmarkComponent bookmark={bookmark} key={bookmark.id} />
+                <BookmarkComponent bookmark={bookmark} key={bookmark.id} getTagBookmark={props.getTagBookmark}/>
             ))}
             <PageMoveBlock count={bookmarks.length} />
         </BookmarksContainer>
