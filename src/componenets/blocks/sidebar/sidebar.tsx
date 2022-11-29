@@ -60,7 +60,13 @@ const SideBarTags = (props: any) => {
 
 const SideBar = (props: any) => {
     const isLogin = false//props.isLogin 
-    const [tagObj, setTagObj] = useState({});
+    const [tagObj, setTagObj] = useState({
+        init:{
+            id: 0,
+            name: '',
+            count: 0
+        }
+    });
     const [tagWithCounts, setTagWithCounts] = useState(
         [{
             id: 0,
@@ -119,6 +125,7 @@ const SideBar = (props: any) => {
     const tagSearch = (tagObj:any, tagInput:string):TagCountObj[] => {
         
         const result:TagCountObj[] = [];
+        
         for(let tag in tagObj) {
             const tagName:string = tagObj[tag].name;
             if(tagName.includes(tagInput)){
@@ -133,6 +140,18 @@ const SideBar = (props: any) => {
         setTagInput(e.target.value);
     };
 
+    const inputRefresh = () => {
+        const inputValue:any = document.getElementById('side_bar_input')!
+        inputValue.value = '';
+        setTagInput('');
+        
+    }
+    const tagSearchRefresh = () => {
+        const originTagObj = setTagCount(tagObj)
+        inputRefresh()
+        setTagWithCounts(originTagObj)
+    }
+
 
     useEffect(() => {
         tagSearch(tagObj, tagInput)
@@ -143,8 +162,11 @@ const SideBar = (props: any) => {
 
     return (
         <SideBarContainer>
-            <span>태그 검색</span>
-            <SideBarInput type="text" defaultValue={tagInput} onChange={inputOnChange} />
+            <div>
+                <span>태그 검색</span>
+                <button onClick={tagSearchRefresh}>다 보기</button>
+            </div>
+            <SideBarInput type="text" id='side_bar_input' defaultValue={tagInput} onChange={inputOnChange} />
             <SideBarTags tagCountObjArr={tagWithCounts} getTagBookmark={props.getTagBookmark} />
         </SideBarContainer>
     )

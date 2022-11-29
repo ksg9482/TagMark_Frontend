@@ -7,18 +7,19 @@ import BookmarkButtonBlock from "./bookmarkOptionButton"
 
 const BookmarkComponent = (props: any) => {
     const [focused, setFocused] = useState(false);
+    const id = props.id
     const bookmark = props.bookmark;
     const tags = bookmark.tags;
     const url = bookmark.url;
 
     return (
-        <BookmarkComponentContainer onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
+        <BookmarkComponentContainer id={id} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
             <BookmarkComponentInner>
                 <div className="main">
                     <UrlCintainer>{url}</UrlCintainer>
                     <Tags tags={tags} getTagBookmark={props.getTagBookmark}/>
                 </div>
-                {focused ? <BookmarkButtonBlock/> : null}
+                {focused ? <BookmarkButtonBlock id={id} onBookmarkDelete={props.onBookmarkDelete}/> : null}
             </BookmarkComponentInner>
         </BookmarkComponentContainer>
 
