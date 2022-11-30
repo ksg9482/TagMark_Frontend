@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BookmarkAreaContainer, MyDataContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
 
 const dumyBookmarkCount = 21;
 const dumyTagCount = 107;
@@ -6,39 +7,7 @@ const dummyUserData = {
     email:'dumy@email.com'
 }
 
-const UserInfoContainer = styled.div`
-    display: grid;
-    grid-template-rows: 50% 50%;
-    height: 90vh;
-    gap: 5px;
-`;
-const SubContainer = styled.div`
-    display: grid;
-    grid-template-columns: 50% 50%;
-    gap: 2px;
-`;
 
-const BookmarkAreaContainer = styled.div`
-    display: grid;
-    align-items: center;
-    border: 2px solid;
-    height: 100%;
-    
-`;
-
-const TagAreaContainer = styled.div`
-    display: grid;
-    align-items: center;
-    border: 2px solid;
-    height: 100%;
-`;
-
-const MyDataContainer = styled.div`
-    display: grid;
-    align-items: center;
-    border: 2px solid;
-    height: 100%;
-`;
 export const UserInfo = () => {
     return (
         <UserInfoContainer>

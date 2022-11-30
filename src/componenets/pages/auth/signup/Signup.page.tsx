@@ -1,17 +1,10 @@
 import styled from "styled-components";
-import { UseModal } from "../../../blocks/header/header";
+import { UseModal } from "../../../../interface/header";
+import { SignupContainer, SignupInput } from "./style";
 
 
 
-const SignupInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
-`;
-const SignupContainer = styled.div`
-    display: grid;
-    gap: 5px;
-    justify-content: center;
-`;
+
 
 //모달 변경되게
 export const Signup = (props:any) => {

@@ -1,15 +1,12 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ModalPage } from '../../pages';
+import { HeaderContainer } from './style';
 
-export interface UseModal {
-    isShowModal: boolean;
-    openModal:Function;
-    closeModal:Function;
-    toggleModal:Function;
-};
 
-const Header = () => {
+
+const Header = (props:any) => {
+    const [isLogin, setIsLogin] = useState(false)
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
 
@@ -38,26 +35,39 @@ const Header = () => {
         const tempCondition = true;
         return tempCondition ? <MainButton /> : <MypageButton />
     }
+    const loginedHeader = () => {
+        return (
+            <HeaderContainer>
+            {useModal.isShowModal ? <ModalPage useModal={useModal}/>: null}
+            <span>Logined Header</span>
+            <span>태그검색가능</span>
+            <span>{ButtonHandle()}</span>
+            <button>로그인 토글 ON</button>
+        </HeaderContainer>
+        )
+    }
+    const unLoginHeader = () => {
+        return (
+            <HeaderContainer>
+            {useModal.isShowModal ? <ModalPage useModal={useModal}/>: null}
+            <span>Unlogin Header</span>
+            <span>태그검색불가</span>
+            <button onClick={onlogin}>로그인/회원가입</button>
+            <span>{ButtonHandle()}</span>
+            <button>로그인 토글 OFF</button>
+        </HeaderContainer>
+        )
+    }
     const onlogin = () => {
         useModal.openModal();
     }
-    return (
-        <HeaderContainer>
-            {useModal.isShowModal ? <ModalPage useModal={useModal}/>: null}
-            <span>Header Block</span>
-            <span>로그인시만 가능 - 태그검색</span>
-            <span>{ButtonHandle()}</span>
-            <button onClick={onlogin}>로그인/회원가입</button>
-            <button>로그아웃</button>
-        </HeaderContainer>
-    )
+    useEffect(()=>{
+        setIsLogin(props.isLogin)
+    },[])
+    //이것도 컴포넌트로 만들어서 컴포넌트 반환하게 통일
+    return isLogin? loginedHeader() : unLoginHeader()
 };
 
-const HeaderContainer = styled.div`
-    position: fixed;
-    width: 100%;
-    border: 1px solid;
-    background-color: white;
-`
+
 
 export default Header;

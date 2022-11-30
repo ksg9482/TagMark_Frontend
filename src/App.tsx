@@ -1,7 +1,7 @@
 import React from 'react';
 import AppRouter from "./routers/router";
 import './App.css';
-import Header from './componenets/blocks/header/header';
+import Header from './componenets/blocks/header/Header';
 import styled from 'styled-components';
 const getJwtToken = () => {
   if (localStorage.getItem('accessToken') === 'undefined') {
@@ -14,7 +14,7 @@ const isLoggedIn = getJwtToken() ? true : false;
 function App() {
   return (
     <div className="App">
-      <Header />
+      <Header isLogin={isLoggedIn}/>
       <MainContainer >
         <div></div>
         {AppRouter(isLoggedIn)}

@@ -1,20 +1,19 @@
 import styled from "styled-components"
 import { Bookmark } from "../../../interface/bookmark"
-import BookmarkComponent from "./bookmarkComponent"
+import BookmarkComponent from "./BookmarkComponent"
+import { BookmarksContainer } from "./style"
 
-const BookmarksContainer = styled.div`
-    display: grid;
-    gap: 5px;
-`;
+
 
 
 //20개씩 묶기. 페이지네이션
 const Bookmarks = (props: any) => {
     const bookmarkView: Bookmark[] = props.bookmarkView
+    
     return (
         <BookmarksContainer>
-            {bookmarkView.map((bookmark: Bookmark, i) => (
-                <BookmarkComponent id={bookmark.id} bookmark={bookmark} key={bookmark.id} getTagBookmark={props.getTagBookmark} onBookmarkDelete={props.onBookmarkDelete}/>
+            {bookmarkView.map((bookmark: Bookmark) => (
+                <BookmarkComponent id={bookmark.id} bookmark={bookmark} key={bookmark.id} getTagBookmark={props.getTagBookmark} onBookmarkDelete={props.onBookmarkDelete} editSave={props.editSave}/>
             ))}
         </BookmarksContainer>
     )

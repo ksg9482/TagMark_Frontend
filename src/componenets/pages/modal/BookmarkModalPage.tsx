@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { UseModal } from "../../blocks/header/header";
-import { Login } from "../auth/login/login.page";
-import { Signup } from "../auth/signup/signup.page";
-import { CreateBookmarkData } from "../main/bookmark.page";
+import { CreateBookmarkData } from "../../../interface/bookmark";
+import { UseModal } from "../../../interface/header";
+import { Login } from "../auth/login/Login.page";
+import { Signup } from "../auth/signup/Signup.page";
 
 const ModalContainer = styled.div`
   //position: absolute;
@@ -67,6 +67,7 @@ export const CreateBookmark = (props: any) => {
     const tags = tagStringToArray(createInput.tags);
     const createBookmark:CreateBookmarkData = {url, tags}
     setNewBookmark(createBookmark)
+    useModal.closeModal()
   }
   return (
     <CreateBookmarkContainer>
@@ -84,11 +85,6 @@ export const CreateBookmark = (props: any) => {
 }
 export const BookmarkModalPage = (props: any) => {
   const useModal = props.useModal
-
-  const onBookmarkEdit = () => {
-    setModalContent(<EditBookmark useModal={useModal} />)
-  }
-  //어차피 모달창 내에서 이동 안하므로 여기엔 필요없다.
 
   const [modalContent, setModalContent] = useState(<CreateBookmark useModal={useModal} setNewBookmark={props.setNewBookmark} />)
 

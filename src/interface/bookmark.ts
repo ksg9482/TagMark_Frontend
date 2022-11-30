@@ -5,3 +5,9 @@ export interface Bookmark {
     url: string;
     tags: Tag[]
 }
+
+export interface CreateBookmarkData {
+    id?: any;
+    url: string;
+    tags: string[];
+};

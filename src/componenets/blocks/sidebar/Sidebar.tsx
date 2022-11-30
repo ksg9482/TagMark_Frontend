@@ -2,25 +2,18 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { dumyTags } from '../../../dumy/dumy-tags';
 import { Bookmark } from '../../../interface/bookmark';
-export const SideBarContainer = styled.div`
-    border: 1px solid;
-    margin-right: 5px;
-`;
+import { Tag, TagCountObj } from '../../../interface/tag';
+import { SideBarContainer, SideBarInput } from './style';
 
-interface Tag {
-    id: number;
-    name: string;
-}
-interface TagCountObj extends Tag {
-    count: number;
-}
+
+
 
 
 const SideBarTagComponenet = (props: any) => {
     const getTagBookmark = props.getTagBookmark;
     const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const targetTagName = e.currentTarget.querySelector('.tag_name')?.innerHTML
-        getTagBookmark([targetTagName])
+        getTagBookmark([targetTagName], 'origin')
     }
     const tag: TagCountObj = props.tagWithCount;
 
@@ -35,9 +28,7 @@ const SideBarTagComponenet = (props: any) => {
 
 
 const SideBarTags = (props: any) => {
-
     const tagCountObjArr: TagCountObj[] = props.tagCountObjArr;
-
 
     return (
         <div>
@@ -60,6 +51,7 @@ const SideBarTags = (props: any) => {
 
 const SideBar = (props: any) => {
     const isLogin = false//props.isLogin 
+    const [originBookmarks, setOriginBookmarks] = useState([{id:0, url:'', tags:[{id:0, name:''}]}])
     const [tagObj, setTagObj] = useState({
         init:{
             id: 0,
@@ -106,11 +98,12 @@ const SideBar = (props: any) => {
 
     const tagCountObjArr = setTagCount(tagWithCounts);
 
-    const getTags = async (isLogin: boolean) => {
-        //로컬 스토리지에서
+    const getTags = async (isLogin: boolean, bookmark:any) => {
+        //로컬 스토리지에서. 뷰는 페이지네이션 적용해서 직접가져와야 정확
         if (!isLogin) {
             const localBookmarks: Bookmark[] = JSON.parse(localStorage.getItem('local-bookmark-storage')!)
-            const localTagArr: Tag[] = createLocalTagArr(localBookmarks)
+            
+            const localTagArr: Tag[] = createLocalTagArr(localBookmarks)//createLocalTagArr(originBookmarks)
             const createdTagObj = createTagObj(localTagArr)
             setTagObj(createdTagObj);
             const tagCountObjArr = setTagCount(createdTagObj);
@@ -130,10 +123,10 @@ const SideBar = (props: any) => {
             const tagName:string = tagObj[tag].name;
             if(tagName.includes(tagInput)){
                 result.push(tagObj[tag])
-            }
-        }
-        setTagWithCounts(result)
-        return result
+            };
+        };
+        setTagWithCounts(result);
+        return result;
     }
 
     const inputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,9 +150,11 @@ const SideBar = (props: any) => {
         tagSearch(tagObj, tagInput)
     }, [tagInput])
     useEffect(() => {
-        getTags(isLogin)
-    }, [])
-
+        getTags(isLogin, props.originBookmarks)
+    }, [originBookmarks])
+    useEffect(()=>{
+        setOriginBookmarks(props.originBookmarks)
+    })
     return (
         <SideBarContainer>
             <div>
@@ -174,6 +169,3 @@ const SideBar = (props: any) => {
 
 export default SideBar;
 
-const SideBarInput = styled.input`
-    max-width: 90%;
-`;

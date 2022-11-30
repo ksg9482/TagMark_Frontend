@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { UseModal } from "../../../blocks/header/header";
+import { UseModal } from "../../../../interface/header";
+import { LoginContainer, LoginInput } from "./style";
 
 
 
@@ -53,13 +54,3 @@ const OAuthButtonBlock = () => {
         </LoginContainer>
     )
 }
-const LoginInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
-`;
-
-const LoginContainer = styled.div`
-    display: grid;
-    gap: 5px;
-    justify-content: center;
-`;

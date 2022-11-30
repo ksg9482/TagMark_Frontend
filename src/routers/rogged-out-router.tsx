@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {BookMark, Login, Signup} from "../componenets/pages"
-import { UserInfo } from "../componenets/pages/userinfo/userinfo.page";
+import { UserInfo } from "../componenets/pages/userinfo/UserInfo.page";
 
 export const LoggedOutRouter = (props: any) => {
     const { oauthLoginIsTrue } = props;
