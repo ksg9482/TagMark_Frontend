@@ -1,5 +1,13 @@
 import styled from "styled-components";
+import { UseModal } from "../../../../interface/header";
+import { LoginContainer, LoginInput } from "./style";
 
+
+
+//모달 변경되게
+export const Login = (props:any) => {
+    const useModal:UseModal = props.useModal;
+    const onSignup = props.onSignup;
 const EmailInput = () => {
     return (
         <LoginInput>
@@ -19,7 +27,10 @@ const PasswordInput = () => {
 };
 
 
-
+const onClose = ()=>{
+    useModal.closeModal()
+    //useModal.closeModal()
+}
 const OAuthButtonBlock = () => {
     return (
         <div>
@@ -28,19 +39,6 @@ const OAuthButtonBlock = () => {
         </div>
     )
 }
-const LoginInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
-`;
-
-const LoginContainer = styled.div`
-    display: grid;
-    gap: 5px;
-    justify-content: center;
-`;
-
-//모달 변경되게
-export const Login = () => {
     return (
         <LoginContainer>
             <div>로고</div>
@@ -48,8 +46,10 @@ export const Login = () => {
                 <EmailInput />
                 <PasswordInput />
                 <button>로그인</button>
+                <button onClick={onClose}>취소</button>
+
             </LoginContainer>
-            <div>회원가입은 여기 클릭</div>
+            <div onClick={onSignup}>회원가입은 여기 클릭</div>
             <OAuthButtonBlock />
         </LoginContainer>
     )

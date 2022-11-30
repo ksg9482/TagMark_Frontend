@@ -1,4 +1,8 @@
 export interface Tag {
-    id: number;
+    id: any;
     name: string;
+}
+
+export interface TagCountObj extends Tag {
+    count: number;
 }
