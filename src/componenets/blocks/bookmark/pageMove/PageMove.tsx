@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageNums } from "./PageNums";
 import { PageButtonsContainer } from "./style";
 
@@ -23,7 +23,9 @@ export const PageMove = (props: any) => {
 
         onMoveClick(move)
     };
-    console.log(pageFocus)
+    useEffect(()=>{
+        setpageFocus(props.currentPageNum)
+    })
     return (
         <PageButtonsContainer>
             <div onClick={onClick(firstPageNum)}>맨앞</div>

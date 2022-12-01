@@ -127,12 +127,22 @@ export const BookMark = (props: any) => {
         }
         //서버 저장
     };
+    //다 뒤로 한칸씩 미느니 아예 다시 만드는게 편할까?
+    //생성하면 어차피 1로 가니까 1번의 맨뒤 하나 삭제하고 앞에 삽입. 
+    const updateBookmarkView = (bookmarks:Bookmark[]) => {
+        setBookmarkView(bookmarks)
+    }
+    const updateOriginBookmark = (bookmarks:Bookmark[]) => {
+        setOriginBookmarks(bookmarks)
+    }
     const bookmarkSequence = (newBookmarks: Bookmark[]) => {
-        setBookmarkView(newBookmarks)
-        setOriginBookmarks(newBookmarks)
+        updateOriginBookmark(newBookmarks)
         saveNewBookmarkStorage(newBookmarks)
+        updateBookmarkView(newBookmarks)
+        //currentPageRefresh(1)
     }
     const setNewBookmark = (createBookmarkData: CreateBookmarkData) => {
+        console.log(originBookmarks)
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
         const url = createBookmarkData.url
@@ -142,7 +152,8 @@ export const BookMark = (props: any) => {
 
         //태그 중복 방지는?
         const newBookmarkArr: Bookmark[] = [{ id, url, tags }]
-        newBookmarkArr.push(...bookmarkView)
+        //newBookmarkArr.push(...bookmarkView)
+        newBookmarkArr.push(...originBookmarks)
         bookmarkSequence(newBookmarkArr)
         //처리 끝난 데이터를 받아 로컬 혹은 DB저장. view, origin 갱신
     };
@@ -186,8 +197,9 @@ export const BookMark = (props: any) => {
     }
 
     const pagenationNum = (num:number) => {
-        setCurrentPageNum(num)
         console.log('pagenationNum-', num)
+        setCurrentPageNum(num)
+        currentPageRefresh(num)
     } 
     useEffect(() => {
         setIsLogin(props.isLogin)
@@ -200,9 +212,24 @@ export const BookMark = (props: any) => {
         }
         getBookmark(isLogin)
     }, [])
+    //세션스토리지 관련을 함수로 묶자
+    const currentPageRefresh = (currentPage:number) => {
+     
+        window.sessionStorage.removeItem('current-page')
+        window.sessionStorage.setItem('current-page', String(currentPage))
+    };
+    
+    useEffect(()=>{
+        const isPage =  Number(window.sessionStorage.getItem('current-page'));
+        if(isPage) {
+            setCurrentPageNum(isPage)
+        }
+        else {
+            window.sessionStorage.setItem('current-page', String(currentPageNum));
+        }
+    },[])
 
     useEffect(()=>{
-        console.log(originBookmarks)
         createBookmarkView(setLocalPagenation(originBookmarks, 20),currentPageNum -1)
     },[originBookmarks, currentPageNum])
 //여기서 사이드바로 데이터를 내려줘야 한다.
@@ -218,7 +245,7 @@ export const BookMark = (props: any) => {
                 </BookmarkManagebuttonContainer>
                 {useModal.isShowModal ? <BookmarkModalPage useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
                 <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave}/>
-                <PageMove count={localBookmarkPage.length} pagenationNum={pagenationNum}/>
+                <PageMove count={localBookmarkPage.length} pagenationNum={pagenationNum} currentPageNum={currentPageNum}/>
             </BookmarkManageContainer>
         </BookmarkContainer>
     )

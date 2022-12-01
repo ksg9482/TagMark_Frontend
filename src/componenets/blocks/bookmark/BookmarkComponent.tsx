@@ -38,7 +38,14 @@ const BookmarkComponent = (props: any) => {
         setEditOn(true)
     };
     const onComplete = () => {
-        const tagArr = tagStrToArr(editInput.tags)
+        
+        if(!Array.isArray(editInput.tags)){
+
+        }
+        const tagArr = Array.isArray(editInput.tags)
+        ? editInput.tags 
+        : tagStrToArr(editInput.tags);
+        
         const bookmarkForm = {url:editInput.url, tags:tagArr}
         setView(bookmarkForm)
         editSave(bookmark.id, bookmarkForm)
