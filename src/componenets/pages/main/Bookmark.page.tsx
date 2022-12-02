@@ -4,6 +4,7 @@ import { dumyBookmark } from "../../../dumy/dumy-bookmarks";
 import { dumyTags } from "../../../dumy/dumy-tags";
 import { Bookmark, CreateBookmarkData } from "../../../interface/bookmark";
 import { Tag } from "../../../interface/tag";
+import { secure } from "../../../utils/secure"
 import Bookmarks from "../../blocks/bookmark/Bookmarks";
 import { PageMove } from "../../blocks/bookmark/pageMove/PageMove";
 import SideBar from "../../blocks/sidebar/Sidebar";
@@ -63,7 +64,12 @@ export const BookMark = (props: any) => {
             })
             if (1 <= tagFilter.length) return tagFilter
         })
-        return setBookmarkView(bookmarkFilter)
+        //페이지네이션으로 안나옴
+        //console.log(bookmarkFilter.length, bookmarkFilter)
+        setLocalBookmarkPage(setLocalPagenation(bookmarkFilter, 20))
+            // //해당하는페이지 보여줌
+            createBookmarkView(setLocalPagenation(bookmarkFilter, 20),currentPageNum -1)
+        //return setBookmarkView(bookmarkFilter)
     };
 
     const bookmarkAdapter = (bookmark: any): Bookmark[] => {
@@ -96,7 +102,7 @@ export const BookMark = (props: any) => {
     }
     const getBookmark = async (isLogin: boolean) => {
         //로컬 스토리지에서
-        const localBookmarks = localStorage.getItem('local-bookmark-storage')!
+        const localBookmarks = secure().local().getItem('local-bookmark-storage')!
         const bookmark = bookmarkAdapter(localBookmarks);
         if (!isLogin) {
             //원본저장
@@ -122,8 +128,8 @@ export const BookMark = (props: any) => {
     };
     const saveNewBookmarkStorage = (newBookmarkData: Bookmark | Bookmark[]) => {
         if (!isLogin) {
-            localStorage.removeItem('local-bookmark-storage')
-            localStorage.setItem('local-bookmark-storage', JSON.stringify(newBookmarkData))
+            secure().local().removeItem('local-bookmark-storage')
+            secure().local().setItem('local-bookmark-storage', JSON.stringify(newBookmarkData))
         }
         //서버 저장
     };
@@ -207,8 +213,8 @@ export const BookMark = (props: any) => {
 
     useEffect(() => {
         //이거 리덕스로 옮겨서 관리? 아니면 최상단으로 올려서 프롭스로 내릴까?
-        if (!isLogin && !localStorage.getItem('local-bookmark-storage')) {
-            localStorage.setItem('local-bookmark-storage', JSON.stringify(dumyBookmark))
+        if (!isLogin && !secure().local().getItem('local-bookmark-storage')) {
+            secure().local().setItem('local-bookmark-storage', JSON.stringify(dumyBookmark))
         }
         getBookmark(isLogin)
     }, [])

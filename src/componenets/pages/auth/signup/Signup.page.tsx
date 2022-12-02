@@ -1,5 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { UseModal } from "../../../../interface/header";
+import { secure } from "../../../../utils/secure";
 import { SignupContainer, SignupInput } from "./style";
 
 
@@ -7,54 +9,63 @@ import { SignupContainer, SignupInput } from "./style";
 
 
 //모달 변경되게
-export const Signup = (props:any) => {
-    const useModal:UseModal = props.useModal;
+export const Signup = (props: any) => {
+    const useModal: UseModal = props.useModal;
+    const [signupInput, setSignupInput] = useState({ email: '', password: '', passwordCheck: '' })
 
-    const EmailInput = () => {
-        return (
-            <SignupInput>
-                <div>이메일</div>
-                <input type="email" required />
-            </SignupInput>
-        )
+    const onsignupInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        setSignupInput({ ...signupInput, [key]: e.target.value });
     };
-    
-    const PasswordInput = () => {
-        return (
-            <SignupInput>
-                <div>비밀번호</div>
-                <input type="password" required />
-            </SignupInput>
-        )
-    };
-    
-    const PasswordCheckInput = () => {
-        return (
-            <SignupInput>
-                <div>비밀번호확인</div>
-                <input type="password" required />
-            </SignupInput>
-        )
-    };
-    const onClose = ()=>{
+
+    const onClose = () => {
         useModal.closeModal()
-        //useModal.closeModal()
+    }
+
+    const sendSignupData = (signupData:any) => {
+        //서버전송.
+        const temp = secure().local().setItem('user', JSON.stringify(signupData))
+        return 'save'
+    }
+    const signupDataForm = (signupInput:{
+        email: string;
+        password: string;
+        passwordCheck: string;
+    }) => {
+        Reflect.deleteProperty(signupInput,'passwordCheck')
+        return signupInput
+    }
+    const onSignup = () => {
+        sendSignupData(signupDataForm(signupInput))
+        useModal.closeModal()
+
     }
     const SignUpButtonBlock = () => {
         return (
             <div>
                 <button onClick={onClose}>취소</button>
-                <button>가입</button>
+                <button onClick={onSignup}>가입</button>
             </div>
         )
     }
-
+    const passwordValid = ()=> {
+        //비번과 비번확인 비교
+    }
     return (
         <SignupContainer>
-            <EmailInput />
-            <PasswordInput />
-            <PasswordCheckInput />
+            <SignupInput>
+                <div>이메일</div>
+                <input type="email" onChange={onsignupInput('email')} required />
+            </SignupInput>
+            <SignupInput>
+                <div>비밀번호</div>
+                <input type="password" onChange={onsignupInput('password')} required />
+            </SignupInput>
+            <SignupInput>
+                <div>비밀번호확인</div>
+                <input type="password" onChange={onsignupInput('passwordCheck')} required />
+            </SignupInput>
             <SignUpButtonBlock />
         </SignupContainer>
     )
-}
+};
+

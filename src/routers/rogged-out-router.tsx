@@ -8,8 +8,6 @@ export const LoggedOutRouter = (props: any) => {
     const isLogin = false
 //가입, 로그인창은 모달로 나옴->같은 모달 규격 공유. baseModal 만들고 HOC로 묶기
     return (
-        <Router>
-            {/* <Header isLogin={false} /> */}
             <Routes>
                 {/* <Route path="/" element={<Login />} /> */}
                 <Route path="/" element={<BookMark isLogin={isLogin} />} />
@@ -17,6 +15,5 @@ export const LoggedOutRouter = (props: any) => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/me" element={<UserInfo />} />
             </Routes>
-        </Router>
     )
 }

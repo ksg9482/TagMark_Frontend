@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { dumyTags } from '../../../dumy/dumy-tags';
 import { Bookmark } from '../../../interface/bookmark';
 import { Tag, TagCountObj } from '../../../interface/tag';
+import { secure } from '../../../utils/secure';
 import { SideBarContainer, SideBarInput } from './style';
 
 
@@ -101,7 +102,7 @@ const SideBar = (props: any) => {
     const getTags = async (isLogin: boolean, bookmark:any) => {
         //로컬 스토리지에서. 뷰는 페이지네이션 적용해서 직접가져와야 정확
         if (!isLogin) {
-            const localBookmarks: Bookmark[] = JSON.parse(localStorage.getItem('local-bookmark-storage')!)
+            const localBookmarks: Bookmark[] = JSON.parse(secure().local().getItem('local-bookmark-storage')!)
             
             const localTagArr: Tag[] = createLocalTagArr(localBookmarks)//createLocalTagArr(originBookmarks)
             const createdTagObj = createTagObj(localTagArr)
