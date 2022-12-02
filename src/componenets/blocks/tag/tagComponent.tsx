@@ -8,7 +8,7 @@ const TagComponent = (props: any) => {
     const tag = props.tag;
     const onClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        getTagBookmark([e.currentTarget.innerText], 'view')
+        getTagBookmark([e.currentTarget.innerText], 'origin')
     }
     return (
         <TagButton onClick={onClick}>{tag.name}</TagButton>
