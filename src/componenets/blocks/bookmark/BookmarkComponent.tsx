@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components"
 import { Tag } from "../../../interface/tag";
+import { secure } from "../../../utils/secure";
 import Tags from "../tag/tags"
 import BookmarkOptionButtons from "./BookmarkOptionButtons"
 import { BookmarkComponentContainer, BookmarkComponentInner, UrlContainer } from "./style";
@@ -9,10 +10,12 @@ import { BookmarkComponentContainer, BookmarkComponentInner, UrlContainer } from
 
 const BookmarkComponent = (props: any) => {
     //const id = props.id
+    const secureWrap = secure().wrapper()
     const editSave = props.editSave
     const bookmark = props.bookmark;
-    const tags = bookmark.tags;
     const url = bookmark.url;
+    const tags = bookmark.tags;
+
     const [focused, setFocused] = useState(false);
     const [editOn, setEditOn] = useState(false);
     const [view, setView] = useState({ url: url, tags: tags })
@@ -30,7 +33,7 @@ const BookmarkComponent = (props: any) => {
         return tagArr
     };
     const onEditInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) => {
-        setEditInput({ ...editInput, [key]: e.target.value });
+        setEditInput({ ...editInput, [key]: secureWrap.encryptWrapper(e.target.value) });
       };
 
     const editFocus = () => {
@@ -45,8 +48,7 @@ const BookmarkComponent = (props: any) => {
         const tagArr = Array.isArray(editInput.tags)
         ? editInput.tags 
         : tagStrToArr(editInput.tags);
-        
-        const bookmarkForm = {url:editInput.url, tags:tagArr}
+        const bookmarkForm = {url:secureWrap.decryptWrapper(editInput.url), tags:tagArr}
         setView(bookmarkForm)
         editSave(bookmark.id, bookmarkForm)
         setEditOn(false)
@@ -59,7 +61,7 @@ const BookmarkComponent = (props: any) => {
         return (
             <BookmarkComponentInner>
                 <div className="main">
-                    <UrlContainer>{view.url}</UrlContainer>
+                    <UrlContainer>{secureWrap.decryptWrapper(view.url)}</UrlContainer>
                     <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} />
                 </div>
                 {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus}/> : null}
@@ -83,6 +85,8 @@ const BookmarkComponent = (props: any) => {
             </BookmarkComponentInner>
         )
     }
+     console.log(view)
+// console.log(editInput)
     return (
         <BookmarkComponentContainer id={bookmark.id} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
             {editOn ? BookmarkEditContent() : BookmarkComponentContent()}

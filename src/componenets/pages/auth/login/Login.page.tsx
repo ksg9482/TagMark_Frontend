@@ -8,6 +8,7 @@ import { LoginContainer, LoginInput } from "./style";
 //모달 변경되게
 export const Login = (props: any) => {
     const onSignup = props.onSignup;
+    const secureWrap = secure().wrapper()
     
     const OAuthButtonBlock = () => {
         return (
@@ -18,12 +19,14 @@ export const Login = (props: any) => {
         )
     };
 
-    const sendLoginData = (sendData:{ email: string, password: string }) => {
-        //서버전송.
-        const form = { email: '', password: '' }
-        const temp = secure().local().getItem('user')!
-        const encryptedSendData = secure().wrapper().encryptWrapper(sendData)
-        console.log(temp)
+    const sendLoginData = (sendData:any) => {
+        //서버전송. 암호문 날아감
+        //const form = { email: '', password: '' }
+        //const temp = secure().local().getItem('user')!
+        //const encryptedSendData = secure().wrapper().encryptWrapper(sendData)
+        console.log('서버에서 받는 것',sendData)
+        console.log('서버에서 해석 email',secureWrap.decryptWrapper(sendData.email))
+        console.log('서버에서 해석 password',secureWrap.decryptWrapper(sendData.password))
     }
     
 
@@ -39,11 +42,12 @@ export const Login = (props: any) => {
 
 export const LoginBlock = (props:any) => {
     const useModal: UseModal = props.useModal;
+    const secureWrap = secure().wrapper()
     const sendLoginData = props.sendLoginData
     const [loginInput, setLoginInput] = useState({ email: '', password: '' })
 
     const onLoginInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setLoginInput({ ...loginInput, [key]: e.target.value });
+        setLoginInput({ ...loginInput, [key]: secureWrap.encryptWrapper(e.target.value) });
     };
     
     const onClose = () => {

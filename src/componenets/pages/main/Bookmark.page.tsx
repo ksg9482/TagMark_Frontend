@@ -19,6 +19,8 @@ export enum FindType {
 
 
 export const BookMark = (props: any) => {
+    const secureStorage = secure().local();
+    const secureWrap = secure().wrapper()
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
 
@@ -76,11 +78,13 @@ export const BookMark = (props: any) => {
         let bookmarkResult: Bookmark[]
         if (typeof bookmark === 'string') {
             const jsonParsedData = JSON.parse(bookmark);
+            const encrypted = jsonParsedData.map((bookmark:Bookmark)=>{return {...bookmark, url:secureWrap.encryptWrapper(bookmark.url)}})
+            //const encrypted = secureWrap.encryptWrapper(jsonParsedData)
             //json 형식이 아닐경우
             if (!jsonParsedData) {
-                bookmarkResult = [bookmarkInitData];
+                bookmarkResult = [bookmarkInitData]; //형식만 맞춘 빈데이터
             };
-            bookmarkResult = JSON.parse(bookmark);
+            bookmarkResult = encrypted;
         }
         else {
             bookmarkResult = bookmark;
@@ -104,6 +108,7 @@ export const BookMark = (props: any) => {
         //로컬 스토리지에서
         const localBookmarks = secure().local().getItem('local-bookmark-storage')!
         const bookmark = bookmarkAdapter(localBookmarks);
+        //console.log(bookmark)
         if (!isLogin) {
             //원본저장
             setOriginBookmarks(bookmark);
@@ -128,8 +133,8 @@ export const BookMark = (props: any) => {
     };
     const saveNewBookmarkStorage = (newBookmarkData: Bookmark | Bookmark[]) => {
         if (!isLogin) {
-            secure().local().removeItem('local-bookmark-storage')
-            secure().local().setItem('local-bookmark-storage', JSON.stringify(newBookmarkData))
+            secureStorage.removeItem('local-bookmark-storage')
+            secureStorage.setItem('local-bookmark-storage', JSON.stringify(newBookmarkData))
         }
         //서버 저장
     };
@@ -148,7 +153,6 @@ export const BookMark = (props: any) => {
         //currentPageRefresh(1)
     }
     const setNewBookmark = (createBookmarkData: CreateBookmarkData) => {
-        console.log(originBookmarks)
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
         const url = createBookmarkData.url

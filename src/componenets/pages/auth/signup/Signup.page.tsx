@@ -11,10 +11,11 @@ import { SignupContainer, SignupInput } from "./style";
 //모달 변경되게
 export const Signup = (props: any) => {
     const useModal: UseModal = props.useModal;
+    const secureWrap = secure().wrapper()
     const [signupInput, setSignupInput] = useState({ email: '', password: '', passwordCheck: '' })
 
     const onsignupInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setSignupInput({ ...signupInput, [key]: e.target.value });
+        setSignupInput({ ...signupInput, [key]: secureWrap.encryptWrapper(e.target.value) });
     };
 
     const onClose = () => {
@@ -22,7 +23,7 @@ export const Signup = (props: any) => {
     }
 
     const sendSignupData = (signupData:any) => {
-        //서버전송.
+        //서버전송. 암호문 날아감
         const temp = secure().local().setItem('user', JSON.stringify(signupData))
         return 'save'
     }
