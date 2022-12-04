@@ -1,6 +1,8 @@
+import axios from "axios";
 import { useState } from "react";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
+import config from "../../../../config";
 import { LoginContainer, LoginInput } from "./style";
 
 
@@ -19,7 +21,16 @@ export const Login = (props: any) => {
         )
     };
 
-    const sendLoginData = (sendData:any) => {
+    const sendLoginData = async (sendData:any) => {
+          try {
+            const userLogin = await axios.post(
+                `${config.SERVER_HOST}/api/user/login`,
+                sendData,
+                { withCredentials: true }
+              );
+          } catch (error) {
+            console.log(error)
+          }
         //서버전송. 암호문 날아감
         //const form = { email: '', password: '' }
         //const temp = secure().local().getItem('user')!

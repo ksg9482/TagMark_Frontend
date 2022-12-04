@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
+import config from "../../../../config";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignupContainer, SignupInput } from "./style";
@@ -22,7 +24,16 @@ export const Signup = (props: any) => {
         useModal.closeModal()
     }
 
-    const sendSignupData = (signupData:any) => {
+    const sendSignupData = async (signupData:any) => {
+        try {
+            const userSignup = await axios.post(
+                `${config.SERVER_HOST}/api/user`,
+                signupData,
+                { withCredentials: true }
+              );
+          } catch (error) {
+            console.log(error)
+          }
         //서버전송. 암호문 날아감
         const temp = secure().local().setItem('user', JSON.stringify(signupData))
         return 'save'

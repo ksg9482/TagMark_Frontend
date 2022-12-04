@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 import config from '../config'
 export const secure = () => {
-    const SECRET_KEY = '123456'//config.CRYPTOJS_SECRET_KEY!;
+    const SECRET_KEY = config.CRYPTOJS_SECRET_KEY!;
     const encrypt = (message:string) => {
         const encrypted = CryptoJS.AES.encrypt(message, SECRET_KEY)
         return encrypted.toString()
@@ -35,7 +35,12 @@ export const secure = () => {
         return encrypt(data)
     }
     const decryptWrapper = (encryptStr:string) => {
-        return decrypt(encryptStr)
+        try {
+            return decrypt(encryptStr)
+        } catch (error) {
+            console.log('이거에러')
+            return '이거에러'//encryptStr
+        }
     }
 
 

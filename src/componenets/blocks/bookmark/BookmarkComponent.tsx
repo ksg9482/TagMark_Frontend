@@ -43,20 +43,22 @@ const BookmarkComponent = (props: any) => {
     const onComplete = () => {
         
         if(!Array.isArray(editInput.tags)){
-
+            console.log('배열아님', editInput.tags)
         }
+        const tagStrDecrypted = secureWrap.decryptWrapper(editInput.tags)
         const tagArr = Array.isArray(editInput.tags)
         ? editInput.tags 
-        : tagStrToArr(editInput.tags);
+        : tagStrToArr(tagStrDecrypted);
         const bookmarkForm = {url:secureWrap.decryptWrapper(editInput.url), tags:tagArr}
+        
         setView(bookmarkForm)
-        editSave(bookmark.id, bookmarkForm)
+        editSave(bookmark.id, bookmarkForm) //평문전송
         setEditOn(false)
         setFocused(false)
     };
 
     
-
+    
     const BookmarkComponentContent = () => {
         return (
             <BookmarkComponentInner>
@@ -78,15 +80,13 @@ const BookmarkComponent = (props: any) => {
     const BookmarkEditContent = () => {
         return (
             <BookmarkComponentInner>
-                <input type="text" defaultValue={editInput.url} onChange={onEditInput('url')}/>
+                <input type="text" defaultValue={secureWrap.decryptWrapper(editInput.url)} onChange={onEditInput('url')}/>
                 <textarea name="" id="" cols={30} rows={10} defaultValue={tagArrToStr(editInput.tags)} onChange={onEditInput('tags')}></textarea>
                 <button onClick={onCancle}>취소</button>
                 <button onClick={onComplete}>완료</button>
             </BookmarkComponentInner>
         )
     }
-     console.log(view)
-// console.log(editInput)
     return (
         <BookmarkComponentContainer id={bookmark.id} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
             {editOn ? BookmarkEditContent() : BookmarkComponentContent()}

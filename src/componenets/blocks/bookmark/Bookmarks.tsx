@@ -9,7 +9,7 @@ import { BookmarksContainer } from "./style"
 //20개씩 묶기. 페이지네이션
 const Bookmarks = (props: any) => {
     const bookmarkView: Bookmark[] = props.bookmarkView
-    
+    console.log(bookmarkView)
     return (
         <BookmarksContainer>
             {bookmarkView.map((bookmark: Bookmark) => (
