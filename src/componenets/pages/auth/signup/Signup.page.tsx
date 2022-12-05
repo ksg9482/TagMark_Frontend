@@ -31,12 +31,13 @@ export const Signup = (props: any) => {
                 signupData,
                 { withCredentials: true }
               );
+              console.log(userSignup)
           } catch (error) {
             console.log(error)
           }
         //서버전송. 암호문 날아감
-        const temp = secure().local().setItem('user', JSON.stringify(signupData))
-        return 'save'
+        // const temp = secure().local().setItem('user', JSON.stringify(signupData))
+        // return 'save'
     }
     const signupDataForm = (signupInput:{
         email: string;

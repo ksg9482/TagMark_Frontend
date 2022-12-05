@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { dumyBookmark } from "../../../dumy/dumy-bookmarks";
@@ -18,8 +19,18 @@ export enum FindType {
     view = 'view'
 }
 
+export interface LocalBookmark {
+    dataFrom: 'local', bookmark: string 
+}
+export interface RemoteBookmark {
+    dataFrom: 'remote', bookmark: AxiosResponse
+}
+
+type GetBookmarkOption = LocalBookmark | RemoteBookmark;
+
 
 export const BookMark = (props: any) => {
+    const isLogin = props.isLogin
     const secureStorage = secure().local();
     const secureWrap = secure().wrapper()
     const UseModal = () => {
@@ -40,7 +51,7 @@ export const BookMark = (props: any) => {
         return { isShowModal, openModal, closeModal, toggleModal };
     }
     const useModal = UseModal()
-    const [isLogin, setIsLogin] = useState(false)
+    // const [isLogin, setIsLogin] = useState(false)
 
     const bookmarkInitData: Bookmark = {
         id: 'init',
@@ -61,12 +72,18 @@ export const BookMark = (props: any) => {
     const getTagBookmark = (targetTags: string[], findType:FindType) => {
         //태그 눌러가면서 원하는거 좁혀가려면?
         const bookmarkArr: Bookmark[] = findType === 'origin' ? originBookmarks : bookmarkView ;
-        const bookmarkFilter = bookmarkArr.filter((bookmark) => {
-            const tagFilter = bookmark.tags.filter((tag) => {
-                return targetTags.includes(tag.name)
+        const tempBookmark = bookmarkArr.map((bookmark)=>{
+            const tags = bookmark.tags ? bookmark.tags : []
+            return {...bookmark, tags:tags}
+        })
+        const bookmarkFilter = tempBookmark.filter((bookmark) => {
+            const tagFilter = bookmark.tags.filter((tag:any) => {
+                const tempTag = tag.name ? tag.name : tag.tag
+                return targetTags.includes(tempTag)
             })
             if (1 <= tagFilter.length) return tagFilter
         })
+        console.log(bookmarkFilter)
         //페이지네이션으로 안나옴
         //console.log(bookmarkFilter.length, bookmarkFilter)
         setLocalBookmarkPage(setLocalPagenation(bookmarkFilter, 20))
@@ -75,22 +92,30 @@ export const BookMark = (props: any) => {
         //return setBookmarkView(bookmarkFilter)
     };
 
-    const bookmarkAdapter = (bookmark: any): Bookmark[] => {
-        let bookmarkResult: Bookmark[]
-        if (typeof bookmark === 'string') {
-            const jsonParsedData = JSON.parse(bookmark);
-            const encrypted = jsonParsedData.map((bookmark:Bookmark)=>{return {...bookmark, url:secureWrap.encryptWrapper(bookmark.url)}})
-            //const encrypted = secureWrap.encryptWrapper(jsonParsedData)
-            //json 형식이 아닐경우
+    const bookmarkAdapter = (storageType: 'local' |'remote',bookmarks:any): Bookmark[] => {
+        const localToBookmarkForm = (bookmarks:string)=> {
+            const jsonParsedData = JSON.parse(bookmarks);
+            const encrypted = jsonParsedData.map((bookmark:Bookmark)=>{
+                return {...bookmark, url:secureWrap.encryptWrapper(bookmark.url)}
+            })
             if (!jsonParsedData) {
-                bookmarkResult = [bookmarkInitData]; //형식만 맞춘 빈데이터
+                return [bookmarkInitData]; //형식만 맞춘 빈데이터
             };
-            bookmarkResult = encrypted;
+            return  encrypted;
+        };
+        const remoteToBookmarkForm = (bookmarks:Bookmark[]) => {
+            const data = bookmarks;
+            const encrypted = data.map((bookmark:Bookmark)=>{
+                return {...bookmark, url:secureWrap.encryptWrapper(bookmark.url)}
+            })
+            return  encrypted;
+        };
+        if(storageType === "local"){
+            return localToBookmarkForm(bookmarks)
         }
         else {
-            bookmarkResult = bookmark;
-        };
-        return bookmarkResult;
+            return remoteToBookmarkForm(bookmarks)
+        } 
     };
     const setLocalPagenation = (bookmark:Bookmark[], pageCount:number) => {
         const copy = deepCopy(bookmark)
@@ -105,38 +130,10 @@ export const BookMark = (props: any) => {
     const createBookmarkView = (pagenationBookmark:Bookmark[][], targetPage:number) => {
         setBookmarkView(pagenationBookmark[targetPage])
     }
-    const sendGetBookmarks = async () => {
-        try {
-            const boookmarks = await customAxios.get(`/bookmark`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const sendCreateBookmark = async () => {
-        try {
-            const encrypted = secureWrap.encryptWrapper('test')
-            const boookmarks = await customAxios.get(`/bookmark/mybookmark`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const sendEditBookmark = async () => {
-        try {
-            const encrypted = secureWrap.encryptWrapper('test')
-            const bookmarkId = 1
-            const boookmarks = await customAxios.patch(`/bookmark/${bookmarkId}`, encrypted)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const sendDeleteBookmark = async () => {
-        try {
-            const bookmarkId = 1
-            const boookmarks = await customAxios.delete(`/bookmark${bookmarkId}`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    
+   
+    
+    
     const sendGetTags = async () => {
         try {
             const tags = await customAxios.get(`/tag`)
@@ -144,39 +141,38 @@ export const BookMark = (props: any) => {
             console.log(error)
         }
     }
-    const sendGetAndSearch = async () => {
-        try {
-            const query = 'query1+query2'
-            const boookmarks = await customAxios.get(`/tag/search-and?query=${query}`)
-        } catch (error) {
-            console.log(error)
+    
+    const sendsearchTagBookmark = () => {
+        const sendGetAndSearch = async () => {
+                const query = 'query1+query2'
+                const boookmarks = await customAxios.get(`/tag/search-and?query=${query}`)
+        }
+        const sendGetOrSearch = async () => {
+                const query = 'query1+query2'
+                const boookmarks = await customAxios.get(`/tag/search-or?query=${query}`)
+        }
+        return {
+            sendGetAndSearch, sendGetOrSearch
         }
     }
-    const sendGetOrSearch = async () => {
-        try {
-            const query = 'query1+query2'
-            const boookmarks = await customAxios.get(`/tag/search-or?query=${query}`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    //어차피 북마크 에디트할꺼면 프론트에서 태그보내고 백에서 변동사항 처리하는 김에 연결 끊으면 안되나?
-    //이렇게 지우는 거랑, 북마크 에디트 할때 같이 하는거랑 뭐가 나을까?
-    const sendDeleteBookmarkTag = async () => {
-        try {
-            const bookmarkId = 1
-            const query = 1
-            const boookmarks = await customAxios.get(`/tag/${bookmarkId}?tagIds=${query}`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const getBookmark = async (isLogin: boolean) => {
-        //로컬 스토리지에서
+    
+    //북마크 읽기
+    const getLocalBookmarks = () => {
         const localBookmarks = secure().local().getItem('local-bookmark-storage')!
-        const bookmark = bookmarkAdapter(localBookmarks);
-        //console.log(bookmark)
-        if (!isLogin) {
+        const bookmark = bookmarkAdapter("local",localBookmarks);
+        return bookmark
+    }
+    const getDBBookmarks = async () => {
+        const bookmarkResponse = await customAxios.get(`/bookmark`)
+        const bookmark = bookmarkAdapter("remote",bookmarkResponse.data.bookmarks);
+        return bookmark
+        
+    }
+    
+    const getBookmark = async (isLogin: boolean) => {
+        try {
+            const bookmark = isLogin? await getDBBookmarks() : getLocalBookmarks()
+        
             //원본저장
             setOriginBookmarks(bookmark);
             //페이지네이션 별로 구분
@@ -184,11 +180,10 @@ export const BookMark = (props: any) => {
             // //해당하는페이지 보여줌
             createBookmarkView(setLocalPagenation(bookmark, 20),currentPageNum -1)
             // return setBookmarkView(bookmark);
+        } catch (error) {
+            console.log(error)
         }
-        else {
-            //서버 연결. 페이지네이션으로.
-            return setBookmarkView(bookmark)
-        }
+        
     };
 
     const bookmarkRefresh = () => {
@@ -200,6 +195,7 @@ export const BookMark = (props: any) => {
     };
     const saveNewBookmarkStorage = (newBookmarkData: Bookmark | Bookmark[]) => {
         //이미 암호화 되어있는게 다시 들어옴 -> 재암호화
+        
         if (!isLogin) {
             secureStorage.removeItem('local-bookmark-storage')
             secureStorage.setItem('local-bookmark-storage', JSON.stringify(newBookmarkData))
@@ -220,6 +216,15 @@ export const BookMark = (props: any) => {
         updateBookmarkView(newBookmarks)
         //currentPageRefresh(1)
         
+    }
+    // 북마크 생성
+    const sendCreateBookmark = async () => {
+        try {
+            const encrypted = secureWrap.encryptWrapper('test')
+            const boookmarks = await customAxios.get(`/bookmark/mybookmark`)
+        } catch (error) {
+            console.log(error)
+        }
     }
     const setNewBookmark = (createBookmarkData: CreateBookmarkData) => {
         const lastId = originBookmarks[0].id
@@ -264,7 +269,28 @@ export const BookMark = (props: any) => {
         }
         return isMachedIndex
     }
+    // 북마크 제거
+    //어차피 북마크 에디트할꺼면 프론트에서 태그보내고 백에서 변동사항 처리하는 김에 연결 끊으면 안되나?
+    //이렇게 지우는 거랑, 북마크 에디트 할때 같이 하는거랑 뭐가 나을까?
+    const sendDeleteBookmarkTag = async () => {
+        try {
+            const bookmarkId = 1
+            const query = 1
+            const boookmarks = await customAxios.get(`/tag/${bookmarkId}?tagIds=${query}`)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const sendDeleteBookmark = async () => {
+        try {
+            const bookmarkId = 1
+            const boookmarks = await customAxios.delete(`/bookmark${bookmarkId}`)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const onBookmarkDelete = (targetBookmarkId: any) => {
+        //sendDeleteBookmark
         const length = originBookmarks.length;
         const isMachedIndex = getMachedIndex(targetBookmarkId)
         const decrypted = originBookmarks.map((bookmark)=>{
@@ -275,6 +301,16 @@ export const BookMark = (props: any) => {
         bookmarkSequence(deletedBookmark)
     }
 
+    //북마크 수정
+    const sendEditBookmark = async () => {
+        try {
+            const encrypted = secureWrap.encryptWrapper('test')
+            const bookmarkId = 1
+            const boookmarks = await customAxios.patch(`/bookmark/${bookmarkId}`, encrypted)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     //동작이 생성과 비슷한데 재활용 방법은? 더 고도화하면 분리될 수 있으니 따로하는게 좋을까?
     const editSave = (targetBookmarkId:any, editContent:any) => {
         const url = editContent.url
@@ -311,9 +347,9 @@ export const BookMark = (props: any) => {
         setCurrentPageNum(num)
         currentPageRefresh(num)
     } 
-    useEffect(() => {
-        setIsLogin(props.isLogin)
-    }, [])
+    // useEffect(() => {
+    //     setIsLogin(props.isLogin)
+    // },[isLogin])
 
     useEffect(() => {
         //이거 리덕스로 옮겨서 관리? 아니면 최상단으로 올려서 프롭스로 내릴까?
@@ -345,7 +381,7 @@ export const BookMark = (props: any) => {
 //여기서 사이드바로 데이터를 내려줘야 한다.
     return (
         <BookmarkContainer>
-            <SideBar getTagBookmark={getTagBookmark} originBookmarks={originBookmarks}/>
+            <SideBar getTagBookmark={getTagBookmark} originBookmarks={originBookmarks} isLogin={props.isLogin}/>
             <div></div>
             <BookmarkManageContainer>
                 <BookmarkManagebuttonContainer>

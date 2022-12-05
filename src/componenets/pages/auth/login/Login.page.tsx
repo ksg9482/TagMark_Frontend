@@ -11,7 +11,8 @@ import { LoginContainer, LoginInput } from "./style";
 export const Login = (props: any) => {
     const onSignup = props.onSignup;
     const secureWrap = secure().wrapper()
-    
+    const secureStorage = secure().local()
+
     const OAuthButtonBlock = () => {
         return (
             <div>
@@ -21,37 +22,45 @@ export const Login = (props: any) => {
         )
     };
 
-    const sendLoginData = async (sendData:any) => {
-          try {
+    const sendLoginData = async (sendData: any) => {
+        try {
             const userLogin = await axios.post(
                 `${config.SERVER_HOST}/api/user/login`,
                 sendData,
                 { withCredentials: true }
-              );
-          } catch (error) {
+            );
+            console.log(userLogin)
+            //이거 한세트로 함수만드는게 나은듯? 어차피 응답오면 복호화하고 객체로 되돌려야 함
+            const user = JSON.parse(secureWrap.decryptWrapper(userLogin.data.user))
+            console.log(user)
+            //어차피 토큰은 암호화되어 온다
+            localStorage.setItem('accessToken', userLogin.data['accessToken'])
+            // eslint-disable-next-line no-restricted-globals
+            //location.reload()
+        } catch (error) {
             console.log(error)
-          }
+        }
         //서버전송. 암호문 날아감
         //const form = { email: '', password: '' }
         //const temp = secure().local().getItem('user')!
         //const encryptedSendData = secure().wrapper().encryptWrapper(sendData)
-        console.log('서버에서 받는 것',sendData)
-        console.log('서버에서 해석 email',secureWrap.decryptWrapper(sendData.email))
-        console.log('서버에서 해석 password',secureWrap.decryptWrapper(sendData.password))
+        console.log('서버에서 받는 것', sendData)
+        console.log('서버에서 해석 email', secureWrap.decryptWrapper(sendData.email))
+        console.log('서버에서 해석 password', secureWrap.decryptWrapper(sendData.password))
     }
-    
+
 
     return (
         <LoginContainer>
             <div>로고</div>
-            <LoginBlock useModal={props.useModal} sendLoginData={sendLoginData}/>
+            <LoginBlock useModal={props.useModal} sendLoginData={sendLoginData} />
             <div onClick={onSignup}>회원가입은 여기 클릭</div>
             <OAuthButtonBlock />
         </LoginContainer>
     )
 }
 
-export const LoginBlock = (props:any) => {
+export const LoginBlock = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper()
     const sendLoginData = props.sendLoginData
@@ -60,7 +69,7 @@ export const LoginBlock = (props:any) => {
     const onLoginInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setLoginInput({ ...loginInput, [key]: secureWrap.encryptWrapper(e.target.value) });
     };
-    
+
     const onClose = () => {
         useModal.closeModal()
     }
@@ -72,16 +81,16 @@ export const LoginBlock = (props:any) => {
     }
     return (
         <LoginContainer>
-                <LoginInput >
-                    <div>이메일</div>
-                    <input type="text" onChange={onLoginInput('email')} />
-                </LoginInput>
-                <LoginInput>
-                    <div>비밀번호</div>
-                    <input type="text" onChange={onLoginInput('password')} />
-                </LoginInput>
-                <button onClick={onLogin}>로그인</button>
-                <button onClick={onClose}>취소</button>
-            </LoginContainer>
+            <LoginInput >
+                <div>이메일</div>
+                <input type="text" onChange={onLoginInput('email')} />
+            </LoginInput>
+            <LoginInput>
+                <div>비밀번호</div>
+                <input type="text" onChange={onLoginInput('password')} />
+            </LoginInput>
+            <button onClick={onLogin}>로그인</button>
+            <button onClick={onClose}>취소</button>
+        </LoginContainer>
     )
 }

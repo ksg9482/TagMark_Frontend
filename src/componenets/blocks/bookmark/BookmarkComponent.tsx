@@ -14,7 +14,7 @@ const BookmarkComponent = (props: any) => {
     const editSave = props.editSave
     const bookmark = props.bookmark;
     const url = bookmark.url;
-    const tags = bookmark.tags;
+    const tags = bookmark.tags ? bookmark.tags : []
 
     const [focused, setFocused] = useState(false);
     const [editOn, setEditOn] = useState(false);
@@ -64,7 +64,7 @@ const BookmarkComponent = (props: any) => {
             <BookmarkComponentInner>
                 <div className="main">
                     <UrlContainer>{secureWrap.decryptWrapper(view.url)}</UrlContainer>
-                    <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} />
+                    {view.tags.length > 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} />: <div>&nbsp;</div>}
                 </div>
                 {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus}/> : null}
             </BookmarkComponentInner>

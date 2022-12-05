@@ -14,14 +14,36 @@ const dummyUserData = {
 export const UserInfo = () => {
     const secureWrap = secure().wrapper()
     const [userInfo, setUserInfo] = useState({ email: '', bookmarkCount: 0, tagCount: 0 })
+    const [tagCount, setTagCount] = useState([{id:0, tag:'', count:''}])
     const updateUserInfo = (userInfo: any) => {
         setUserInfo(userInfo)
     }
-    const getUserData = async () => {
+    const sendGetUserInfo = async () => {
+        return await customAxios.get(`/user`)
+    }
+    const sendGetBookmarkCount = async () => {
+        return await customAxios.get(`/bookmark/count`)
+    }
+    const sendGetTagCount = async () => {
+        return await customAxios.get(`/tag`)
+    }
+    //객체 내용물을 재귀를 통해 암호화함
+    const encryptWrapper = (data:any) => {
+
+    }
+    const updateTagCount = (tagCount:any) => {
+        setTagCount(tagCount)
+    }
+    const getUserInfo = async () => {
         try {
-            const userInfo = await customAxios.get(`/user`); //암호문
-            secureWrap.decryptWrapper(userInfo.data)
-            updateUserInfo(userInfo.data)
+            const userInfo = await sendGetUserInfo(); //암호문
+            const bookmarkCount = await sendGetBookmarkCount()
+            const tagCount = await sendGetTagCount()
+            console.log(tagCount)
+            const user = JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
+            encryptWrapper('')
+            updateUserInfo({user:user, bookmarkCount:bookmarkCount.data.count, tagCount:tagCount.data.tags.length})
+            updateTagCount(tagCount.data.tags)
         } catch (error) {
             console.log(error)
         }
@@ -38,8 +60,8 @@ export const UserInfo = () => {
         const userInfo = await customAxios.delete(`/user`)
     }
     useEffect(() => {
-        getUserData()
-    }, [userInfo])
+        getUserInfo()
+    }, [])
     return (
         <UserInfoContainer>
             <BookmarkAreaContainer className="bookmark-area">
@@ -52,7 +74,14 @@ export const UserInfo = () => {
                 <TagAreaContainer className="tag-area">
                     <div>총 태그 개수 {userInfo.tagCount}</div>
                     <div>
-                        <div>태그 비율</div>
+                        {tagCount.map((tag)=>{
+                            return (
+                                <div key={tag.id}>
+                                <span>{tag.tag}</span>
+                                <span>{tag.count}</span>
+                                </div>
+                            )
+                        })}
                         <div>태그 그래프 자리</div>
                     </div>
                 </TagAreaContainer>

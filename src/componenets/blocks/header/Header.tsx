@@ -54,6 +54,9 @@ const Header = (props: any) => {
         //서버요청
         try {
             await customAxios.get(`/user/logout`);
+            localStorage.removeItem('accessToken')
+            // eslint-disable-next-line no-restricted-globals
+            //location.reload()
         console.log('로그아웃 응답 반환')
         } catch (error) {
             console.log(error)
