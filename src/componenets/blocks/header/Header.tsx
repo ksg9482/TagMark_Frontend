@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { customAxios } from '../../../utils/axios/customAxios';
 import { ModalPage } from '../../pages';
 import { HeaderContainer } from './style';
 
@@ -49,9 +50,18 @@ const Header = (props: any) => {
             </button>
         )
     }
-    const sendLogoutReq = async () => {
+    const sendLogout = async () => {
         //서버요청
+        try {
+            await customAxios.get(`/user/logout`);
+            localStorage.removeItem('accessToken')
+            // eslint-disable-next-line no-restricted-globals
+            //location.reload()
         console.log('로그아웃 응답 반환')
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
     const deleteLocalUserData = () => {
         //액세스토큰 삭제
@@ -61,7 +71,8 @@ const Header = (props: any) => {
     const onLogout = async () => {
         deleteLocalUserData()
         //로그아웃인데 굳이 응답 기다려야 하나? 이럭 위한 메시지큐?
-        await sendLogoutReq()
+        localStorage.removeItem('accessToken')
+        await sendLogout()
     }
     const ButtonHandle = () => {
         const isMainPage = location.pathname === '/' ? true : false

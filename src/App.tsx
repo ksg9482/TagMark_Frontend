@@ -6,17 +6,13 @@ import styled from 'styled-components';
 import { secure } from './utils/secure';
 import { BrowserRouter as Router } from 'react-router-dom';
 const getJwtToken = () => {
-  //임시용
-  if (localStorage.getItem('user')) {
-    return true
-  }
   if (localStorage.getItem('accessToken') === 'undefined') {
     return false;
   }
-  return localStorage.getItem('accessToken')!;
+  return localStorage.getItem('accessToken') ? true : false;
 };
 
-const isLoggedIn = getJwtToken() ? true : false;
+const isLoggedIn = getJwtToken();
 
 function App() {
   const [logined, setLogined] = useState(false);

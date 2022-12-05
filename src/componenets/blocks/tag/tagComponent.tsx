@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { TagButton } from "./style";
 
 
-
+//태그 tag로 할지 name으로 할지 결정해야됨
 const TagComponent = (props: any) => {
     const getTagBookmark=props.getTagBookmark
     const tag = props.tag;
@@ -11,7 +11,7 @@ const TagComponent = (props: any) => {
         getTagBookmark([e.currentTarget.innerText], 'origin')
     }
     return (
-        <TagButton onClick={onClick}>{tag.name}</TagButton>
+        <TagButton onClick={onClick}>{tag.name ? tag.name : tag.tag}</TagButton>
     )
 }
 

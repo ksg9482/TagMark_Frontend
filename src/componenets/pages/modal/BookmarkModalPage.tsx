@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { CreateBookmarkData } from "../../../interface/bookmark";
 import { UseModal } from "../../../interface/header";
+import { secure } from "../../../utils/secure";
 import { Login } from "../auth/login/Login.page";
 import { Signup } from "../auth/signup/Signup.page";
 
@@ -46,7 +47,7 @@ const ButtonContainer = styled.div`
 export const CreateBookmark = (props: any) => {
   const useModal: UseModal = props.useModal;
   const setNewBookmark = props.setNewBookmark;
-
+  const secureWrap = secure().wrapper()
   const [createInput, setCreateInput] = useState({ url: '', tags: '' })
   
   const tagStringToArray = (tagString: string) => {
@@ -55,7 +56,7 @@ export const CreateBookmark = (props: any) => {
   };
 
   const onCreateInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateInput({ ...createInput, [key]: e.target.value });
+    setCreateInput({ ...createInput, [key]:  secureWrap.encryptWrapper(e.target.value) });
   };
   
   const onCancle = () => {
@@ -63,9 +64,11 @@ export const CreateBookmark = (props: any) => {
   };
 
   const onCreate = () => {
-    const url = createInput.url;
-    const tags = tagStringToArray(createInput.tags);
+    console.log(createInput)
+    const url = secureWrap.decryptWrapper(createInput.url);
+    const tags = tagStringToArray(secureWrap.decryptWrapper(createInput.tags));
     const createBookmark:CreateBookmarkData = {url, tags}
+    console.log(createBookmark)
     setNewBookmark(createBookmark)
     useModal.closeModal()
   }

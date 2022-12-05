@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { dumyTags } from '../../../dumy/dumy-tags';
 import { Bookmark } from '../../../interface/bookmark';
 import { Tag, TagCountObj } from '../../../interface/tag';
+import { customAxios } from '../../../utils/axios/customAxios';
 import { secure } from '../../../utils/secure';
 import { SideBarContainer, SideBarInput } from './style';
 
@@ -51,7 +52,7 @@ const SideBarTags = (props: any) => {
 */
 
 const SideBar = (props: any) => {
-    const isLogin = false//props.isLogin 
+    const isLogin = props.isLogin 
     const [originBookmarks, setOriginBookmarks] = useState([{id:0, url:'', tags:[{id:0, name:''}]}])
     const [tagObj, setTagObj] = useState({
         init:{
@@ -99,6 +100,10 @@ const SideBar = (props: any) => {
 
     const tagCountObjArr = setTagCount(tagWithCounts);
 
+    
+        const sendGetTagCount = async () => {
+            return await customAxios.get(`/tag`)
+        }
     const getTags = async (isLogin: boolean, bookmark:any) => {
         //로컬 스토리지에서. 뷰는 페이지네이션 적용해서 직접가져와야 정확
         if (!isLogin) {
@@ -112,7 +117,11 @@ const SideBar = (props: any) => {
         }
         else {
             //서버 연결
-            return setTagWithCounts(tagCountObjArr)
+            const tagData = await sendGetTagCount()
+            const tempForm = tagData.data.tags.map((tag:any)=>{
+                return {...tag, name:tag.tag}
+            })
+            return setTagWithCounts(tempForm)
         }
     }
 
