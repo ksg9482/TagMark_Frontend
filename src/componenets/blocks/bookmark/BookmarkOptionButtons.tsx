@@ -10,7 +10,7 @@ const BookmarkOptionButtons = (props:any) => {
         onBookmarkDelete(bookmark.id)
     }
     const onEdit = () => {
-        console.log(bookmark)
+        //console.log(bookmark)
         editFocus()
     }
 

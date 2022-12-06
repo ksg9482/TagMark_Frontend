@@ -57,7 +57,7 @@ const Header = (props: any) => {
             localStorage.removeItem('accessToken')
             // eslint-disable-next-line no-restricted-globals
             //location.reload()
-        console.log('로그아웃 응답 반환')
+        //console.log('로그아웃 응답 반환')
         } catch (error) {
             console.log(error)
         }

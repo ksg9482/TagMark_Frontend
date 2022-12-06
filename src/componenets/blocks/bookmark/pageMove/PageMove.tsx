@@ -16,7 +16,7 @@ export const PageMove = (props: any) => {
         //맨앞 index0, 이전index-1, 이후index+1, 맨뒤 index 마지막
     }
     const onClick = (move:any) => (e:React.MouseEvent<HTMLDivElement, MouseEvent>)=> {
-        console.log('클릭',move)
+        //console.log('클릭',move)
         if(move < firstPageNum ||move > count) {
             return ;
         }

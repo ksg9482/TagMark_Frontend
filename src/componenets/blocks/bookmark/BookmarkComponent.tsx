@@ -9,7 +9,7 @@ import { BookmarkComponentContainer, BookmarkComponentInner, UrlContainer } from
 
 
 const BookmarkComponent = (props: any) => {
-    //const id = props.id
+    const id = props.id
     const secureWrap = secure().wrapper()
     const editSave = props.editSave
     const bookmark = props.bookmark;
@@ -23,13 +23,13 @@ const BookmarkComponent = (props: any) => {
     const tagArrToStr = (tags:Tag[]) => {
         const result = [];
         for(let tag of tags) {
-            result.push(tag.name);
+            result.push(tag.tag);
         };
         
         return result.join(' ');
     };
     const tagStrToArr = (tagStr:string) => {
-        const tagArr = tagStr.split(' ').map((tagName)=>{return {name:tagName}})
+        const tagArr = tagStr.split(' ').map((tagName)=>{return {tag:tagName}})
         return tagArr
     };
     const onEditInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -40,22 +40,58 @@ const BookmarkComponent = (props: any) => {
         //다른 에디트 누르면 원상복귀
         setEditOn(true)
     };
-    const onComplete = () => {
-        
-        if(!Array.isArray(editInput.tags)){
-            console.log('배열아님', editInput.tags)
-        }
-        const tagStrDecrypted = secureWrap.decryptWrapper(editInput.tags)
-        const tagArr = Array.isArray(editInput.tags)
-        ? editInput.tags 
-        : tagStrToArr(tagStrDecrypted);
-        const bookmarkForm = {url:secureWrap.decryptWrapper(editInput.url), tags:tagArr}
-        
-        setView(bookmarkForm)
-        editSave(bookmark.id, bookmarkForm) //평문전송
-        setEditOn(false)
-        setFocused(false)
+
+    const editOut = () => {
+        setEditOn(false);
+        setFocused(false);
     };
+
+    const editHandle = () => {
+        const deepCopy = (obj:any) => {
+            if (obj instanceof Object) {
+                let result = new obj.constructor();
+                Object.keys(obj).forEach(k => {
+                    result[k] = deepCopy(obj[k]);
+                })
+                return result;
+            }
+            else if (obj instanceof Array) {
+                let result = obj.map(element => deepCopy(element));
+            }
+            else return obj;
+        }
+        const originBookmarkdata = deepCopy(view);
+        
+    
+        const onComplete = () => {
+        
+            if(!Array.isArray(editInput.tags)){
+                console.log('배열아님', editInput.tags)
+            }
+            const tagStrDecrypted = secureWrap.decryptWrapper(editInput.tags)
+            console.log(tagStrDecrypted)
+            const tagArr = tagStrDecrypted.length <= 0
+            ? []//editInput.tags 
+            : tagStrToArr(tagStrDecrypted);
+            console.log(tagArr)
+            const bookmarkForm = {url:editInput.url, tags:tagArr}
+            
+            setView(bookmarkForm)
+            editSave(bookmark.id, originBookmarkdata, bookmarkForm) //평문전송
+            editOut()
+        };
+    
+        const onCancle = () => {
+            setView(originBookmarkdata)
+            setEditInput(originBookmarkdata)
+            editOut()
+        }
+
+        return {
+            onComplete, onCancle
+        }
+    }
+    
 
     
     
@@ -71,24 +107,26 @@ const BookmarkComponent = (props: any) => {
         )
     };
     
-    const onCancle = () => {
-        setView({ url: url, tags: tags })
-        setEditInput({ url: url, tags: tags })
-        setEditOn(false)
-        setFocused(false)
-    }
+    
     const BookmarkEditContent = () => {
+        const editInputInit = () => {
+            const tags = view.tags.map((tag:any) => {
+                return {id:tag.id, tag:tag.tag}
+            })
+            
+            return {...view, tags:tags}
+        }
         return (
             <BookmarkComponentInner>
-                <input type="text" defaultValue={secureWrap.decryptWrapper(editInput.url)} onChange={onEditInput('url')}/>
-                <textarea name="" id="" cols={30} rows={10} defaultValue={tagArrToStr(editInput.tags)} onChange={onEditInput('tags')}></textarea>
-                <button onClick={onCancle}>취소</button>
-                <button onClick={onComplete}>완료</button>
+                <input type="text" defaultValue={secureWrap.decryptWrapper(editInputInit().url)} onChange={onEditInput('url')}/>
+                <textarea name="" id="" cols={30} rows={10} defaultValue={tagArrToStr(editInputInit().tags)} onChange={onEditInput('tags')}></textarea>
+                <button onClick={editHandle().onCancle}>취소</button>
+                <button onClick={editHandle().onComplete}>완료</button>
             </BookmarkComponentInner>
         )
     }
     return (
-        <BookmarkComponentContainer id={bookmark.id} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
+        <BookmarkComponentContainer id={`bookmark_${bookmark.id}`} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
             {editOn ? BookmarkEditContent() : BookmarkComponentContent()}
         </BookmarkComponentContainer>
 

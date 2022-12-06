@@ -11,7 +11,7 @@ const TagComponent = (props: any) => {
         getTagBookmark([e.currentTarget.innerText], 'origin')
     }
     return (
-        <TagButton onClick={onClick}>{tag.name ? tag.name : tag.tag}</TagButton>
+        <TagButton onClick={onClick}>{tag.tag}</TagButton>
     )
 }
 
