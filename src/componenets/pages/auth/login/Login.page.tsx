@@ -21,18 +21,19 @@ export const Login = (props: any) => {
             </div>
         )
     };
-
+    const securedSendData = (data:any) => {
+        return secureWrap.encryptWrapper(JSON.stringify(data))
+     }
     const sendLoginData = async (sendData: any) => {
+        const securedData:string = securedSendData(sendData)
         try {
             const userLogin = await axios.post(
                 `${config.SERVER_HOST}/api/user/login`,
                 sendData,
                 { withCredentials: true }
             );
-            console.log(userLogin)
             //이거 한세트로 함수만드는게 나은듯? 어차피 응답오면 복호화하고 객체로 되돌려야 함
             const user = JSON.parse(secureWrap.decryptWrapper(userLogin.data.user))
-            console.log(user)
             //어차피 토큰은 암호화되어 온다
             localStorage.setItem('accessToken', userLogin.data['accessToken'])
             // eslint-disable-next-line no-restricted-globals
@@ -44,9 +45,9 @@ export const Login = (props: any) => {
         //const form = { email: '', password: '' }
         //const temp = secure().local().getItem('user')!
         //const encryptedSendData = secure().wrapper().encryptWrapper(sendData)
-        console.log('서버에서 받는 것', sendData)
-        console.log('서버에서 해석 email', secureWrap.decryptWrapper(sendData.email))
-        console.log('서버에서 해석 password', secureWrap.decryptWrapper(sendData.password))
+        //console.log('서버에서 받는 것', sendData)
+        //console.log('서버에서 해석 email', secureWrap.decryptWrapper(sendData.email))
+        //console.log('서버에서 해석 password', secureWrap.decryptWrapper(sendData.password))
     }
 
 

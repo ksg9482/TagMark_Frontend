@@ -13,6 +13,16 @@ import SideBar from "../../blocks/sidebar/Sidebar";
 import { BookmarkModalPage } from "../modal/BookmarkModalPage";
 import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer } from "./styles";
 
+//로딩중 페이지 만들기
+/*
+암호화 방침
+state: 암호로 저장
+서버통신: 그냥 평문. https로 보안
+내부처리: 평문으로 처리하고, 괜히 객체, 문자열 뒤섞지 말고 상태에 저장은 암호화 문자열
+          어뎁터를 둬서 json, decrypt까지 일괄처리 -> 평문화 된거 받음.
+props: 상태를 내려주는 거면 내부에서 복호화 처리한다. 개별 컴포넌트 말고 그 위 ~'s에서 바꿔서 보내줌
+프롭스 노출되면 그냥 개별에서 바꾸기
+*/
 
 export enum FindType {
     origin = 'origin',
@@ -58,7 +68,7 @@ export const BookMark = (props: any) => {
         url: '',
         tags: [{
             id: 'init',
-            name: ''
+            tag: ''
         }]
     }
     //전부 갖고 있음. 유지용
@@ -78,12 +88,11 @@ export const BookMark = (props: any) => {
         })
         const bookmarkFilter = tempBookmark.filter((bookmark) => {
             const tagFilter = bookmark.tags.filter((tag:any) => {
-                const tempTag = tag.name ? tag.name : tag.tag
-                return targetTags.includes(tempTag)
+                return targetTags.includes(tag.tag)
             })
             if (1 <= tagFilter.length) return tagFilter
         })
-        console.log(bookmarkFilter)
+        //console.log(bookmarkFilter)
         //페이지네이션으로 안나옴
         //console.log(bookmarkFilter.length, bookmarkFilter)
         setLocalBookmarkPage(setLocalPagenation(bookmarkFilter, 20))
@@ -127,8 +136,14 @@ export const BookMark = (props: any) => {
         }
         return result
     }
+
+    //이거 둘이 정리
     const createBookmarkView = (pagenationBookmark:Bookmark[][], targetPage:number) => {
         setBookmarkView(pagenationBookmark[targetPage])
+    }
+
+    const updateBookmarkView = (bookmarks:Bookmark[]) => {
+        setBookmarkView(bookmarks)
     }
     
    
@@ -186,8 +201,11 @@ export const BookMark = (props: any) => {
         
     };
 
+    //상태 정리 해야 함. 상태가 꼬여있어서 복잡해진거 해결 안됨
     const bookmarkRefresh = () => {
-        setBookmarkView(localBookmarkPage[0]) //페이지네이션 한걸로 해야 함
+        //console.log(localBookmarkPage, originBookmarks, bookmarkView)
+        //createBookmarkView(setLocalPagenation(originBookmarks, 20),currentPageNum -1) //페이지네이션 한걸로 해야 함
+        setBookmarkView(setLocalPagenation(originBookmarks, 20)[0]) //페이지네이션 한걸로 해야 함
     };
 
     const bookmarkCreate = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -204,9 +222,7 @@ export const BookMark = (props: any) => {
     };
     //다 뒤로 한칸씩 미느니 아예 다시 만드는게 편할까?
     //생성하면 어차피 1로 가니까 1번의 맨뒤 하나 삭제하고 앞에 삽입. 
-    const updateBookmarkView = (bookmarks:Bookmark[]) => {
-        setBookmarkView(bookmarks)
-    }
+    
     const updateOriginBookmark = (bookmarks:Bookmark[]) => {
         setOriginBookmarks(bookmarks)
     }
@@ -218,22 +234,32 @@ export const BookMark = (props: any) => {
         
     }
     // 북마크 생성
-    const sendCreateBookmark = async () => {
-        try {
+    //사이드바랑 바로 연동안됨
+    const sendCreateBookmark = async (newBookmarkData:CreateBookmarkData) => {
+       try {
             const encrypted = secureWrap.encryptWrapper('test')
-            const boookmarks = await customAxios.get(`/bookmark/mybookmark`)
+            const boookmarks = await customAxios.post(`/bookmark`,{
+                ...newBookmarkData
+            })
+            //console.log(boookmarks)
         } catch (error) {
             console.log(error)
         }
     }
     const setNewBookmark = (createBookmarkData: CreateBookmarkData) => {
+        //로컬(로컬에 저장), 리모트(서버 전송, 로컬저장), 공통필요(변동사항을 view에 적용)
+        //if로 로그인 상태일때만 서버에 전송하는 과정 추가하는 쪽으로 개발
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
         const url = createBookmarkData.url //암호? 평문? 공백인거 보면 문제가?
+        console.log(createBookmarkData.tags)
         const tags = createBookmarkData.tags.map((tag, i) => {
-            return { id: 'tempTag' + i, name: tag }
+            return { id: 'tempTag' + i, tag: tag }
         })
-
+        
+        if(isLogin) {
+            sendCreateBookmark({url,tags:createBookmarkData.tags})
+        }
         //태그 중복 방지는?
         const newBookmarkArr: Bookmark[] = [{ id, url, tags }]
         //newBookmarkArr.push(...bookmarkView)
@@ -246,7 +272,7 @@ export const BookMark = (props: any) => {
             const url = secureWrap.encryptWrapper(bookmark.url)
             return {...bookmark, url:url}
         })
-        console.log('setNewBookmark에서 생성',newBookmarkArr, encryptedArr)
+        //console.log('setNewBookmark에서 생성',newBookmarkArr, encryptedArr)
         bookmarkSequence(newBookmarkArr)
         setLocalBookmarkPage(setLocalPagenation(encryptedArr, 20))
         // //해당하는페이지 보여줌
@@ -302,21 +328,62 @@ export const BookMark = (props: any) => {
     }
 
     //북마크 수정
-    const sendEditBookmark = async () => {
+    const editForm = (booomarkId:any, originBookmark:Bookmark, editContent:Bookmark) => {
+        //암호화 url 받음
+        const decrypytedOrigin = {...originBookmark, url:secureWrap.decryptWrapper(originBookmark.url)}
+        const decrypytedEdit = {...editContent, url:secureWrap.decryptWrapper(editContent.url)}
+        let changeForm:any = {};
+        console.log(decrypytedOrigin, decrypytedEdit)
+        const addTag = decrypytedEdit.tags.filter((editTag) =>{
+            return !decrypytedOrigin.tags.some((originTag)=>{
+                return originTag.tag === editTag.tag
+            })
+        })
+        console.log(addTag)
+        const deleteTag = decrypytedOrigin.tags.filter((originTag) =>{
+            return !decrypytedEdit.tags.some((editTag)=>{
+                return originTag.tag === editTag.tag
+            })
+        })
+        console.log(deleteTag)
+        if(decrypytedOrigin.url !== decrypytedEdit.url) {
+            changeForm.changeUrl = decrypytedEdit
+        }
+        if(addTag.length > 0) {
+            changeForm.addTag = addTag.map((tag)=>{return tag.tag})
+        }
+        if(deleteTag.length > 0) {
+            changeForm.deleteTag = deleteTag.map((tag)=>{return tag.id})
+        }
+        
+        
+        return changeForm;
+    }
+    const sendEditBookmark = async (targetBookmarkId:any, editContent:any) => {
+        
         try {
-            const encrypted = secureWrap.encryptWrapper('test')
-            const bookmarkId = 1
-            const boookmarks = await customAxios.patch(`/bookmark/${bookmarkId}`, encrypted)
+            
+            console.log('최종',{...editContent})
+            const editResult = await customAxios.patch(
+                `/bookmark/${targetBookmarkId}`, 
+                {...editContent}
+                )
+                console.log(editResult)
         } catch (error) {
             console.log(error)
         }
     }
     //동작이 생성과 비슷한데 재활용 방법은? 더 고도화하면 분리될 수 있으니 따로하는게 좋을까?
-    const editSave = (targetBookmarkId:any, editContent:any) => {
+    const editSave = (targetBookmarkId:any, originBookmark:any, editContent:any) => {
         const url = editContent.url
         const tags = editContent.tags.map((tag:any, i:number) => {
-            return { id: 'tempTag' + i, name: tag.name }
+            return { id: 'tempTag' + i, tag: tag.tag }
         })
+        if(isLogin){
+            
+           const editFrom = editForm(targetBookmarkId,originBookmark,editContent)
+            sendEditBookmark(targetBookmarkId,editFrom)
+        }
         const length = originBookmarks.length;
         const isMachedIndex = getMachedIndex(targetBookmarkId)
         const decrypted = originBookmarks.map((bookmark)=>{return {...bookmark, url:secureWrap.decryptWrapper(bookmark.url)} })
@@ -330,7 +397,7 @@ export const BookMark = (props: any) => {
             return {...bookmark, url:url}
         })
         
-        console.log('setNewBookmark에서 생성',editedBookmark, encryptedArr)
+        //console.log('setNewBookmark에서 생성',editedBookmark, encryptedArr)
         bookmarkSequence(editedBookmark)
         //내용갱신이 안된거처럼 보여서 그러는거 아닐까?
         setLocalBookmarkPage(setLocalPagenation(encryptedArr, 20))
@@ -338,8 +405,7 @@ export const BookMark = (props: any) => {
         createBookmarkView(setLocalPagenation(encryptedArr, 20),currentPageNum -1)
         //login? 서버 저장
         // eslint-disable-next-line no-restricted-globals
-        location.reload()
-
+        //location.reload()
         //no login? 로컬 저장.
     }
 
@@ -379,6 +445,7 @@ export const BookMark = (props: any) => {
         createBookmarkView(setLocalPagenation(originBookmarks, 20),currentPageNum -1)
     },[originBookmarks, currentPageNum])
 //여기서 사이드바로 데이터를 내려줘야 한다.
+
     return (
         <BookmarkContainer>
             <SideBar getTagBookmark={getTagBookmark} originBookmarks={originBookmarks} isLogin={props.isLogin}/>

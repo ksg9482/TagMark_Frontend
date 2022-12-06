@@ -13,7 +13,7 @@ const dummyUserData = {
 
 export const UserInfo = () => {
     const secureWrap = secure().wrapper()
-    const [userInfo, setUserInfo] = useState({ email: '', bookmarkCount: 0, tagCount: 0 })
+    const [userInfo, setUserInfo] = useState({ email: '', nickname:'', bookmarkCount: 0, tagCount: 0 })
     const [tagCount, setTagCount] = useState([{id:0, tag:'', count:''}])
     const updateUserInfo = (userInfo: any) => {
         setUserInfo(userInfo)
@@ -39,10 +39,10 @@ export const UserInfo = () => {
             const userInfo = await sendGetUserInfo(); //암호문
             const bookmarkCount = await sendGetBookmarkCount()
             const tagCount = await sendGetTagCount()
-            console.log(tagCount)
+            //console.log(secureWrap.decryptWrapper(userInfo.data.user))
             const user = JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
             encryptWrapper('')
-            updateUserInfo({user:user, bookmarkCount:bookmarkCount.data.count, tagCount:tagCount.data.tags.length})
+            updateUserInfo({email:user.email,nickname:user.nickname, bookmarkCount:bookmarkCount.data.count, tagCount:tagCount.data.tags.length})
             updateTagCount(tagCount.data.tags)
         } catch (error) {
             console.log(error)
@@ -62,6 +62,7 @@ export const UserInfo = () => {
     useEffect(() => {
         getUserInfo()
     }, [])
+    //console.log(userInfo)
     return (
         <UserInfoContainer>
             <BookmarkAreaContainer className="bookmark-area">
@@ -87,6 +88,7 @@ export const UserInfo = () => {
                 </TagAreaContainer>
                 <MyDataContainer className="userinfo-area">
                     <div>이메일 {userInfo.email}</div>
+                    <div>닉네임 {userInfo.nickname}</div>
                     <button>정보변경 </button>
                     <button>회원탈퇴 </button>
                 </MyDataContainer>

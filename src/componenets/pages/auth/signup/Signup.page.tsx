@@ -23,7 +23,9 @@ export const Signup = (props: any) => {
     const onClose = () => {
         useModal.closeModal()
     }
-
+    const securedSendData = (data:any) => {
+       return secureWrap.encryptWrapper(JSON.stringify(data))
+    }
     const sendSignupData = async (signupData:any) => {
         try {
             const userSignup = await axios.post(
@@ -31,13 +33,10 @@ export const Signup = (props: any) => {
                 signupData,
                 { withCredentials: true }
               );
-              console.log(userSignup)
+              //console.log(userSignup)
           } catch (error) {
             console.log(error)
           }
-        //서버전송. 암호문 날아감
-        // const temp = secure().local().setItem('user', JSON.stringify(signupData))
-        // return 'save'
     }
     const signupDataForm = (signupInput:{
         email: string;
@@ -48,7 +47,8 @@ export const Signup = (props: any) => {
         return signupInput
     }
     const onSignup = () => {
-        sendSignupData(signupDataForm(signupInput))
+        const securedData:string = securedSendData(signupDataForm(signupInput))
+        sendSignupData(securedData)
         useModal.closeModal()
 
     }

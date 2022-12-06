@@ -21,7 +21,7 @@ const SideBarTagComponenet = (props: any) => {
 
     return (
         <div onClick={onClick}>
-            <span className='tag_name'>{tag.name}</span>
+            <span className='tag_name'>{tag.tag}</span>
             <span>{tag.count}</span>
         </div>
     )
@@ -35,7 +35,7 @@ const SideBarTags = (props: any) => {
     return (
         <div>
             {tagCountObjArr.map((tag) => (
-                <SideBarTagComponenet tagWithCount={tag} key={tag.name} getTagBookmark={props.getTagBookmark} />
+                <SideBarTagComponenet tagWithCount={tag} key={tag.tag} getTagBookmark={props.getTagBookmark} />
             ))}
         </div>
     )
@@ -57,14 +57,14 @@ const SideBar = (props: any) => {
     const [tagObj, setTagObj] = useState({
         init:{
             id: 0,
-            name: '',
+            tag: '',
             count: 0
         }
     });
     const [tagWithCounts, setTagWithCounts] = useState(
         [{
             id: 0,
-            name: '',
+            tag: '',
             count: 0
         }]
     );
@@ -85,7 +85,7 @@ const SideBar = (props: any) => {
     const createTagObj = (tags: Tag[]) => {
         let result: any = {}
         tags.forEach((tag) => {
-            result[tag.name] = { ...tag, count: (result[tag.name]?.count || 0) + 1 }
+            result[tag.tag] = { ...tag, count: (result[tag.tag]?.count || 0) + 1 }
 
         })
         return result;
@@ -121,6 +121,7 @@ const SideBar = (props: any) => {
             const tempForm = tagData.data.tags.map((tag:any)=>{
                 return {...tag, name:tag.tag}
             })
+            setTagObj(tempForm);
             return setTagWithCounts(tempForm)
         }
     }
@@ -130,7 +131,7 @@ const SideBar = (props: any) => {
         const result:TagCountObj[] = [];
         
         for(let tag in tagObj) {
-            const tagName:string = tagObj[tag].name;
+            const tagName:string = tagObj[tag].tag;
             if(tagName.includes(tagInput)){
                 result.push(tagObj[tag])
             };
