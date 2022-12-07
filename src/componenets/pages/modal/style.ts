@@ -10,6 +10,19 @@ export const ModalContainer = styled.div`
   height: 100vh;
 `;
 
+export const UserInfoModalContainer = styled.div`
+  position: absolute;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: #81818194;
+  top:0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+`;
+
 
 export const ModalContentContainer = styled.div`
   display: grid;
@@ -18,4 +31,5 @@ export const ModalContentContainer = styled.div`
   background-color: #ffffff;
   width: 600px;
   height: 800px;
+  z-index: 1;
 `;

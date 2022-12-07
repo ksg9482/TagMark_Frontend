@@ -333,19 +333,22 @@ export const BookMark = (props: any) => {
         const decrypytedOrigin = {...originBookmark, url:secureWrap.decryptWrapper(originBookmark.url)}
         const decrypytedEdit = {...editContent, url:secureWrap.decryptWrapper(editContent.url)}
         let changeForm:any = {};
-        console.log(decrypytedOrigin, decrypytedEdit)
+        
+        
         const addTag = decrypytedEdit.tags.filter((editTag) =>{
             return !decrypytedOrigin.tags.some((originTag)=>{
                 return originTag.tag === editTag.tag
             })
         })
         console.log(addTag)
+
         const deleteTag = decrypytedOrigin.tags.filter((originTag) =>{
             return !decrypytedEdit.tags.some((editTag)=>{
                 return originTag.tag === editTag.tag
             })
         })
         console.log(deleteTag)
+
         if(decrypytedOrigin.url !== decrypytedEdit.url) {
             changeForm.changeUrl = decrypytedEdit
         }
@@ -360,15 +363,11 @@ export const BookMark = (props: any) => {
         return changeForm;
     }
     const sendEditBookmark = async (targetBookmarkId:any, editContent:any) => {
-        
         try {
-            
-            console.log('최종',{...editContent})
             const editResult = await customAxios.patch(
                 `/bookmark/${targetBookmarkId}`, 
                 {...editContent}
                 )
-                console.log(editResult)
         } catch (error) {
             console.log(error)
         }
@@ -397,7 +396,6 @@ export const BookMark = (props: any) => {
             return {...bookmark, url:url}
         })
         
-        //console.log('setNewBookmark에서 생성',editedBookmark, encryptedArr)
         bookmarkSequence(editedBookmark)
         //내용갱신이 안된거처럼 보여서 그러는거 아닐까?
         setLocalBookmarkPage(setLocalPagenation(encryptedArr, 20))
