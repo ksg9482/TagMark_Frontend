@@ -17,7 +17,7 @@ export const UserInfoModalPage = (props:any) => {
   
   const modalContentMap:ContentKey = {
     edit:<EditUserInfo useModal={props.useModal} userData={props.userData} sendEditUserData={props.sendEditUserData}/>,
-    delete: <DeleteUser useModal={props.useModal} userData={props.userData}/>
+    delete: <DeleteUser useModal={props.useModal} userData={props.userData} sendDeleteUser={props.sendDeleteUser}/>
   }
   const content = (contentKey:'edit' | 'delete') => {
 

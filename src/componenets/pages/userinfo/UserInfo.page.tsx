@@ -47,7 +47,7 @@ export const UserInfo = () => {
         
         const modalPage = () => {
             //전송함수 묶어서 보내기 데이터랑 함수 단위로 하나로 묶어 보내는게 좋지 않을까? 인터페이스 만들기도 편하고
-            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData}/>
+            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser}/>
         }
         const openModal = (key:'edit' | 'delete') => {
             setContentKey(key)
@@ -111,7 +111,17 @@ export const UserInfo = () => {
             console.log(error)
         }
     }
-    const sendDeleteUser = async () => {
+    const deletePasswordCheck = async(password:string) => {
+        const result = await customAxios.post(`/user/valid`,{password})
+        console.log(result.data)
+        return result.data.valid
+    }
+    const sendDeleteUser = async (password:string) => {
+        //비번검사 거친다
+        if(!await deletePasswordCheck(password)){
+            return '비밀번호 다름 에러'
+        }
+        return;
         const userInfo = await customAxios.delete(`/user`)
     }
     useEffect(() => {

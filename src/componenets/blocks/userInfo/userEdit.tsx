@@ -10,10 +10,16 @@ export const EditUserInfo = (props:any) => {
     const secureWrap = secure().wrapper()
     const sendEditUserData = props.sendEditUserData
     //초기화는 평문임. 변동있으면 암호화 그때. 암호화로 통일해야함.
-    const [editInput, setEditInput] = useState({ nickName: userData.nickname, password: '', passwordCheck: '' })
+    const [editInput, setEditInput] = useState({ nickName: secureWrap.encryptWrapper(userData.nickname), password: '', passwordCheck: '' })
 
     const onEditInput = (key: EditKey) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setEditInput({ ...editInput, [key]: secureWrap.encryptWrapper(e.target.value) });
+        console.log(e.target.value.length)
+        if(e.target.value.length <= 0){
+            setEditInput({ ...editInput, [key]: '' });
+        } 
+        else {
+            setEditInput({ ...editInput, [key]: secureWrap.encryptWrapper(e.target.value) });
+        } 
     };
 
     const onClose = () => {
@@ -29,11 +35,17 @@ export const EditUserInfo = (props:any) => {
     }
     const onEdit = () => {
         if(!passwordValid()){
+            console.log('비번 서로 다름')
             return false; //비번 안맞다 에러.
         }
-        const editData = {...editInput, changeNickname:editInput.nickName}
+        let editData:any = {}
+        if(editInput.nickName.length > 0) {
+            editData.changeNickname = editInput.nickName
+        }
+        if(editInput.password.length > 0) {
+            editData.changePassword = editInput.password
+        }
         Reflect.deleteProperty(editData, 'passwordCheck')
-        Reflect.deleteProperty(editData, 'password')
         //비밀번호에 변동있으면 비번 보내서 바꾸기
         sendEditUserData(editData)
         useModal.closeModal()
@@ -44,7 +56,7 @@ export const EditUserInfo = (props:any) => {
             유저정보 변경
             <div>
                 <span>닉네임변경</span>
-                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={editInput.nickName}/>
+                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)}/>
             </div>
             <div>
                 <span>비밀번호변경</span>
