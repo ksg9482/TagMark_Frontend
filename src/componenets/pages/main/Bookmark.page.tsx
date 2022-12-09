@@ -97,6 +97,7 @@ export const BookMark = (props: any) => {
         setCurrentTag([targetTag])
     }
     const getRemoteTagBookmark = async (targetTags: string[]): Promise<Bookmark[]> => {
+        console.log(targetTags)
         const prevTag: any[] = currentTag
         if (currentTag[0] !== '' && !currentTag.includes(targetTags[0])) {
             targetTags.push(...prevTag)
@@ -104,11 +105,17 @@ export const BookMark = (props: any) => {
         if(currentTag.includes(targetTags[0])){
             targetTags = prevTag
         }
+
+        //이거 앞에서 미리 처리해야 함
+        const blankChange = targetTags.map((tag)=>{
+            return tag.replaceAll(' ','%20')
+        })
+
         //띄어쓰기 문제 해결!!
         //사이드바 검색이 우선되게. 같은 로직 공유하니 and로 자동 적용됨
         const tagString = targetTags.join('+');
         console.log(tagString)
-        const andSearch = await customAxios.get(`/tag/search-and?tags=${tagString}`)
+        const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}`)
         if(andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -128,9 +135,9 @@ export const BookMark = (props: any) => {
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]): Promise<Bookmark[]> => {
         const tagString = targetTags.join();
-        console.log(tagString)
+        
         const andSearch = await customAxios.get(`/tag/search-and?tags=${tagString}`)
-        console.log(andSearch.data.bookmarks)
+        console.log(tagString, andSearch)
         if(andSearch.data.bookmarks.length <= 0) {
             console.log(andSearch.data.bookmarks.length,'없음')
             return bookmarkView
@@ -458,14 +465,12 @@ export const BookMark = (props: any) => {
                 return originTag.tag === editTag.tag
             })
         })
-        console.log(addTag)
 
         const deleteTag = decrypytedOrigin.tags.filter((originTag) => {
             return !decrypytedEdit.tags.some((editTag) => {
                 return originTag.tag === editTag.tag
             })
         })
-        console.log(deleteTag)
 
         if (decrypytedOrigin.url !== decrypytedEdit.url) {
             changeForm.changeUrl = decrypytedEdit

@@ -26,10 +26,10 @@ const BookmarkComponent = (props: any) => {
             result.push(tag.tag);
         };
         
-        return result.join(' ');
+        return result.join('\n');
     };
     const tagStrToArr = (tagStr:string) => {
-        const tagArr = tagStr.split(' ').map((tagName)=>{return {tag:tagName}})
+        const tagArr = tagStr.split('\n').map((tagName)=>{return {tag:tagName}})
         return tagArr
     };
     const onEditInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -96,10 +96,11 @@ const BookmarkComponent = (props: any) => {
     
     
     const BookmarkComponentContent = () => {
+        console.log(view.url,view.tags)
         return (
             <BookmarkComponentInner>
                 <div className="main">
-                    <UrlContainer>{secureWrap.decryptWrapper(view.url) ? secureWrap.decryptWrapper(view.url):view.url}</UrlContainer>
+                    <UrlContainer>{!secureWrap.decryptWrapper(view.url) || secureWrap.decryptWrapper(view.url) === '이거에러' ? view.url : secureWrap.decryptWrapper(view.url)}</UrlContainer>
                     {view.tags.length > 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} />: <div>&nbsp;</div>}
                 </div>
                 {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus}/> : null}
