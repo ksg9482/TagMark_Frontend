@@ -12,10 +12,10 @@ import { SideBarContainer, SideBarInput } from './style';
 
 
 const SideBarTagComponenet = (props: any) => {
-    const getTagBookmark = props.getTagBookmark;
+    const getTagBookmarkSideBar = props.getTagBookmarkSideBar;
     const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const targetTagName = e.currentTarget.querySelector('.tag_name')?.innerHTML
-        getTagBookmark([targetTagName], 'origin')
+        getTagBookmarkSideBar([targetTagName], 'origin')
     }
     const tag: TagCountObj = props.tagWithCount;
 
@@ -35,7 +35,7 @@ const SideBarTags = (props: any) => {
     return (
         <div>
             {tagCountObjArr.map((tag) => (
-                <SideBarTagComponenet tagWithCount={tag} key={tag.tag} getTagBookmark={props.getTagBookmark} />
+                <SideBarTagComponenet tagWithCount={tag} key={tag.tag} getTagBookmarkSideBar={props.getTagBookmarkSideBar} />
             ))}
         </div>
     )
@@ -173,7 +173,7 @@ const SideBar = (props: any) => {
                 <button onClick={tagSearchRefresh}>다 보기</button>
             </div>
             <SideBarInput type="text" id='side_bar_input' defaultValue={tagInput} onChange={inputOnChange} />
-            <SideBarTags tagCountObjArr={tagWithCounts} getTagBookmark={props.getTagBookmark} />
+            <SideBarTags tagCountObjArr={tagWithCounts} getTagBookmarkSideBar={props.getTagBookmarkSideBar} />
         </SideBarContainer>
     )
 }

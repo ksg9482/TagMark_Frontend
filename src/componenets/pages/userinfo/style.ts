@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const UserInfoContainer = styled.div`
     display: grid;
     grid-template-rows: 50% 50%;
-    height: 90vh;
+    height: 90%;
     gap: 5px;
 `;
 export const SubContainer = styled.div`
