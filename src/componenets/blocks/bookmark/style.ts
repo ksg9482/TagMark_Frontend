@@ -16,13 +16,32 @@ export const BookmarkComponentContainer = styled.div`
     }
 `;
 
+export const BookmarkComponentEditInner = styled.div`
+    display: grid ;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    width: 100%;
+    min-width: 330px;
+    background-color: white;
+`;
 export const BookmarkComponentInner = styled.div`
     display: grid ;
+    grid-template-rows: auto auto;
     grid-template-columns: 5fr 1fr;
     justify-items: center;
     width: 100%;
     min-width: 330px;
     background-color: white;
+`;
+
+export const EditContainer = styled.div`
+display: grid ;
+grid-template-rows: 1fr 6fr;
+`;
+export const EditButtonContainer = styled.div`
+display: grid ;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
 `;
 
 export const BookmarkOptionButtonsContainer = styled.div`

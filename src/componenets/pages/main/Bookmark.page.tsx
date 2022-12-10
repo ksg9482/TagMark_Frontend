@@ -136,10 +136,10 @@ export const BookMark = (props: any) => {
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]): Promise<Bookmark[]> => {
         const tagString = targetTags.join();
         
-        const andSearch = await customAxios.get(`/tag/search-and?tags=${tagString}`)
-        console.log(tagString, andSearch)
+        const andSearch = await customAxios.get(`/tag/search-or?tags=${tagString}`)
+        
         if(andSearch.data.bookmarks.length <= 0) {
-            console.log(andSearch.data.bookmarks.length,'없음')
+            console.log(andSearch.data.bookmarks,'없음')
             return bookmarkView
         }
         const bookmarkArr: Bookmark[] = originBookmarks;
@@ -158,7 +158,6 @@ export const BookMark = (props: any) => {
     }
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
         //태그 눌러가면서 원하는거 좁혀가려면?
-        console.log(currentTag, targetTags[0])
         if(!currentTag.includes(targetTags[0])) {
             updateCurrentTag(targetTags.join())
         }
@@ -566,7 +565,6 @@ export const BookMark = (props: any) => {
         createBookmarkView(setLocalPagenation(originBookmarks, 20), currentPageNum - 1)
     }, [originBookmarks, currentPageNum])
     //여기서 사이드바로 데이터를 내려줘야 한다.
-
     return (
         <BookmarkContainer>
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
@@ -577,6 +575,7 @@ export const BookMark = (props: any) => {
                     <button onClick={bookmarkRefresh}>북마크 전체보기</button>
                     <button onClick={bookmarkCreate}>북마크 생성</button>
                 </BookmarkManagebuttonContainer>
+                <div>{currentTag[0]?.length > 0 ? currentTag.join(', ') : <div>&nbsp;</div>}</div>
                 {useModal.isShowModal ? <BookmarkModalPage useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
                 <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
                 <PageMove count={localBookmarkPage.length} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
