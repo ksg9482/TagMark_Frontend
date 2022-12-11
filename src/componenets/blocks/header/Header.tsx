@@ -8,8 +8,9 @@ import { HeaderContainer } from './style';
 
 
 const Header = (props: any) => {
-    const location = useLocation()
+    const reactLocation = useLocation()
     const [isLogin, setIsLogin] = useState(false)
+    const [focused, setFocused] = useState(false);
 
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
@@ -39,14 +40,14 @@ const Header = (props: any) => {
     const MypageButton = () => {
         return (
             <button onClick={navUserInfo}>
-                마이
+                내정보
             </button>
         )
     }
     const MainButton = () => {
         return (
             <button onClick={navMain}>
-                메인
+                북마크
             </button>
         )
     }
@@ -57,11 +58,11 @@ const Header = (props: any) => {
             localStorage.removeItem('accessToken')
             // eslint-disable-next-line no-restricted-globals
             //location.reload()
-        //console.log('로그아웃 응답 반환')
+            //console.log('로그아웃 응답 반환')
         } catch (error) {
             console.log(error)
         }
-        
+
     }
     const deleteLocalUserData = () => {
         //액세스토큰 삭제
@@ -73,31 +74,58 @@ const Header = (props: any) => {
         //로그아웃인데 굳이 응답 기다려야 하나? 이럭 위한 메시지큐?
         localStorage.removeItem('accessToken')
         await sendLogout()
+        // eslint-disable-next-line no-restricted-globals
+        location.reload()
     }
     const ButtonHandle = () => {
-        const isMainPage = location.pathname === '/' ? true : false
+        const isMainPage = reactLocation.pathname === '/' ? true : false
         return isMainPage ? <MypageButton /> : <MainButton />
     }
+    const LogoutToggle = styled.div`
+    border: 1px solid;
+    background-color: #98ff5dcf;
+    white-space: nowrap;
+    width: fit-content;
+    padding-left: 4px;
+    padding-right: 4px;
+    :hover {
+        background-color: #ff5d5dcf;
+    }
+    `;
     const loginedHeader = () => {
 
         return (
+
             <HeaderContainer>
+                <div></div>
                 {useModal.isShowModal ? <ModalPage useModal={useModal} /> : null}
-                <span>Logined Header</span>
-                <span>태그검색가능</span>
-                <span>{ButtonHandle()}</span>
-                <span onClick={onLogout}>로그인 토글 ON</span>
+                <HeaderContent>
+                    <div>Tag Mark</div>
+                    <div></div>
+                    <div>{ButtonHandle()}</div>
+                    <LogoutToggle onClick={onLogout} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>{focused ? 'Logout' : 'Logged In'}</LogoutToggle>
+                </HeaderContent>
+                <div></div>
             </HeaderContainer>
+
         )
     }
+    const HeaderContent = styled.div`
+        display: grid;
+        grid-template-columns: 20% 50% 20% 10%;
+    `;
     const unLoginHeader = () => {
         return (
             <HeaderContainer>
+                <div></div>
                 {useModal.isShowModal ? <ModalPage useModal={useModal} /> : null}
-                <span>Unlogin Header</span>
-                <span>태그검색불가</span>
-                <button onClick={onlogin}>로그인/회원가입</button>
-                <span>로그인 토글 OFF</span>
+                <HeaderContent>
+                    <div>Tag Mark</div>
+                    <div></div>
+                    <button onClick={onlogin}>로그인</button>
+                    <div>Local</div>
+                </HeaderContent>
+                <div></div>
             </HeaderContainer>
         )
     }

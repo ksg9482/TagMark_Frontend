@@ -472,7 +472,7 @@ export const BookMark = (props: any) => {
         })
 
         if (decrypytedOrigin.url !== decrypytedEdit.url) {
-            changeForm.changeUrl = decrypytedEdit
+            changeForm.changeUrl = decrypytedEdit.url
         }
         if (addTag.length > 0) {
             changeForm.addTag = addTag.map((tag) => { return tag.tag })
@@ -571,7 +571,7 @@ export const BookMark = (props: any) => {
             <div></div>
             <BookmarkManageContainer>
                 <BookmarkManagebuttonContainer>
-                    <div>바로삭제 확인, 아니면 시간내 누르면 복구버튼?</div>
+                    <div></div>
                     <button onClick={bookmarkRefresh}>북마크 전체보기</button>
                     <button onClick={bookmarkCreate}>북마크 생성</button>
                 </BookmarkManagebuttonContainer>

@@ -13,7 +13,7 @@ export const BookmarkComponentContainer = styled.div`
     background-color: white;
     &:hover{
         background-color: gray;
-    }
+    };
 `;
 
 export const BookmarkComponentEditInner = styled.div`
@@ -29,6 +29,7 @@ export const BookmarkComponentInner = styled.div`
     grid-template-rows: auto auto;
     grid-template-columns: 5fr 1fr;
     justify-items: center;
+    //margin-left: 20px;
     width: 100%;
     min-width: 330px;
     background-color: white;

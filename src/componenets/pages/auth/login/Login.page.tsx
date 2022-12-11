@@ -13,11 +13,41 @@ export const Login = (props: any) => {
     const secureWrap = secure().wrapper()
     const secureStorage = secure().local()
 
+    const oauthGoogle = () => {
+        const googleHost = "accounts.google.com";
+            const googleParametor = {
+              client_id: config.GOOGLE_CLIENT_ID,
+              redirect_uri: config.GOOGLE_REDIRECT_URI,
+              scope_email: "https://www.googleapis.com/auth/userinfo.email",
+            };
+            const googleOAuthURL =
+              `https://${googleHost}/o/oauth2/v2/auth?` +
+              `client_id=${googleParametor.client_id}&` +
+              `redirect_uri=${googleParametor.redirect_uri}&` +
+              `response_type=token&` +
+              `scope=${googleParametor.scope_email}`;
+              window.location.href = googleOAuthURL;
+    };
+    const oauthKakao = () => {
+        const kakaoHost = "kauth.kakao.com";
+            const kakaoParametor = {
+              clientid: config.KAKAO_REST_API_KEY,
+              redirect_uri: config.KAKAO_REDIRECT_URI,
+            };
+            const kakaoOAuthURL =
+              `https://${kakaoHost}/oauth/authorize?` +
+              `clientid=${kakaoParametor.clientid}` +
+              `&redirect_uri=${kakaoParametor.redirect_uri}` +
+              `&response_type=code`;
+  
+            window.location.href = kakaoOAuthURL;
+    };
+
     const OAuthButtonBlock = () => {
         return (
             <div>
-                <button>구글</button>
-                <button>카카오</button>
+                <button onClick={oauthGoogle}>구글</button>
+                <button onClick={oauthKakao}>카카오</button>
             </div>
         )
     };
@@ -78,7 +108,8 @@ export const LoginBlock = (props: any) => {
     const onLogin = () => {
         sendLoginData(loginInput)
         useModal.closeModal()
-
+        // eslint-disable-next-line no-restricted-globals
+        location.reload()
     }
     return (
         <LoginContainer>

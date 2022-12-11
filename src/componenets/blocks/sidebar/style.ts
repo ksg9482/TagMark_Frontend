@@ -7,4 +7,5 @@ export const SideBarInput = styled.input`
 export const SideBarContainer = styled.div`
     border: 1px solid;
     margin-right: 5px;
+    padding-top: 5px;
 `;

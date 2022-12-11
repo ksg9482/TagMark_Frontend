@@ -158,7 +158,7 @@ const GraphCon = styled.div`
 .div {
     position: unset;
 }
-    height: 100%;
+    height: 450px;
     max-height: 50vh;
     //max-width: 200px;
 `

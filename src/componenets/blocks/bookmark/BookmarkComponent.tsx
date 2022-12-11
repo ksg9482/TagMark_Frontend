@@ -29,6 +29,9 @@ const BookmarkComponent = (props: any) => {
         return result.join('\n');
     };
     const tagStrToArr = (tagStr: string) => {
+        if(Array.isArray(tagStr)){
+            return tagStr
+        }
         const tagArr = tagStr.split('\n').map((tagName) => { return { tag: tagName } })
         return tagArr
     };
@@ -69,7 +72,7 @@ const BookmarkComponent = (props: any) => {
                 console.log('배열아님', editInput.tags)
             }
             const tagStrDecrypted = secureWrap.decryptWrapper(editInput.tags)
-
+            console.log(tagStrDecrypted)
             const tagArr = tagStrDecrypted.length <= 0
                 ? []//editInput.tags 
                 : tagStrToArr(tagStrDecrypted);
