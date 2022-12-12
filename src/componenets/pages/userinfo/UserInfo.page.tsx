@@ -4,14 +4,7 @@ import { customAxios } from "../../../utils/axios/customAxios";
 import { secure } from "../../../utils/secure";
 import { MyResponsivePie } from "../../blocks/userInfo/tagGraph";
 import { UserInfoModalPage } from "../modal/UserInfoModalPage";
-import { BookmarkAreaContainer, MyDataContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
-
-const dumyBookmarkCount = 21;
-const dumyTagCount = 107;
-const dummyUserData = {
-    email: 'dumy@email.com'
-}
-
+import { BookmarkAreaContainer, GraphContainer, MyDataContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
 
 export const UserInfo = () => {
     const secureWrap = secure().wrapper()
@@ -106,14 +99,12 @@ export const UserInfo = () => {
         try {
             const encrypted = secureWrap.encryptWrapper('test')
             const userInfo = await customAxios.patch(`/user`, editUser)
-            console.log(userInfo)
         } catch (error) {
             console.log(error)
         }
     }
     const deletePasswordCheck = async(password:string) => {
         const result = await customAxios.post(`/user/valid`,{password})
-        console.log(result.data)
         return result.data.valid
     }
     const sendDeleteUser = async (password:string) => {
@@ -127,7 +118,6 @@ export const UserInfo = () => {
     useEffect(() => {
         getUserInfo()
     }, [])
-    //console.log(userInfo)
     
     return (
         <UserInfoContainer>
@@ -141,7 +131,7 @@ export const UserInfo = () => {
             <SubContainer>
                 <TagAreaContainer className="tag-area">
                     <div>총 태그 개수 {userInfo.tagCount}</div>
-                    <GraphCon className="graph_con">{MyResponsivePie(tagGraphData)}</GraphCon>
+                    <GraphContainer className="graph_con">{MyResponsivePie(tagGraphData)}</GraphContainer>
                 </TagAreaContainer>
                 <MyDataContainer className="userinfo-area">
                     <div>이메일 {userInfo.email}</div>
@@ -154,12 +144,5 @@ export const UserInfo = () => {
         </UserInfoContainer>
     )
 }
-const GraphCon = styled.div`
-.div {
-    position: unset;
-}
-    height: 100%;
-    max-height: 50vh;
-    //max-width: 200px;
-`
+
 //export default BookMark

@@ -8,6 +8,7 @@ export const ModalContainer = styled.div`
   background-color: #81818194;
   width: 100vw;
   height: 100vh;
+  z-index: 2;
 `;
 
 export const UserInfoModalContainer = styled.div`

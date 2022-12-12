@@ -33,7 +33,7 @@ function App() {
 const MainContainer = styled.div`
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  padding: 40px 0 40px 0;
+  padding: 50px 0 40px 0;
 
 `;
 

@@ -36,10 +36,11 @@ export const secure = () => {
     }
     const decryptWrapper = (encryptStr:string) => {
         try {
-            return decrypt(encryptStr)
+            const result = decrypt(encryptStr)
+            if(!result) {throw false}
+            return result
         } catch (error) {
-            console.log('이거에러')
-            return '이거에러'//encryptStr
+            return encryptStr;
         }
     }
 

@@ -4,6 +4,8 @@ import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import config from "../../../../config";
 import { LoginContainer, LoginInput } from "./style";
+import { LoginBlock } from "../../../blocks/auth/login/login.block";
+import { OAuthButtonBlock } from "../../../blocks/auth/login/OAuthButton.block";
 
 
 
@@ -11,16 +13,38 @@ import { LoginContainer, LoginInput } from "./style";
 export const Login = (props: any) => {
     const onSignup = props.onSignup;
     const secureWrap = secure().wrapper()
-    const secureStorage = secure().local()
 
-    const OAuthButtonBlock = () => {
-        return (
-            <div>
-                <button>구글</button>
-                <button>카카오</button>
-            </div>
-        )
+    const oauthGoogle = () => {
+        const googleHost = "accounts.google.com";
+            const googleParametor = {
+              client_id: config.GOOGLE_CLIENT_ID,
+              redirect_uri: config.GOOGLE_REDIRECT_URI,
+              scope_email: "https://www.googleapis.com/auth/userinfo.email",
+            };
+            const googleOAuthURL =
+              `https://${googleHost}/o/oauth2/v2/auth?` +
+              `client_id=${googleParametor.client_id}&` +
+              `redirect_uri=${googleParametor.redirect_uri}&` +
+              `response_type=token&` +
+              `scope=${googleParametor.scope_email}`;
+              window.location.href = googleOAuthURL;
     };
+    const oauthKakao = () => {
+        const kakaoHost = "kauth.kakao.com";
+            const kakaoParametor = {
+              clientid: config.KAKAO_REST_API_KEY,
+              redirect_uri: config.KAKAO_REDIRECT_URI,
+            };
+            const kakaoOAuthURL =
+              `https://${kakaoHost}/oauth/authorize?` +
+              `clientid=${kakaoParametor.clientid}` +
+              `&redirect_uri=${kakaoParametor.redirect_uri}` +
+              `&response_type=code`;
+  
+            window.location.href = kakaoOAuthURL;
+    };
+
+    
     const securedSendData = (data:any) => {
         return secureWrap.encryptWrapper(JSON.stringify(data))
      }
@@ -41,14 +65,7 @@ export const Login = (props: any) => {
         } catch (error) {
             console.log(error)
         }
-        //서버전송. 암호문 날아감
-        //const form = { email: '', password: '' }
-        //const temp = secure().local().getItem('user')!
-        //const encryptedSendData = secure().wrapper().encryptWrapper(sendData)
-        //console.log('서버에서 받는 것', sendData)
-        //console.log('서버에서 해석 email', secureWrap.decryptWrapper(sendData.email))
-        //console.log('서버에서 해석 password', secureWrap.decryptWrapper(sendData.password))
-    }
+      }
 
 
     return (
@@ -56,42 +73,9 @@ export const Login = (props: any) => {
             <div>로고</div>
             <LoginBlock useModal={props.useModal} sendLoginData={sendLoginData} />
             <div onClick={onSignup}>회원가입은 여기 클릭</div>
-            <OAuthButtonBlock />
+            <OAuthButtonBlock oauthGoogle={oauthGoogle} oauthKakao={oauthKakao}/>
         </LoginContainer>
     )
 }
 
-export const LoginBlock = (props: any) => {
-    const useModal: UseModal = props.useModal;
-    const secureWrap = secure().wrapper()
-    const sendLoginData = props.sendLoginData
-    const [loginInput, setLoginInput] = useState({ email: '', password: '' })
 
-    const onLoginInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setLoginInput({ ...loginInput, [key]: secureWrap.encryptWrapper(e.target.value) });
-    };
-
-    const onClose = () => {
-        useModal.closeModal()
-    }
-
-    const onLogin = () => {
-        sendLoginData(loginInput)
-        useModal.closeModal()
-
-    }
-    return (
-        <LoginContainer>
-            <LoginInput >
-                <div>이메일</div>
-                <input type="text" onChange={onLoginInput('email')} />
-            </LoginInput>
-            <LoginInput>
-                <div>비밀번호</div>
-                <input type="text" onChange={onLoginInput('password')} />
-            </LoginInput>
-            <button onClick={onLogin}>로그인</button>
-            <button onClick={onClose}>취소</button>
-        </LoginContainer>
-    )
-}
