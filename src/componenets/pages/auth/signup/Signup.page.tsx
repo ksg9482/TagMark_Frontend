@@ -4,6 +4,7 @@ import styled from "styled-components";
 import config from "../../../../config";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
+import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
 import { SignupContainer, SignupInput } from "./style";
 
 
@@ -52,14 +53,7 @@ export const Signup = (props: any) => {
         useModal.closeModal()
 
     }
-    const SignUpButtonBlock = () => {
-        return (
-            <div>
-                <button onClick={onClose}>취소</button>
-                <button onClick={onSignup}>가입</button>
-            </div>
-        )
-    }
+    
     const passwordValid = ()=> {
         //비번과 비번확인 비교
     }
@@ -77,7 +71,7 @@ export const Signup = (props: any) => {
                 <div>비밀번호확인</div>
                 <input type="password" onChange={onsignupInput('passwordCheck')} required />
             </SignupInput>
-            <SignUpButtonBlock />
+            <SignUpButtonBlock onClose={onClose} onSignup={onSignup}/>
         </SignupContainer>
     )
 };

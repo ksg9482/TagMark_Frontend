@@ -36,3 +36,12 @@ export const MyDataContainer = styled.div`
     border-style: groove;
     height: 475px;
 `;
+
+export const GraphContainer = styled.div`
+.div {
+    position: unset;
+}
+    height: 450px;
+    max-height: 50vh;
+    //max-width: 200px;
+`;
