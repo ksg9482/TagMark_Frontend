@@ -5,7 +5,7 @@ import { Bookmark } from '../../../interface/bookmark';
 import { Tag, TagCountObj } from '../../../interface/tag';
 import { customAxios } from '../../../utils/axios/customAxios';
 import { secure } from '../../../utils/secure';
-import { SideBarContainer, SideBarInput } from './style';
+import { CommonButton, SideBarContainer, SideBarInput } from './style';
 
 
 
@@ -33,14 +33,18 @@ const SideBarTags = (props: any) => {
     const tagCountObjArr: TagCountObj[] = props.tagCountObjArr;
 
     return (
-        <div>
+        <SideBarTagsContainer>
             {tagCountObjArr.map((tag) => (
                 <SideBarTagComponenet tagWithCount={tag} key={tag.tag} getTagBookmarkSideBar={props.getTagBookmarkSideBar} />
             ))}
-        </div>
+        </SideBarTagsContainer>
     )
 }
-
+const SideBarTagsContainer = styled.div`
+    display: grid;
+    margin-top: 20px;
+    gap: 2px;
+`;
 
 /*
 [tagName] [tagCount]
@@ -168,10 +172,10 @@ const SideBar = (props: any) => {
     })
     return (
         <SideBarContainer>
-            <div>
+            <SideBarTextContainer>
                 <span>태그 검색</span>
-                <button onClick={tagSearchRefresh}>다 보기</button>
-            </div>
+                <CommonButton onClick={tagSearchRefresh}>다 보기</CommonButton>
+            </SideBarTextContainer>
             <SideBarInput type="text" id='side_bar_input' defaultValue={tagInput} onChange={inputOnChange} />
             <SideBarTags tagCountObjArr={tagWithCounts} getTagBookmarkSideBar={props.getTagBookmarkSideBar} />
         </SideBarContainer>
@@ -180,3 +184,6 @@ const SideBar = (props: any) => {
 
 export default SideBar;
 
+const SideBarTextContainer = styled.div`
+margin-top: 10px;
+`;

@@ -5,7 +5,7 @@ import config from "../../../../config";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
-import { SignupContainer, SignupInput } from "./style";
+import { CommonInput, ModalTitle, SignupContainer, SignupInput } from "./style";
 
 
 
@@ -18,6 +18,10 @@ export const Signup = (props: any) => {
     const [signupInput, setSignupInput] = useState({ email: '', password: '', passwordCheck: '' })
 
     const onsignupInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (e.target.value.length <= 0) {
+            setSignupInput({ ...signupInput, [key]: '' });
+            return ;
+        }
         setSignupInput({ ...signupInput, [key]: secureWrap.encryptWrapper(e.target.value) });
     };
 
@@ -59,18 +63,19 @@ export const Signup = (props: any) => {
     }
     return (
         <SignupContainer>
-            <SignupInput>
+            <ModalTitle>회원가입</ModalTitle>
+            <CommonInput>
                 <div>이메일</div>
                 <input type="email" onChange={onsignupInput('email')} required />
-            </SignupInput>
-            <SignupInput>
+            </CommonInput>
+            <CommonInput>
                 <div>비밀번호</div>
                 <input type="password" onChange={onsignupInput('password')} required />
-            </SignupInput>
-            <SignupInput>
+            </CommonInput>
+            <CommonInput>
                 <div>비밀번호확인</div>
                 <input type="password" onChange={onsignupInput('passwordCheck')} required />
-            </SignupInput>
+            </CommonInput>
             <SignUpButtonBlock onClose={onClose} onSignup={onSignup}/>
         </SignupContainer>
     )

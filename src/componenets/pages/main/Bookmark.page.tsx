@@ -90,6 +90,7 @@ export const BookMark = (props: any) => {
     const [pageCount, setPageCount] = useState(0);
     const [currentSearch, setCurrentSearch] = useState(CurrentSearch.Bookmark);
 
+    const [firstPage, setFirstPage] = useState([bookmarkInitData])
 
     const updateCurrentTag = (targetTag: any) => {
         if (currentTag.includes(targetTag)) {
@@ -336,6 +337,7 @@ export const BookMark = (props: any) => {
             //결과 없을땐 어떻게??
             return bookmarkView
         }
+        
         updateOriginPageCount(bookmarkResponse.data.totalPage)
         updateOriginTotalCount(bookmarkResponse.data.totalCount)
         updateTotalCount(bookmarkResponse.data.totalCount)
@@ -349,7 +351,7 @@ export const BookMark = (props: any) => {
     const getBookmark = async (isLogin: boolean) => {
         try {
             const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks()
-
+            setFirstPage(bookmark)
             //원본저장
             setOriginBookmarks(bookmark);
             //페이지네이션 별로 구분
@@ -364,13 +366,17 @@ export const BookMark = (props: any) => {
     };
 
     //상태 정리 해야 함. 상태가 꼬여있어서 복잡해진거 해결 안됨
+    //전체보기를 하면 결국 getBookmark의 첫화면으로 돌아온다
+    //첫화면을 따로 저장하는게 좋을까?
     const bookmarkRefresh = () => {
-        console.log(originBookmarks)
-        setCurrentSearch(CurrentSearch.Bookmark)
-        setBookmarkView(setLocalPagenation(originBookmarks, 20)[0]) //페이지네이션 한걸로 해야 함
-        setCurrentTag([])
-        updateOriginPageCount(originPageCount)
-        currentPageRefresh(1)
+        setCurrentSearch(CurrentSearch.Bookmark) //첫화면 구성요소. 맨처음엔 getBookmark였음
+        setBookmarkView(firstPage) //첫화면 구성요소. 맨처음 뷰로 복귀
+        //setBookmarkView(setLocalPagenation(originBookmarks, 20)[0]) //페이지네이션 한걸로 해야 함
+        setCurrentTag([]) //첫화면 구성요소. 맨처음엔 태그지정 없었음
+        updateOriginPageCount(originPageCount) //첫화면 구성요소. 맨처음엔 몇페이지였나
+        updateOriginTotalCount(originTotalCount) //첫화면 구성요소. 맨처음엔 총 몇 개 북마크였나
+        setCurrentPageNum(1) //지금 몇 페이지에 있는지 페이지 넘버를 1로 새로고침(숫자)
+        currentPageRefresh(1) //여러페이지중 첫번째 페이지로 옮김(뷰)
         if(isLogin) {
             updatePageCount(originPageCount)
             updateTotalCount(originTotalCount)
@@ -581,6 +587,7 @@ export const BookMark = (props: any) => {
     
     const pagenationNum = async (num: number) => {
         //여러가지 get요청중에서 어떤걸로 했는지 확인해야함
+        console.log(currentSearch, num, currentPageNum)
         if (isLogin) {
             if (currentSearch === CurrentSearch.Bookmark) {
                 console.log('bookmark move')
@@ -664,10 +671,10 @@ console.log('bookmarkView -', bookmarkView)
             <BookmarkManageContainer>
                 <BookmarkManagebuttonContainer>
                     <div>총 {totalCount}개 북마크</div>
-                    <button onClick={bookmarkRefresh}>북마크 전체보기</button>
-                    <button onClick={bookmarkCreate}>북마크 생성</button>
+                    <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
+                    <CommonButton onClick={bookmarkCreate}>북마크 생성</CommonButton>
                 </BookmarkManagebuttonContainer>
-                <div>{currentTag[0]?.length > 0 ? currentTag.join(', ') : <div>&nbsp;</div>}</div>
+                <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
                 {useModal.isShowModal ? <BookmarkModalPage useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
                 <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
                 <PageMove count={paginationCount()} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
@@ -675,6 +682,14 @@ console.log('bookmarkView -', bookmarkView)
         </BookmarkContainer>
     )
 };
-
+const CommonButton = styled.button`
+    white-space: nowrap;
+    min-width: fit-content;
+`;
+const TagText = styled.div`
+    display: grid;
+    align-items: center;
+    margin-bottom: 10px;
+`;
 //로컬에 저장된거 암호화 못시키나? 가져올때 원복시키면 되지 않을까?
 //export default BookMark

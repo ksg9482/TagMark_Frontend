@@ -27,7 +27,7 @@ export const PageMove = (props: any) => {
         setpageFocus(props.currentPageNum)
     })
     return (
-        <PageButtonsContainer>
+        <PageButtonsContainer id="move-button">
             <div onClick={onClick(firstPageNum)}>맨앞</div>
             <div onClick={onClick(pageFocus-1)}>이전</div>
             <PageNums buttonCount={count} onMoveClick={onMoveClick} pageFocus={pageFocus}/>

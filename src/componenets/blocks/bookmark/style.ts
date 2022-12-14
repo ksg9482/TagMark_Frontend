@@ -59,4 +59,6 @@ export const BookmarkOptionButton = styled.button`
 export const BookmarksContainer = styled.div`
 display: grid;
 gap: 5px;
+background-color: skyblue;
+height: max-content;
 `;
