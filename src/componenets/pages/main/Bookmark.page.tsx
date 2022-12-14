@@ -38,9 +38,9 @@ export interface RemoteBookmark {
 
 type GetBookmarkOption = LocalBookmark | RemoteBookmark;
 enum CurrentSearch {
-    Bookmark='Bookmark',
-    TagSearch='TagSearch',
-    SideBarSearch='SideBarSearch'
+    Bookmark = 'Bookmark',
+    TagSearch = 'TagSearch',
+    SideBarSearch = 'SideBarSearch'
 }
 
 export const BookMark = (props: any) => {
@@ -77,6 +77,8 @@ export const BookMark = (props: any) => {
     }
     //전부 갖고 있음. 유지용
     const [originBookmarks, setOriginBookmarks] = useState([bookmarkInitData]);
+    const [originPageCount, setOriginPageCount] = useState(0);
+    const [originTotalCount, setOriginTotalCount] = useState(0);
     //페이지 보이기용
     const [bookmarkView, setBookmarkView] = useState([bookmarkInitData]);
     //로컬 페이지네이션
@@ -87,11 +89,12 @@ export const BookMark = (props: any) => {
     const [totalCount, setTotalCount] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [currentSearch, setCurrentSearch] = useState(CurrentSearch.Bookmark);
-    
+
+    const [firstPage, setFirstPage] = useState([bookmarkInitData])
 
     const updateCurrentTag = (targetTag: any) => {
-        if(currentTag.includes(targetTag)){
-            return ;
+        if (currentTag.includes(targetTag)) {
+            return;
         }
         if (!currentTag[0]) {
             setCurrentTag([targetTag])
@@ -105,26 +108,25 @@ export const BookMark = (props: any) => {
         setCurrentTag([targetTag])
     }
     const getRemoteTagBookmark = async (targetTags: string[]) => {
-        
+        currentPageRefresh(1)
         const prevTag: any[] = currentTag
         if (currentTag[0] !== '' && !currentTag.includes(targetTags[0])) {
             targetTags.push(...prevTag)
         }
-        if(currentTag.includes(targetTags[0])){
+        if (currentTag.includes(targetTags[0])) {
             targetTags = prevTag
         }
 
         //이거 앞에서 미리 처리해야 함
-        const blankChange = targetTags.map((tag)=>{
-            return tag.replaceAll(' ','%20')
+        const blankChange = targetTags.map((tag) => {
+            return tag.replaceAll(' ', '%20')
         })
 
         //띄어쓰기 문제 해결!!
         //사이드바 검색이 우선되게. 같은 로직 공유하니 and로 자동 적용됨
-        const tagString = targetTags.join('+');
         const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}&pageNo=1`)
-        console.log(andSearch.data)
-        if(andSearch.data.bookmarks.length <= 0) {
+        
+        if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
         const bookmarkArr: Bookmark[] = originBookmarks;
@@ -142,12 +144,11 @@ export const BookMark = (props: any) => {
         return andSearch.data
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
-        const tagString = targetTags.join();
-        
-        const andSearch = await customAxios.get(`/tag/search-or?tags=${tagString}&pageNo=1`)
-        
-        if(andSearch.data.bookmarks.length <= 0) {
-            console.log(andSearch.data.bookmarks,'없음')
+        currentPageRefresh(1)
+        const andSearch = await customAxios.get(`/tag/search-or?tags=${targetTags}&pageNo=1`)
+
+        if (andSearch.data.bookmarks.length <= 0) {
+            console.log(andSearch.data.bookmarks, '없음')
             return bookmarkView
         }
         const bookmarkArr: Bookmark[] = originBookmarks;
@@ -166,16 +167,18 @@ export const BookMark = (props: any) => {
     }
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
         //태그 눌러가면서 원하는거 좁혀가려면?
-        if(!currentTag.includes(targetTags[0])) {
+        
+        if (!currentTag.includes(targetTags[0])) {
             updateCurrentTag(targetTags.join())
         }
-        
+
         let searched: Bookmark[]
         if (isLogin) {
             const result = await getRemoteTagBookmark(targetTags)
             searched = result.bookmarks
+            console.log(result)
             updateTotalCount(result.totalCount)
-            updatePageCount(result.data.totalPage)
+            updatePageCount(result.totalPage)
         }
         else {
             const bookmarkArr: Bookmark[] = findType === 'origin' ? originBookmarks : bookmarkView;
@@ -192,23 +195,24 @@ export const BookMark = (props: any) => {
             searched = bookmarkFilter
         }
 
-        
-        
+        console.log(searched)
+        setCurrentSearch(CurrentSearch.TagSearch)
         setLocalBookmarkPage(setLocalPagenation(searched, 20))
         // //해당하는페이지 보여줌
-        createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1)
+        //createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1)
+        updateBookmarkView(searched)
         //return setBookmarkView(bookmarkFilter)
     };
 
     const getTagBookmarkSideBar = async (targetTags: string[], findType: FindType) => {
         //태그 눌러가면서 원하는거 좁혀가려면?
         let searched: Bookmark[]
+        currentPageRefresh(1)
         if (isLogin) {
             const result = await getRemoteTagBookmarkSideBar(targetTags)
-            console.log(result)
             searched = result.bookmarks
             updateTotalCount(result.totalCount)
-            updatePageCount(result.data.totalPage)
+            updatePageCount(result.totalPage)
         }
         else {
             const bookmarkArr: Bookmark[] = findType === 'origin' ? originBookmarks : bookmarkView;
@@ -224,7 +228,7 @@ export const BookMark = (props: any) => {
             })
             searched = bookmarkFilter
         }
-
+        setCurrentSearch(CurrentSearch.SideBarSearch)
         //url 암호화 문제
         updateCurrentTagSideBar(targetTags.join())
 
@@ -292,19 +296,19 @@ export const BookMark = (props: any) => {
         }
     }
 
-    const sendsearchTagBookmark = () => {
-        const sendGetAndSearch = async () => {
-            const query = 'query1+query2'
-            const boookmarks = await customAxios.get(`/tag/search-and?query=${query}&pageNo=1`)
-        }
-        const sendGetOrSearch = async () => {
-            const query = 'query1+query2'
-            const boookmarks = await customAxios.get(`/tag/search-or?query=${query}&pageNo=1`)
-        }
-        return {
-            sendGetAndSearch, sendGetOrSearch
-        }
-    }
+    // const sendsearchTagBookmark = () => {
+    //     const sendGetAndSearch = async () => {
+    //         const query = 'query1+query2'
+    //         const boookmarks = await customAxios.get(`/tag/search-and?query=${query}&pageNo=1`)
+    //     }
+    //     const sendGetOrSearch = async () => {
+    //         const query = 'query1+query2'
+    //         const boookmarks = await customAxios.get(`/tag/search-or?query=${query}&pageNo=1`)
+    //     }
+    //     return {
+    //         sendGetAndSearch, sendGetOrSearch
+    //     }
+    // }
 
     //북마크 읽기
     const getLocalBookmarks = () => {
@@ -313,20 +317,29 @@ export const BookMark = (props: any) => {
         updateTotalCount(bookmark.length)
         return bookmark
     }
-    const updateTotalCount = (count:number) => {
+    const updateTotalCount = (count: number) => {
         setTotalCount(count)
     };
-    const updatePageCount = (count:number) => {
+    const updatePageCount = (count: number) => {
         setPageCount(count)
     };
+    const updateOriginPageCount = (count: number) => {
+        setOriginPageCount(count)
+    }
+    const updateOriginTotalCount = (count: number) => {
+        setOriginTotalCount(count)
+    }
     //pageNo 페이지버튼 클릭하면 이거 변경
     const getDBBookmarks = async () => {
         const currentPageCount = sessionStorage.getItem('current-page') || 1
         const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageCount}`)
-        if(bookmarkResponse.data.bookmarks.length <= 0){
+        if (bookmarkResponse.data.bookmarks.length <= 0) {
             //결과 없을땐 어떻게??
             return bookmarkView
         }
+        
+        updateOriginPageCount(bookmarkResponse.data.totalPage)
+        updateOriginTotalCount(bookmarkResponse.data.totalCount)
         updateTotalCount(bookmarkResponse.data.totalCount)
         updatePageCount(bookmarkResponse.data.totalPage)
         console.log(bookmarkResponse)
@@ -338,7 +351,7 @@ export const BookMark = (props: any) => {
     const getBookmark = async (isLogin: boolean) => {
         try {
             const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks()
-
+            setFirstPage(bookmark)
             //원본저장
             setOriginBookmarks(bookmark);
             //페이지네이션 별로 구분
@@ -353,10 +366,24 @@ export const BookMark = (props: any) => {
     };
 
     //상태 정리 해야 함. 상태가 꼬여있어서 복잡해진거 해결 안됨
+    //전체보기를 하면 결국 getBookmark의 첫화면으로 돌아온다
+    //첫화면을 따로 저장하는게 좋을까?
     const bookmarkRefresh = () => {
-        setBookmarkView(setLocalPagenation(originBookmarks, 20)[0]) //페이지네이션 한걸로 해야 함
-        setCurrentTag([])
-        updateTotalCount(originBookmarks.length)
+        setCurrentSearch(CurrentSearch.Bookmark) //첫화면 구성요소. 맨처음엔 getBookmark였음
+        setBookmarkView(firstPage) //첫화면 구성요소. 맨처음 뷰로 복귀
+        //setBookmarkView(setLocalPagenation(originBookmarks, 20)[0]) //페이지네이션 한걸로 해야 함
+        setCurrentTag([]) //첫화면 구성요소. 맨처음엔 태그지정 없었음
+        updateOriginPageCount(originPageCount) //첫화면 구성요소. 맨처음엔 몇페이지였나
+        updateOriginTotalCount(originTotalCount) //첫화면 구성요소. 맨처음엔 총 몇 개 북마크였나
+        setCurrentPageNum(1) //지금 몇 페이지에 있는지 페이지 넘버를 1로 새로고침(숫자)
+        currentPageRefresh(1) //여러페이지중 첫번째 페이지로 옮김(뷰)
+        if(isLogin) {
+            updatePageCount(originPageCount)
+            updateTotalCount(originTotalCount)
+        }
+        else {
+            updateTotalCount(originBookmarks.length)
+        }
     };
 
     const bookmarkCreate = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -458,7 +485,7 @@ export const BookMark = (props: any) => {
             console.log(error)
         }
     }
-    const sendDeleteBookmark = async (bookmarkId:any) => {
+    const sendDeleteBookmark = async (bookmarkId: any) => {
         console.log(bookmarkId)
         try {
             const boookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`)
@@ -466,8 +493,8 @@ export const BookMark = (props: any) => {
             console.log(error)
         }
     }
-    const onBookmarkDelete = async(targetBookmarkId: any) => {
-        if(isLogin){
+    const onBookmarkDelete = async (targetBookmarkId: any) => {
+        if (isLogin) {
             await sendDeleteBookmark(targetBookmarkId)
         }
         const length = originBookmarks.length;
@@ -557,39 +584,52 @@ export const BookMark = (props: any) => {
         //location.reload()
         //no login? 로컬 저장.
     }
-    const moveNumAllBookmarkPage = async (num: number) => {
-        const andSearch = await customAxios.get(`/bookmark?pageNo=${num}`)
-        return andSearch
-    }
-    const pagenationNum = async(num: number) => {
+    
+    const pagenationNum = async (num: number) => {
         //여러가지 get요청중에서 어떤걸로 했는지 확인해야함
-        if(isLogin){
-            console.log(num)
-            if(currentSearch === CurrentSearch.Bookmark){
-                const andSearch = await moveNumAllBookmarkPage(num)
+        console.log(currentSearch, num, currentPageNum)
+        if (isLogin) {
+            if (currentSearch === CurrentSearch.Bookmark) {
+                console.log('bookmark move')
+                const bookmarks = await customAxios.get(`/bookmark?pageNo=${num}`)
+                console.log(bookmarks)
                 setCurrentSearch(CurrentSearch.Bookmark)
-                console.log(andSearch.data)
+                setOriginBookmarks(bookmarks.data.bookmarks);
+                setLocalBookmarkPage(setLocalPagenation(bookmarks.data.bookmarks, 20))
+                updateBookmarkView(bookmarks.data.bookmarks)
+            }
+            if (currentSearch === CurrentSearch.TagSearch) {
+                console.log('tag move')
+                const andSearch = await customAxios.get(`/tag/search-and?tags=${currentTag.join('+')}&pageNo=${num}`)
+                console.log(andSearch)
+                setCurrentSearch(CurrentSearch.TagSearch)
                 setOriginBookmarks(andSearch.data.bookmarks);
-            //페이지네이션 별로 구분
-            setLocalBookmarkPage(setLocalPagenation(andSearch.data.bookmarks, 20))
-            // //해당하는페이지 보여줌
-            //createBookmarkView(setLocalPagenation(andSearch.data.bookmarks, 20), currentPageNum - 1)
-            updateBookmarkView(andSearch.data.bookmarks)
-        }
+                setLocalBookmarkPage(setLocalPagenation(andSearch.data.bookmarks, 20))
+                updateBookmarkView(andSearch.data.bookmarks)
+            }
+            if (currentSearch === CurrentSearch.SideBarSearch) { 
+                console.log('sidebar move')
+                const orSearch = await customAxios.get(`/tag/search-or?tags=${currentTag.join('+')}&pageNo=${num}`)
+                console.log(orSearch)
+                setCurrentSearch(CurrentSearch.SideBarSearch)
+                setOriginBookmarks(orSearch.data.bookmarks);
+                setLocalBookmarkPage(setLocalPagenation(orSearch.data.bookmarks, 20))
+                updateBookmarkView(orSearch.data.bookmarks)
+            }
             setCurrentPageNum(num)
             currentPageRefresh(num)
         }
-        else{
+        else {
             setCurrentPageNum(num)
             currentPageRefresh(num)
         }
-        
+
     }
     // useEffect(() => {
     //     setIsLogin(props.isLogin)
     // },[isLogin])
     const paginationCount = () => {
-        if(isLogin){
+        if (isLogin) {
             return pageCount
         }
         return localBookmarkPage.length
@@ -619,11 +659,11 @@ export const BookMark = (props: any) => {
     }, [])
 
     useEffect(() => {
-        if(!isLogin){
+        if (!isLogin) {
             createBookmarkView(setLocalPagenation(originBookmarks, 20), currentPageNum - 1)
         }
     }, [originBookmarks, currentPageNum])
-    
+console.log('bookmarkView -', bookmarkView)
     return (
         <BookmarkContainer>
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
@@ -631,10 +671,10 @@ export const BookMark = (props: any) => {
             <BookmarkManageContainer>
                 <BookmarkManagebuttonContainer>
                     <div>총 {totalCount}개 북마크</div>
-                    <button onClick={bookmarkRefresh}>북마크 전체보기</button>
-                    <button onClick={bookmarkCreate}>북마크 생성</button>
+                    <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
+                    <CommonButton onClick={bookmarkCreate}>북마크 생성</CommonButton>
                 </BookmarkManagebuttonContainer>
-                <div>{currentTag[0]?.length > 0 ? currentTag.join(', ') : <div>&nbsp;</div>}</div>
+                <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
                 {useModal.isShowModal ? <BookmarkModalPage useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
                 <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
                 <PageMove count={paginationCount()} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
@@ -642,6 +682,14 @@ export const BookMark = (props: any) => {
         </BookmarkContainer>
     )
 };
-
+const CommonButton = styled.button`
+    white-space: nowrap;
+    min-width: fit-content;
+`;
+const TagText = styled.div`
+    display: grid;
+    align-items: center;
+    margin-bottom: 10px;
+`;
 //로컬에 저장된거 암호화 못시키나? 가져올때 원복시키면 되지 않을까?
 //export default BookMark

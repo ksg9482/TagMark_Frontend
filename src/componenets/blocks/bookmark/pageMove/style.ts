@@ -11,4 +11,5 @@ export const PageNumsContainer = styled.div`
 export const PageButtonsContainer = styled.div`
 display: grid;
 grid-template-columns: 15% 15% 40% 15% 15%;
+align-content:flex-end;
 `;

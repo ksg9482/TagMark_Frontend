@@ -11,7 +11,7 @@ const Bookmarks = (props: any) => {
     console.log(props.bookmarkView)
     const bookmarkView: Bookmark[] = props.bookmarkView
     return (
-        <BookmarksContainer>
+        <BookmarksContainer id="bookmarks">
             {bookmarkView.map((bookmark: Bookmark) => (
                 <BookmarkComponent id={bookmark.id} bookmark={bookmark} key={bookmark.id} getTagBookmark={props.getTagBookmark} onBookmarkDelete={props.onBookmarkDelete} editSave={props.editSave}/>
             ))}

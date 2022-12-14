@@ -56,6 +56,10 @@ export const CreateBookmark = (props: any) => {
   };
 
   const onCreateInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length <= 0) {
+      setCreateInput({ ...createInput, [key]: '' });
+      return ;
+  }
     setCreateInput({ ...createInput, [key]:  secureWrap.encryptWrapper(e.target.value) });
   };
   
