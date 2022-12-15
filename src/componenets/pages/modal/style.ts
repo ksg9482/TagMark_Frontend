@@ -30,7 +30,7 @@ export const ModalContentContainer = styled.div`
   justify-content: center;
   align-content: center;
   background-color: #ffffff;
-  width: 600px;
-  height: 800px;
+  width: 500px;
+  height: 700px;
   z-index: 1;
 `;

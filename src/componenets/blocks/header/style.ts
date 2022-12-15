@@ -20,4 +20,5 @@ grid-template-columns: 20% 60% 20%;
 export const CommonButton = styled.button`
     white-space: nowrap;
     min-width: fit-content;
+    width: 85px;
 `;

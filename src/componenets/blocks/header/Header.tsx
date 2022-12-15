@@ -143,7 +143,9 @@ const Header = (props: any) => {
                 <HeaderContent>
                     <div>Tag Mark</div>
                     <div></div>
-                    <button onClick={onlogin}>로그인</button>
+                    <HeaderButtonContainer>
+                        <CommonButton onClick={onlogin}>로그인</CommonButton>
+                    </HeaderButtonContainer>
                 </HeaderContent>
                 <div></div>
             </HeaderContainer>
@@ -165,11 +167,12 @@ const LogoutButton = styled.button`
         min-width: 75px;
         background-color: #ff5d5dcf;
         border: 1px solid;
-    `;
+`;
+
 const LoggedInButton = styled.button`
-white-space: nowrap;
-min-width: 75px;
-background-color: #98ff5dcf;
-border: 1px solid;
+    white-space: nowrap;
+    min-width: 75px;
+    background-color: #98ff5dcf;
+    border: 1px solid;
 `;
 export default Header;

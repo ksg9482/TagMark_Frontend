@@ -20,7 +20,7 @@ export const BookmarkManageContainer = styled.div`
 
 export const BookmarkManagebuttonContainer = styled.div`
   display: grid;
-  grid-template-columns: 50% 25% 25%;
+  grid-template-columns: 60% 40%;
   align-items: center;
   justify-items: center;
 `;

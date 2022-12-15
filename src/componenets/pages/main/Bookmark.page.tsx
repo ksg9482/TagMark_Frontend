@@ -125,7 +125,7 @@ export const BookMark = (props: any) => {
         //띄어쓰기 문제 해결!!
         //사이드바 검색이 우선되게. 같은 로직 공유하니 and로 자동 적용됨
         const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}&pageNo=1`)
-        
+
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -167,7 +167,8 @@ export const BookMark = (props: any) => {
     }
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
         //태그 눌러가면서 원하는거 좁혀가려면?
-        
+
+
         if (!currentTag.includes(targetTags[0])) {
             updateCurrentTag(targetTags.join())
         }
@@ -176,26 +177,48 @@ export const BookMark = (props: any) => {
         if (isLogin) {
             const result = await getRemoteTagBookmark(targetTags)
             searched = result.bookmarks
-            console.log(result)
             updateTotalCount(result.totalCount)
             updatePageCount(result.totalPage)
         }
         else {
+            const prevTag: any[] = currentTag
+            if (currentTag[0] !== '' && !currentTag.includes(targetTags[0])) {
+                targetTags.push(...prevTag)
+            }
+            if (currentTag.includes(targetTags[0])) {
+                targetTags = prevTag
+            }
+
             const bookmarkArr: Bookmark[] = findType === 'origin' ? originBookmarks : bookmarkView;
-            const tempBookmark = bookmarkArr.map((bookmark) => {
+            const prevBookmark = bookmarkArr.map((bookmark) => {
                 const tags = bookmark.tags ? bookmark.tags : []
                 return { ...bookmark, tags: tags }
             })
-            const bookmarkFilter = tempBookmark.filter((bookmark) => {
-                const tagFilter = bookmark.tags.filter((tag: any) => {
-                    return targetTags.includes(tag.tag)
+
+            // const addTag = decrypytedEdit.tags.filter((editTag) => {
+            //     return !decrypytedOrigin.tags.some((originTag) => {
+            //         return originTag.tag === editTag.tag
+            //     })
+            // })
+            const bookmarkFilter = prevBookmark.filter((bookmark) => {
+                return targetTags.every((tagStr) => {
+                    return bookmark.tags.some((tag) => {
+                        return tag.tag === tagStr
+                    })
                 })
-                if (1 <= tagFilter.length) return tagFilter
             })
+            // 이걸로 바뀌면 북마크 개수 바꿔야 됨
+            // const bookmarkFilter = prevBookmark.filter((bookmark) => {
+            //     const tagFilter = bookmark.tags.filter((tag: any) => {
+            //         return targetTags.includes(tag.tag)
+            //     })
+            //     if (1 <= tagFilter.length) return tagFilter
+            // })
             searched = bookmarkFilter
+            updateTotalCount(bookmarkFilter.length)
+            //이동하면 이거 결과 저장 안됨. 이걸로 재저장해야 한다.
         }
 
-        console.log(searched)
         setCurrentSearch(CurrentSearch.TagSearch)
         setLocalBookmarkPage(setLocalPagenation(searched, 20))
         // //해당하는페이지 보여줌
@@ -337,7 +360,7 @@ export const BookMark = (props: any) => {
             //결과 없을땐 어떻게??
             return bookmarkView
         }
-        
+
         updateOriginPageCount(bookmarkResponse.data.totalPage)
         updateOriginTotalCount(bookmarkResponse.data.totalCount)
         updateTotalCount(bookmarkResponse.data.totalCount)
@@ -377,7 +400,7 @@ export const BookMark = (props: any) => {
         updateOriginTotalCount(originTotalCount) //첫화면 구성요소. 맨처음엔 총 몇 개 북마크였나
         setCurrentPageNum(1) //지금 몇 페이지에 있는지 페이지 넘버를 1로 새로고침(숫자)
         currentPageRefresh(1) //여러페이지중 첫번째 페이지로 옮김(뷰)
-        if(isLogin) {
+        if (isLogin) {
             updatePageCount(originPageCount)
             updateTotalCount(originTotalCount)
         }
@@ -451,6 +474,7 @@ export const BookMark = (props: any) => {
             return { ...bookmark, url: url }
         })
         //console.log('setNewBookmark에서 생성',newBookmarkArr, encryptedArr)
+        setFirstPage(newBookmarkArr)
         bookmarkSequence(newBookmarkArr)
         setLocalBookmarkPage(setLocalPagenation(encryptedArr, 20))
         // //해당하는페이지 보여줌
@@ -504,6 +528,8 @@ export const BookMark = (props: any) => {
             return { ...bookmark, url: url }
         })
         const deletedBookmark = [...decrypted.slice(0, isMachedIndex), ...decrypted.slice(isMachedIndex + 1, length)]
+        //오리진이랑 퍼스트랑 역할이 겹친다. 정돈하자
+        setFirstPage(deletedBookmark)
         bookmarkSequence(deletedBookmark)
     }
 
@@ -552,6 +578,7 @@ export const BookMark = (props: any) => {
     }
     //동작이 생성과 비슷한데 재활용 방법은? 더 고도화하면 분리될 수 있으니 따로하는게 좋을까?
     const editSave = (targetBookmarkId: any, originBookmark: any, editContent: any) => {
+        //암호화되서 옴
         const url = editContent.url
         const tags = editContent.tags.map((tag: any, i: number) => {
             return { id: 'tempTag' + i, tag: tag.tag }
@@ -561,6 +588,7 @@ export const BookMark = (props: any) => {
             const editFrom = editForm(targetBookmarkId, originBookmark, editContent)
             sendEditBookmark(targetBookmarkId, editFrom)
         }
+        console.log(editContent)
         const length = originBookmarks.length;
         const isMachedIndex = getMachedIndex(targetBookmarkId)
         const decrypted = originBookmarks.map((bookmark) => { return { ...bookmark, url: secureWrap.decryptWrapper(bookmark.url) } })
@@ -584,7 +612,7 @@ export const BookMark = (props: any) => {
         //location.reload()
         //no login? 로컬 저장.
     }
-    
+
     const pagenationNum = async (num: number) => {
         //여러가지 get요청중에서 어떤걸로 했는지 확인해야함
         console.log(currentSearch, num, currentPageNum)
@@ -607,7 +635,7 @@ export const BookMark = (props: any) => {
                 setLocalBookmarkPage(setLocalPagenation(andSearch.data.bookmarks, 20))
                 updateBookmarkView(andSearch.data.bookmarks)
             }
-            if (currentSearch === CurrentSearch.SideBarSearch) { 
+            if (currentSearch === CurrentSearch.SideBarSearch) {
                 console.log('sidebar move')
                 const orSearch = await customAxios.get(`/tag/search-or?tags=${currentTag.join('+')}&pageNo=${num}`)
                 console.log(orSearch)
@@ -663,7 +691,7 @@ export const BookMark = (props: any) => {
             createBookmarkView(setLocalPagenation(originBookmarks, 20), currentPageNum - 1)
         }
     }, [originBookmarks, currentPageNum])
-console.log('bookmarkView -', bookmarkView)
+    console.log('bookmarkView -', bookmarkView)
     return (
         <BookmarkContainer>
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
@@ -671,8 +699,10 @@ console.log('bookmarkView -', bookmarkView)
             <BookmarkManageContainer>
                 <BookmarkManagebuttonContainer>
                     <div>총 {totalCount}개 북마크</div>
-                    <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
-                    <CommonButton onClick={bookmarkCreate}>북마크 생성</CommonButton>
+                    <ManageButtonContainer>
+                        <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
+                        <CommonButton onClick={bookmarkCreate}>북마크 생성</CommonButton>
+                    </ManageButtonContainer>
                 </BookmarkManagebuttonContainer>
                 <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
                 {useModal.isShowModal ? <BookmarkModalPage useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
@@ -685,7 +715,15 @@ console.log('bookmarkView -', bookmarkView)
 const CommonButton = styled.button`
     white-space: nowrap;
     min-width: fit-content;
+    width: 85px;
 `;
+
+const ManageButtonContainer = styled.div`
+        display:grid;
+        grid-template-columns: auto auto;
+        gap:5px;
+        justify-items: end;
+    `;
 const TagText = styled.div`
     display: grid;
     align-items: center;
@@ -693,3 +731,35 @@ const TagText = styled.div`
 `;
 //로컬에 저장된거 암호화 못시키나? 가져올때 원복시키면 되지 않을까?
 //export default BookMark
+
+/**
+ * 
+ * 로컬은 로직수정 해야함. 
+태그 누르면 거의 OR급으로 나옴
+
+
+생성, 수정 정리
+생성은 그냥 띄어쓰기하면 그냥 분리됨
+근데 수정은 줄넘김 안하면 하나로 인식. 이 간극 어떻게 줄일까?
+
+
+암호화방침
+set에 적용은 update함수 만들어서. 여기서 일괄적으로 암호화 실시. 다른 함수 내에서 각각 하면 헷갈린다.
+
+useㅇㅇㅇ함수에 return이함수 2개. updateㅇㅇㅇ, getㅇㅇㅇ.
+update는 암호화 저장. get은 복호화 반환.
+상태하나당 함수가 사실상 여러개 생기지만, 착오없이 할 수 있다.
+
+
+
+지우고 새로고침버튼은 오류. 오리진에 적용된걸 뷰에 재적용하다보니 이미 지워졌는데 오리진에선 남아있다.
+오리진 쓰는 다른 기능들도 오리진이랑 현재랑 안 맏는거 더 있을수 있다.
+
+
+
+firstPage - 맨처음 getBookmark작동했을때 첫페이지. 새로고침시 갱신없이 바로 첫페이지로 돌아가는 용도.
+첫페이지에서 삭제, 수정, 생성이 일어나면 갱신.
+
+snapshot - 보고있는 페이지. 삭제, 수정, 생성시 갱신. (예: 태그검색 상태에서 수정하면 보이는화면, 스냅샷 수정. 태그검색을 유지하며 해야 됨)
+스프레드로 뿌리고 원하는 거 수정, 로컬저장. 사실상 1페이지일 경우 퍼스트페이지와 같이 다뤄야 한다.
+ */

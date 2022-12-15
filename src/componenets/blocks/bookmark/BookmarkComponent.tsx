@@ -76,7 +76,8 @@ const BookmarkComponent = (props: any) => {
             const tagArr = tagStrDecrypted.length <= 0
                 ? []//editInput.tags 
                 : tagStrToArr(tagStrDecrypted);
-            const bookmarkForm = { url: editInput.url, tags: tagArr }
+            const decryptedUrl = secureWrap.decryptWrapper(editInput.url)
+            const bookmarkForm = { url: decryptedUrl, tags: tagArr }
 
             setView(bookmarkForm)
             editSave(bookmark.id, originBookmarkdata, bookmarkForm) //평문전송
@@ -99,10 +100,11 @@ const BookmarkComponent = (props: any) => {
 
     const BookmarkComponentContent = () => {
         const a = secureWrap.decryptWrapper(view.url)
+
         const tagLength = view.tags?.length
         return (
-            <BookmarkComponentInner>
-                <div className="main">
+            <BookmarkComponentInner id="bookmark-component-inner">
+                <div>
                     <UrlContainer>{a}</UrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                 </div>

@@ -6,8 +6,7 @@ export const SideBarInput = styled.input`
 `;
 
 export const SideBarContainer = styled.div`
-    border: 1px solid;
-    padding-top: 5px;
+    margin-top: 5px;
 `;
 
 export const CommonButton = styled.button`

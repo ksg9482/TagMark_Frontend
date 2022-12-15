@@ -7,7 +7,7 @@ export const UrlContainer = styled.div`
 `;
 export const BookmarkComponentContainer = styled.div`
     display: grid;
-    justify-content: center;
+    justify-items: center;
     align-items: center;
     border: 1px solid;
     background-color: white;
@@ -30,7 +30,7 @@ export const BookmarkComponentInner = styled.div`
     grid-template-columns: 5fr 1fr;
     justify-items: center;
     //margin-left: 20px;
-    width: 100%;
+    width: 90%;
     min-width: 330px;
     background-color: white;
 `;
@@ -47,13 +47,17 @@ gap: 20px;
 
 export const BookmarkOptionButtonsContainer = styled.div`
     display: grid;
+    align-items: center;
     gap: 5px;
+    max-height: 200px;
     grid-template-rows: 1fr 1fr;
+    padding: 3px 0 3px 0;
 `;
 export const BookmarkOptionButton = styled.button`
     border: none;
     border-radius: 5px;
     width: fit-content;
+    height: fit-content;
 `;
 
 export const BookmarksContainer = styled.div`

@@ -20,12 +20,26 @@ const SideBarTagComponenet = (props: any) => {
     const tag: TagCountObj = props.tagWithCount;
 
     return (
-        <div onClick={onClick}>
-            <span className='tag_name'>{tag.tag}</span>
-            <span>{tag.count}</span>
-        </div>
+        <SideBarTagComponent onClick={onClick}>
+            <TagNameContainer className='tag_name'>{tag.tag}</TagNameContainer>
+            <div>{tag.count}</div>
+        </SideBarTagComponent>
     )
 }
+const SideBarTagComponent = styled.div`
+    display: grid;
+    grid-template-columns: 80% 20%;
+    justify-items: center;
+    align-items: center;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0 5px 0 10px;
+    word-break: break-all;
+`;
+
+const TagNameContainer = styled.div`
+    padding-right: 10px;
+`;
 
 
 
@@ -41,9 +55,12 @@ const SideBarTags = (props: any) => {
     )
 }
 const SideBarTagsContainer = styled.div`
+    border: 1px solid;
+    border-radius: 5px;
     display: grid;
     margin-top: 20px;
-    gap: 2px;
+    padding: 5px 0 5px 0;
+    gap: 5px;
 `;
 
 /*
@@ -173,8 +190,8 @@ const SideBar = (props: any) => {
     return (
         <SideBarContainer>
             <SideBarTextContainer>
-                <span>태그 검색</span>
-                <CommonButton onClick={tagSearchRefresh}>다 보기</CommonButton>
+                <div>태그검색</div>
+                <CommonButton onClick={tagSearchRefresh}>초기화</CommonButton>
             </SideBarTextContainer>
             <SideBarInput type="text" id='side_bar_input' defaultValue={tagInput} onChange={inputOnChange} />
             <SideBarTags tagCountObjArr={tagWithCounts} getTagBookmarkSideBar={props.getTagBookmarkSideBar} />
@@ -185,5 +202,8 @@ const SideBar = (props: any) => {
 export default SideBar;
 
 const SideBarTextContainer = styled.div`
+display: grid;
+grid-template-columns: auto auto;
+gap: 2px;
 margin-top: 10px;
 `;
