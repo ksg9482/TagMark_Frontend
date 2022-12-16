@@ -33,4 +33,7 @@ export const ModalContentContainer = styled.div`
   width: 500px;
   height: 700px;
   z-index: 1;
+  border: 1px solid;
+  padding: 0 5px 0 5px;
+  border-radius: 3px;
 `;

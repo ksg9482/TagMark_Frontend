@@ -21,7 +21,7 @@ function App() {
     <AppContainer className="App">
       <Router>
         <Header isLogin={isLoggedIn} />
-      <MainContainer >
+      <MainContainer>
         <div></div>
         {AppRouter(isLoggedIn)}
         <div></div>
@@ -39,7 +39,7 @@ const MainContainer = styled.div`
   @media (max-width: 1000px) {
     grid-template-columns: 10% 80% 10%;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     grid-template-columns: 0 100% 0;
   }
   background-color: gray;

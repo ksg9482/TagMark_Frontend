@@ -693,7 +693,7 @@ export const BookMark = (props: any) => {
     }, [originBookmarks, currentPageNum])
     console.log('bookmarkView -', bookmarkView)
     return (
-        <BookmarkContainer>
+        <BookmarkContainer id='main-content'>
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
             <div></div>
             <BookmarkManageContainer>
@@ -723,6 +723,7 @@ const ManageButtonContainer = styled.div`
         grid-template-columns: auto auto;
         gap:5px;
         justify-items: end;
+        width: 100%;
     `;
 const TagText = styled.div`
     display: grid;

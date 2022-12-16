@@ -4,7 +4,7 @@ import { Tag } from "../../../interface/tag";
 import { secure } from "../../../utils/secure";
 import Tags from "../tag/tags"
 import BookmarkOptionButtons from "./BookmarkOptionButtons"
-import { BookmarkComponentContainer, BookmarkComponentEditInner, BookmarkComponentInner, EditButtonContainer, EditContainer, UrlContainer } from "./style";
+import { BookmarkComponentContainer, BookmarkComponentEditInner, BookmarkComponentInner, EditButtonContainer, EditContainer, FocusedUrlContainer, UnFocusedBookmarkComponentInner, UrlContainer } from "./style";
 //클릭시 -> 색바뀜, 옵션창 나옴
 
 
@@ -100,12 +100,37 @@ const BookmarkComponent = (props: any) => {
 
     const BookmarkComponentContent = () => {
         const a = secureWrap.decryptWrapper(view.url)
-
         const tagLength = view.tags?.length
+
+        const UnFocusedBookmark = () => {
+            return (
+                <UnFocusedBookmarkComponentInner id="bookmark-component-inner">
+                    <UrlContainer>{a}</UrlContainer>
+                    {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
+                </UnFocusedBookmarkComponentInner>
+            )
+        }
+        //url창에 나온 주소와 %문법쓴 거랑 고려해야됨. 보이는 건 원래대로. 클릭은 %문법으로 가게 
+        const FocusedBookmark = () => {
+            return (
+                <BookmarkComponentInner id="bookmark-component-inner">
+                    <div>
+                        <FocusedUrlContainer>{a}</FocusedUrlContainer>
+                        {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
+                    </div>
+                    <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} />
+            </BookmarkComponentInner>
+                )
+        }
+
         return (
             <BookmarkComponentInner id="bookmark-component-inner">
-                <div>
+                <UnFocusedBookmarkComponentInner id="un-focused" className="un-focused">
                     <UrlContainer>{a}</UrlContainer>
+                    {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
+                </UnFocusedBookmarkComponentInner>
+                <div id="focused" className="focused">
+                    <FocusedUrlContainer>{a}</FocusedUrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                 </div>
                 {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} /> : null}

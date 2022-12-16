@@ -61,6 +61,7 @@ const SideBarTagsContainer = styled.div`
     margin-top: 20px;
     padding: 5px 0 5px 0;
     gap: 5px;
+    width: 100%;
 `;
 
 /*
@@ -205,5 +206,5 @@ const SideBarTextContainer = styled.div`
 display: grid;
 grid-template-columns: auto auto;
 gap: 2px;
-margin-top: 10px;
+margin: 10px 0 5px 0;
 `;

@@ -8,12 +8,11 @@ export const LoginInput = styled.div`
 
 
 export const ModalTitle = styled.div`
-    margin-bottom: 15px;
+    margin-bottom: 55px;
     font-size: large;
 `;
 
 export const MoveSignupPage = styled.div`
-    margin-top: 10px;
     color: blue;
     font-size: small;
     text-decoration-line: underline;
