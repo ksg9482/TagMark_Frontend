@@ -28,8 +28,8 @@ export const PageMove = (props: any) => {
     })
     return (
         <PageButtonsContainer id="move-button">
-            <div onClick={onClick(firstPageNum)}>맨앞</div>
-            <div onClick={onClick(pageFocus-1)}>이전</div>
+            <div onClick={onClick(firstPageNum)}> 맨앞</div>
+            <div onClick={onClick(pageFocus-1)}> 이전</div>
             <PageNums buttonCount={count} onMoveClick={onMoveClick} pageFocus={pageFocus}/>
             <div onClick={onClick(pageFocus+1)}>이후</div>
             <div onClick={onClick(count)}>맨뒤</div>

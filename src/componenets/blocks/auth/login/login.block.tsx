@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
-import { CommonButtonContainer, CommonInput, LoginContainer } from "./styles";
+import { CommonButtonContainer, CommonInput, ErrorMessageBlock, LoginContainer } from "./styles";
 
 export const LoginBlock = (props: any) => {
     const useModal: UseModal = props.useModal;
+    const onClose = props.onClose
     const errorMessage = props.errorMessage;
     const updateErrorMessage = props.updateErrorMessage;
     const secureWrap = secure().wrapper()
@@ -19,9 +20,6 @@ export const LoginBlock = (props: any) => {
         setLoginInput({ ...loginInput, [key]: secureWrap.encryptWrapper(e.target.value) });
     };
 
-    const onClose = () => {
-        useModal.closeModal()
-    }
 
     const inputCheck = (loginInput:any) => {
         const {email, password} = loginInput;
@@ -45,21 +43,21 @@ export const LoginBlock = (props: any) => {
         // eslint-disable-next-line no-restricted-globals
         location.reload()
     }
-    console.log(loginInput)
+    
     return (
         <LoginContainer>
             <CommonInput >
-                <div>이메일</div>
+                <div id="input-name">이메일</div>
                 <input type="email" onChange={onLoginInput('email')} />
             </CommonInput>
             <CommonInput>
-                <div>비밀번호</div>
+                <div id="input-name">비밀번호</div>
                 <input type="password" onChange={onLoginInput('password')} />
             </CommonInput>
-            {errorMessage ? <div>{errorMessage}</div> : <div>&nbsp;</div>}
+            {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
             <CommonButtonContainer>
-            <button onClick={onLogin}>로그인</button>
             <button onClick={onClose}>취소</button>
+            <button onClick={onLogin}>로그인</button>
             </CommonButtonContainer>
         </LoginContainer>
     )

@@ -6,7 +6,7 @@ export const BookmarkContainer = styled.div`
   @media (max-width: 1000px) {
     grid-template-columns: 20% 10% auto;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     grid-template-columns: 20% 5% auto;
   }
   padding: 50px 10px 40px 5px;
@@ -20,7 +20,11 @@ export const BookmarkManageContainer = styled.div`
 
 export const BookmarkManagebuttonContainer = styled.div`
   display: grid;
-  grid-template-columns: 50% 25% 25%;
+  grid-template-columns: 60% 40%;
+  @media (max-width: 1200px) {
+    grid-template-columns: 50% 50%;
+  }
   align-items: center;
   justify-items: center;
+  min-width: max-content;
 `;

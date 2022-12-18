@@ -1,13 +1,15 @@
 import styled from "styled-components";
 
 export const SideBarInput = styled.input`
-    max-width: 90%;
+    width: 95%;
     margin-top: 15px;
 `;
 
 export const SideBarContainer = styled.div`
-    border: 1px solid;
-    padding-top: 5px;
+    display: grid;
+    grid-template-rows: min-content min-content auto;
+    height: fit-content;
+    margin-top: 5px;
 `;
 
 export const CommonButton = styled.button`
