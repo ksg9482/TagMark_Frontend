@@ -165,10 +165,11 @@ export const BookMark = (props: any) => {
         })
         return andSearch.data
     }
+    //로컬시 pageMove로 움직이면 원래 없어야 하는 북마크도 보임. 1로 옮기면서 그대로 복붙하니 그런듯?
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
         //태그 눌러가면서 원하는거 좁혀가려면?
 
-
+        currentPageRefresh(1)
         if (!currentTag.includes(targetTags[0])) {
             updateCurrentTag(targetTags.join())
         }
@@ -225,6 +226,7 @@ export const BookMark = (props: any) => {
         //createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1)
         updateBookmarkView(searched)
         //return setBookmarkView(bookmarkFilter)
+        setCurrentPageNum(1)
     };
 
     const getTagBookmarkSideBar = async (targetTags: string[], findType: FindType) => {
@@ -259,6 +261,9 @@ export const BookMark = (props: any) => {
         // //해당하는페이지 보여줌
         createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1)
         //return setBookmarkView(bookmarkFilter)
+        updateBookmarkView(searched)
+        setCurrentPageNum(1) //지금 몇 페이지에 있는지 페이지 넘버를 1로 새로고침(숫자)
+        
     };
 
     const bookmarkAdapter = (storageType: 'local' | 'remote', bookmarks: any): Bookmark[] => {
@@ -442,24 +447,26 @@ export const BookMark = (props: any) => {
             const boookmarks = await customAxios.post(`/bookmark`, {
                 ...newBookmarkData
             })
-            //console.log(boookmarks)
+            return boookmarks
         } catch (error) {
             console.log(error)
         }
     }
-    const setNewBookmark = (createBookmarkData: CreateBookmarkData) => {
+    const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
+        
         //로컬(로컬에 저장), 리모트(서버 전송, 로컬저장), 공통필요(변동사항을 view에 적용)
         //if로 로그인 상태일때만 서버에 전송하는 과정 추가하는 쪽으로 개발
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
         const url = createBookmarkData.url //암호? 평문? 공백인거 보면 문제가?
-        console.log(createBookmarkData.tags)
         const tags = createBookmarkData.tags.map((tag, i) => {
             return { id: 'tempTag' + i, tag: tag }
         })
 
         if (isLogin) {
-            sendCreateBookmark({ url, tags: createBookmarkData.tags })
+            //만든걸로 하지않고 임시로 만드니까 새로고침 안하고 바로 삭제하면 이상한 걸로 id들어감
+            const remoSave = await sendCreateBookmark({ url, tags: createBookmarkData.tags })
+            console.log(createBookmarkData, remoSave?.data.createdBookmark)
         }
         //태그 중복 방지는?
         const newBookmarkArr: Bookmark[] = [{ id, url, tags }]
@@ -498,19 +505,8 @@ export const BookMark = (props: any) => {
         return isMachedIndex
     }
     // 북마크 제거
-    //어차피 북마크 에디트할꺼면 프론트에서 태그보내고 백에서 변동사항 처리하는 김에 연결 끊으면 안되나?
-    //이렇게 지우는 거랑, 북마크 에디트 할때 같이 하는거랑 뭐가 나을까?
-    const sendDeleteBookmarkTag = async () => {
-        try {
-            const bookmarkId = 1
-            const query = 1
-            const boookmarks = await customAxios.get(`/tag/${bookmarkId}?tagIds=${query}`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    
     const sendDeleteBookmark = async (bookmarkId: any) => {
-        console.log(bookmarkId)
         try {
             const boookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`)
         } catch (error) {

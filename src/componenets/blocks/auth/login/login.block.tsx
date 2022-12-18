@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
-import { CommonButtonContainer, CommonInput, LoginContainer } from "./styles";
+import { CommonButtonContainer, CommonInput, ErrorMessageBlock, LoginContainer } from "./styles";
 
 export const LoginBlock = (props: any) => {
     const useModal: UseModal = props.useModal;
@@ -54,7 +54,7 @@ export const LoginBlock = (props: any) => {
                 <div id="input-name">비밀번호</div>
                 <input type="password" onChange={onLoginInput('password')} />
             </CommonInput>
-            {errorMessage ? <div>{errorMessage}</div> : <div>&nbsp;</div>}
+            {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
             <CommonButtonContainer>
             <button onClick={onClose}>취소</button>
             <button onClick={onLogin}>로그인</button>

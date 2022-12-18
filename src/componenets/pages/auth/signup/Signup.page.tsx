@@ -16,6 +16,7 @@ export const Signup = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper()
     const [signupInput, setSignupInput] = useState({ email: '', password: '', passwordCheck: '' })
+    const [errorMessage, setErrorMessage] = useState('')
 
     const onsignupInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target.value.length <= 0) {
@@ -38,7 +39,7 @@ export const Signup = (props: any) => {
                 signupData,
                 { withCredentials: true }
             );
-            //console.log(userSignup)
+            return userSignup
         } catch (error) {
             console.log(error)
         }
@@ -49,18 +50,48 @@ export const Signup = (props: any) => {
         passwordCheck: string;
     }) => {
         Reflect.deleteProperty(signupInput, 'passwordCheck')
-        return signupInput
-    }
-    const onSignup = () => {
-        const securedData: string = securedSendData(signupDataForm(signupInput))
-        sendSignupData(securedData)
+        console.log(signupInput)
+        return signupInput;
+    };
+
+    
+    const inputCheck = (signupInput:any) => {
+        const {email, password, passwordCheck} = signupInput;
+        
+        if(email.length <= 0) {
+            setErrorMessage('이메일을 입력해주세요')
+            return false;
+        }
+        if(password.length <= 0) {
+            setErrorMessage('비밀번호를 입력해주세요')
+            return false;
+        }
+        if(passwordCheck.length <= 0) {
+            setErrorMessage('비밀번호확인을 입력해주세요')
+            return false;
+        }
+        
+        if(secureWrap.decryptWrapper(password) !== secureWrap.decryptWrapper(passwordCheck)) {
+            setErrorMessage('비밀번호와 비밀번호 확인이 다릅니다.')
+            return false;
+        }
+        return true;
+    };
+    
+    const onSignup = async () => {
+        if(!inputCheck(signupInput)){
+            return ;
+        }
+        //const securedData: string = securedSendData(signupDataForm(signupInput))
+        const signupResp = await sendSignupData(signupDataForm(signupInput))
+        if(signupResp?.data.error){
+            setErrorMessage(signupResp?.data.error)
+            return ;
+        }
         useModal.closeModal()
-
     }
 
-    const passwordValid = () => {
-        //비번과 비번확인 비교
-    }
+    
     return (
         <SignupContainer>
             <ContentTop>
@@ -82,12 +113,18 @@ export const Signup = (props: any) => {
                         <div id="input-name">비밀번호확인</div>
                         <input type="password" onChange={onsignupInput('passwordCheck')} required />
                     </CommonInput>
+                    {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
                     <SignUpButtonBlock onClose={onClose} onSignup={onSignup} />
                 </SignUpBlock>
             </ContentBody>
         </SignupContainer>
     )
 };
+const ErrorMessageBlock = styled.div`
+    margin-top: 10px;
+    color: red;
+    font-size: small;
+`;
 const SignUpBlock = styled.div`
     display: grid;
     gap: 10px;

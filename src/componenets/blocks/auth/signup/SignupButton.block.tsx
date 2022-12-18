@@ -13,6 +13,6 @@ export const SignUpButtonBlock = (props:any) => {
 export const CommonButtonContainer = styled.div`
     display: grid;
     gap: 5px;
-    margin-top: 35px;
+    margin-top: 10px;
     grid-template-columns: 1fr 1fr;
 `;

@@ -26,3 +26,9 @@ export const CommonButtonContainer = styled.div`
     margin-top: 15px;
     grid-template-columns: 1fr 1fr;
 `;
+
+export const ErrorMessageBlock = styled.div`
+    margin-top: 10px;
+    color: red;
+    font-size: small;
+`;
