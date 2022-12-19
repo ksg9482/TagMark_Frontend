@@ -72,7 +72,6 @@ const BookmarkComponent = (props: any) => {
                 console.log('배열아님', editInput.tags)
             }
             const tagStrDecrypted = secureWrap.decryptWrapper(editInput.tags)
-            console.log(tagStrDecrypted)
             const tagArr = tagStrDecrypted.length <= 0
                 ? []//editInput.tags 
                 : tagStrToArr(tagStrDecrypted);
@@ -102,26 +101,26 @@ const BookmarkComponent = (props: any) => {
         const a = secureWrap.decryptWrapper(view.url)
         const tagLength = view.tags?.length
 
-        const UnFocusedBookmark = () => {
-            return (
-                <UnFocusedBookmarkComponentInner id="bookmark-component-inner">
-                    <UrlContainer>{a}</UrlContainer>
-                    {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
-                </UnFocusedBookmarkComponentInner>
-            )
-        }
-        //url창에 나온 주소와 %문법쓴 거랑 고려해야됨. 보이는 건 원래대로. 클릭은 %문법으로 가게 
-        const FocusedBookmark = () => {
-            return (
-                <BookmarkComponentInner id="bookmark-component-inner">
-                    <div>
-                        <FocusedUrlContainer>{a}</FocusedUrlContainer>
-                        {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
-                    </div>
-                    <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} />
-            </BookmarkComponentInner>
-                )
-        }
+        // const UnFocusedBookmark = () => {
+        //     return (
+        //         <UnFocusedBookmarkComponentInner id="bookmark-component-inner">
+        //             <UrlContainer>{a}</UrlContainer>
+        //             {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
+        //         </UnFocusedBookmarkComponentInner>
+        //     )
+        // }
+        // //url창에 나온 주소와 %문법쓴 거랑 고려해야됨. 보이는 건 원래대로. 클릭은 %문법으로 가게 
+        // const FocusedBookmark = () => {
+        //     return (
+        //         <BookmarkComponentInner id="bookmark-component-inner">
+        //             <div>
+        //                 <FocusedUrlContainer>{a}</FocusedUrlContainer>
+        //                 {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
+        //             </div>
+        //             <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} />
+        //     </BookmarkComponentInner>
+        //         )
+        // }
 
         return (
             <BookmarkComponentInner id="bookmark-component-inner">

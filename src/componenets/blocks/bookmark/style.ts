@@ -7,8 +7,10 @@ export const UrlContainer = styled.div`
 `;
 
 export const FocusedUrlContainer = styled.div`
+    display: grid;
     max-width: 300px;
     word-break: break-all;
+    align-self: center;
 `;
 
 export const BookmarkComponentContainer = styled.div`
@@ -17,6 +19,9 @@ export const BookmarkComponentContainer = styled.div`
     align-items: center;
     border: 1px solid;
     background-color: white;
+    .un-focused {
+        justify-self: end;
+    };
     .focused {
         display: none;
     };
@@ -26,7 +31,7 @@ export const BookmarkComponentContainer = styled.div`
             display: none;
         };
         .focused {
-        display: grid;
+            display: grid;
         };
     };
 `;
@@ -41,15 +46,14 @@ export const BookmarkComponentEditInner = styled.div`
 `;
 export const BookmarkComponentInner = styled.div`
     display: grid ;
-    &:hover{
-        grid-template-rows: auto auto;
-        grid-template-columns: 5fr 1fr;
-    };
+    grid-template-rows: auto auto;
+    //호버 안에 넣어놓으면 따로논다
+    //밖으로 빼면 걍 다 밀린다. 어떻게해야 하나?
+    grid-template-columns: 9fr 1fr;
     justify-items: center;
     width: 90%;
     min-width: 330px;
     background-color: white;
-    
 `;
 export const UnFocusedBookmarkComponentInner = styled.div`
     display: grid ;
@@ -78,13 +82,14 @@ export const BookmarkOptionButtonsContainer = styled.div`
     gap: 5px;
     max-height: 200px;
     grid-template-rows: 1fr 1fr;
-    padding: 3px 0 3px 0;
+    padding: 3px 3px 3px 0;
 `;
 export const BookmarkOptionButton = styled.button`
     border: none;
     border-radius: 5px;
     width: fit-content;
     height: fit-content;
+    white-space: nowrap;
 `;
 
 export const BookmarksContainer = styled.div`

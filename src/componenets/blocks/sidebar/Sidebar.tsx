@@ -188,7 +188,6 @@ const SideBar = (props: any) => {
     useEffect(() => {
         setOriginBookmarks(props.originBookmarks)
     })
-    console.log(originBookmarks, tagWithCounts)
     return (
         <SideBarContainer>
             <SideBarTextContainer>
