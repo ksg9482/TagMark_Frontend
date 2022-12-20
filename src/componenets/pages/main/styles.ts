@@ -5,17 +5,28 @@ export const BookmarkContainer = styled.div`
   grid-template-columns: 20% 20% auto;
   @media (max-width: 1000px) {
     grid-template-columns: 20% 10% auto;
-  }
+  };
   @media (max-width: 640px) {
     grid-template-columns: 20% 5% auto;
-  }
-  padding: 50px 10px 40px 5px;
+    box-sizing: border-box;
+  };
+  padding: 80px 10px 40px 10px;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
   background-color: white;
+  width: 100%;
 `;
 
 export const BookmarkManageContainer = styled.div`
   display: grid;
-  grid-template-rows: 50px 50px auto;
+  grid-template-rows: min-content auto;
+`;
+
+export const ContentBox = styled.div`
+  padding: 10px 5px 10px 5px;
+  box-shadow: 2px 2px 2px 2px #bbbbbb;
+  border-radius: 5px;
+  margin-bottom: 5px;
 `;
 
 export const BookmarkManagebuttonContainer = styled.div`
@@ -26,5 +37,6 @@ export const BookmarkManagebuttonContainer = styled.div`
   }
   align-items: center;
   justify-items: center;
+  width: 98%;
   min-width: max-content;
 `;

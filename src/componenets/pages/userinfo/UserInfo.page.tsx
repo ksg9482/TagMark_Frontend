@@ -124,9 +124,9 @@ export const UserInfo = () => {
             {useModal.isShowModal ? modalHandle.modalPage() : null}
             <BookmarkAreaContainer className="bookmark-area">
                 <div>총 북마크 개수 : {userInfo.bookmarkCount} </div>
+                {/* <div>북마크 DB 동기화 (자동 on/off) </div>
                 <button>북마크 가져오기 </button>
-                <button>내 북마크 공유하기 </button>
-                <div>북마크 DB 동기화 (자동 on/off) </div>
+                <button>내 북마크 공유하기 </button> */}
             </BookmarkAreaContainer>
             <SubContainer id="sub-container">
                 <TagAreaContainer className="tag-area">
@@ -134,17 +134,49 @@ export const UserInfo = () => {
                     <GraphContainer className="graph_con">{MyResponsivePie(tagGraphData)}</GraphContainer>
                 </TagAreaContainer>
                 <MyDataContainer className="userinfo-area">
-                    <div>
-                        <div>이메일 : {userInfo.email}</div>
-                        {userInfo.type !== 'BASIC' ? <div>소셜로그인:소셜로그인입니다</div> : <div></div>}
-                    </div>
-                    <div>닉네임 : {userInfo.nickname}</div>
-                    <button onClick={e => modalHandle.openModal('edit')}>정보변경 </button>
-                    <button onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </button>
+                    <div>내 정보</div>
+                    <MyInfoContainer>
+                        <div className="email-info">
+                            <div>이메일 : {userInfo.email}</div>
+                            {userInfo.type === 'BASIC' ? <div>소셜로그인입니다</div> : <div></div>}
+                        </div>
+                        <div>닉네임 : {userInfo.nickname}</div>
+                    </MyInfoContainer>
+                    <MyDataButtonContainer>
+                        <button className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </button>
+                        <button className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </button>
+                    </MyDataButtonContainer>
                 </MyDataContainer>
             </SubContainer>
         </UserInfoContainer>
     )
 }
-
+const MyInfoContainer = styled.div`
+    display: grid;
+    align-self: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+    .email-info {
+        display: grid;
+        gap: 5px;
+    }
+`;
+const MyDataButtonContainer = styled.div`
+    display: grid;
+    gap: 30px;
+    justify-items: center;
+    height: 100%;
+    button {
+        width: 50%;
+        height: fit-content;
+    }
+    .edit-button{
+        display: grid;
+        align-self: flex-start;
+    }
+    .delete-button{
+        display: grid;
+        align-self: center;
+    }
+`;
 //export default BookMark

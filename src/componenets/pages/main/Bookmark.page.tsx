@@ -10,8 +10,8 @@ import { customAxios } from "../../../utils/axios/customAxios";
 import Bookmarks from "../../blocks/bookmark/Bookmarks";
 import { PageMove } from "../../blocks/bookmark/pageMove/PageMove";
 import SideBar from "../../blocks/sidebar/Sidebar";
-import { BookmarkModalPage } from "../modal/BookmarkModalPage";
-import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer } from "./styles";
+import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
+import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, ContentBox } from "./styles";
 
 //로딩중 페이지 만들기
 /*
@@ -704,16 +704,18 @@ export const BookMark = (props: any) => {
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
             <div></div>
             <BookmarkManageContainer>
+                <ContentBox>
                 <BookmarkManagebuttonContainer>
                     <div>총 {totalCount}개 북마크</div>
                     <ManageButtonContainer>
                         <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
-                        <CommonButton onClick={bookmarkCreate}>북마크 생성</CommonButton>
+                        <CommonButton onClick={bookmarkCreate}>북마크생성</CommonButton>
                     </ManageButtonContainer>
                 </BookmarkManagebuttonContainer>
+                {useModal.isShowModal ? <BookmarkCreateBlock useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
                 <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
-                {useModal.isShowModal ? <BookmarkModalPage useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
                 <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
+                </ContentBox>
                 <PageMove count={paginationCount()} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
             </BookmarkManageContainer>
         </BookmarkContainer>
@@ -731,11 +733,12 @@ const ManageButtonContainer = styled.div`
         gap:5px;
         justify-items: end;
         width: 100%;
+        margin-right: 5px;
     `;
 const TagText = styled.div`
     display: grid;
     align-items: center;
-    margin-bottom: 10px;
+    margin: 10px 0 10px 0;
 `;
 //로컬에 저장된거 암호화 못시키나? 가져올때 원복시키면 되지 않을까?
 //export default BookMark

@@ -22,10 +22,13 @@ const SideBarTagComponenet = (props: any) => {
     return (
         <SideBarTagComponent onClick={onClick}>
             <TagNameContainer className='tag_name'>{tag.tag}</TagNameContainer>
-            <div>{tag.count}</div>
+            <CountContainer>{tag.count}</CountContainer>
         </SideBarTagComponent>
     )
 }
+const CountContainer = styled.div`
+    white-space: nowrap;
+`;
 const SideBarTagComponent = styled.div`
     display: grid;
     grid-template-columns: 80% 20%;
@@ -35,6 +38,12 @@ const SideBarTagComponent = styled.div`
     overflow-x: auto;
     padding: 0 5px 0 10px;
     word-break: break-all;
+    border-bottom: 2px solid white;
+    &:hover {
+        border-bottom: 2px solid transparent;
+        border-image: linear-gradient(to right, #ffffff, #eed69d,#ffffff);
+        border-image-slice: 1;
+    }
 `;
 
 const TagNameContainer = styled.div`
@@ -55,7 +64,7 @@ const SideBarTags = (props: any) => {
     )
 }
 const SideBarTagsContainer = styled.div`
-    border: 1px solid;
+    border: 1px solid #1C3879;
     border-radius: 5px;
     display: grid;
     margin-top: 20px;
@@ -207,4 +216,6 @@ display: grid;
 grid-template-columns: auto auto;
 gap: 2px;
 margin: 10px 0 5px 0;
+align-items: center;
+width: 100%;
 `;

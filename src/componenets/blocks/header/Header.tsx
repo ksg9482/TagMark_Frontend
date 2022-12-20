@@ -132,6 +132,7 @@ const Header = (props: any) => {
     `;
     const HeaderContent = styled.div`
         display: grid;
+        align-items: center;
         grid-template-columns: 20% auto auto;
         padding: 0 10px 0 0;
     `;
@@ -162,17 +163,22 @@ const Header = (props: any) => {
 };
 
 
+//기본은 파란 프레임만 보이는 디자인. 마우스 대면 하얀 바탕을 빨갛게 채우고 글자색 바뀜
 const LogoutButton = styled.button`
         white-space: nowrap;
         min-width: 75px;
+        height: 100%;
         background-color: #ff5d5dcf;
         border: 1px solid;
+        border-radius: 10px;
 `;
 
 const LoggedInButton = styled.button`
     white-space: nowrap;
     min-width: 75px;
-    background-color: #98ff5dcf;
+    height: 20px;
+    background-color: #d5e6ff;
     border: 1px solid;
+    border-radius: 10px;
 `;
 export default Header;

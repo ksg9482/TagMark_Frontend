@@ -20,13 +20,13 @@ export const BookmarkComponentContainer = styled.div`
     border: 1px solid;
     background-color: white;
     .un-focused {
-        justify-self: end;
+        //justify-self: end;
     };
     .focused {
         display: none;
     };
     &:hover{
-        background-color: gray;
+        background-color: #f5eedd;
         .un-focused {
             display: none;
         };
@@ -46,10 +46,7 @@ export const BookmarkComponentEditInner = styled.div`
 `;
 export const BookmarkComponentInner = styled.div`
     display: grid ;
-    grid-template-rows: auto auto;
-    //호버 안에 넣어놓으면 따로논다
-    //밖으로 빼면 걍 다 밀린다. 어떻게해야 하나?
-    grid-template-columns: 9fr 1fr;
+    //grid-template-columns: 9fr 1fr;
     justify-items: center;
     width: 90%;
     min-width: 330px;
@@ -67,13 +64,16 @@ export const UnFocusedBookmarkComponentInner = styled.div`
 
 export const EditContainer = styled.div`
     display: grid ;
-    grid-template-rows: 1fr 6fr;
+    gap: 5px;
+    margin: 5px 0 5px 0;
+    grid-template-rows: 3fr 4fr;
 `;
 
 export const EditButtonContainer = styled.div`
     display: grid ;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    margin-bottom: 5px;
 `;
 
 export const BookmarkOptionButtonsContainer = styled.div`
@@ -83,6 +83,7 @@ export const BookmarkOptionButtonsContainer = styled.div`
     max-height: 200px;
     grid-template-rows: 1fr 1fr;
     padding: 3px 3px 3px 0;
+    justify-self: right;
 `;
 export const BookmarkOptionButton = styled.button`
     border: none;
@@ -95,7 +96,7 @@ export const BookmarkOptionButton = styled.button`
 export const BookmarksContainer = styled.div`
     display: grid;
     gap: 5px;
-    background-color: skyblue;
+    background-color: #97b5e1;
     height: max-content;
     padding: 5px;
     border: 1px solid;

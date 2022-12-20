@@ -128,16 +128,25 @@ const BookmarkComponent = (props: any) => {
                     <UrlContainer>{a}</UrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                 </UnFocusedBookmarkComponentInner>
-                <div id="focused" className="focused">
+                <FocusedBookmarkComponentInner id="focused" className="focused">
+                    <BookmarkContent>
                     <FocusedUrlContainer>{a}</FocusedUrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
-                </div>
-                {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} /> : null}
+                    </BookmarkContent>
+                    {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} /> : null}
+                </FocusedBookmarkComponentInner>
             </BookmarkComponentInner>
         )
     };
-
-
+const BookmarkContent = styled.div`
+    display: grid;
+    justify-items: center;
+`;
+const FocusedBookmarkComponentInner = styled.div`
+    display: grid;
+    grid-template-columns: auto min-content;
+    width: 100%;
+`;
     const BookmarkEditContent = () => {
         const editInputInit = () => {
             const tags = view.tags.map((tag: any) => {
@@ -149,8 +158,8 @@ const BookmarkComponent = (props: any) => {
         return (
             <BookmarkComponentEditInner>
                 <EditContainer>
-                    <input type="text" defaultValue={secureWrap.decryptWrapper(editInputInit().url)} onChange={onEditInput('url')} />
-                    <textarea name="" id="" cols={30} rows={10} defaultValue={tagArrToStr(editInputInit().tags)} onChange={onEditInput('tags')}></textarea>
+                    <textarea  defaultValue={secureWrap.decryptWrapper(editInputInit().url)} onChange={onEditInput('url')} />
+                    <textarea name="" id="" cols={40} defaultValue={tagArrToStr(editInputInit().tags)} onChange={onEditInput('tags')} />
                 </EditContainer>
                 <EditButtonContainer>
                     <button onClick={editHandle().onCancle}>취소</button>
