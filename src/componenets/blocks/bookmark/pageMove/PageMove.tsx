@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PageNums } from "./PageNums";
-import { PageButtonsContainer } from "./style";
+import { PageButtonsContainer, PageButtonsContent } from "./style";
 
 export const PageMove = (props: any) => {
     const pagenationNum = props.pagenationNum;
@@ -10,29 +10,31 @@ export const PageMove = (props: any) => {
     const firstPageNum = 1;
     //const buttonCount = Math.ceil(count / bookmarkMax);
     //const buttonCount = Math.ceil(count / bookmarkMax);
-    const onMoveClick = (move:any) => {
+    const onMoveClick = (move: any) => {
         setpageFocus(move)
         pagenationNum(move)
         //맨앞 index0, 이전index-1, 이후index+1, 맨뒤 index 마지막
     }
-    const onClick = (move:any) => (e:React.MouseEvent<HTMLDivElement, MouseEvent>)=> {
+    const onClick = (move: any) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         //console.log('클릭',move)
-        if(move < firstPageNum ||move > count) {
-            return ;
+        if (move < firstPageNum || move > count) {
+            return;
         }
 
         onMoveClick(move)
     };
-    useEffect(()=>{
+    useEffect(() => {
         setpageFocus(props.currentPageNum)
     })
     return (
         <PageButtonsContainer id="move-button">
-            <div onClick={onClick(firstPageNum)}> 맨앞</div>
-            <div onClick={onClick(pageFocus-1)}> 이전</div>
-            <PageNums buttonCount={count} onMoveClick={onMoveClick} pageFocus={pageFocus}/>
-            <div onClick={onClick(pageFocus+1)}>이후</div>
-            <div onClick={onClick(count)}>맨뒤</div>
+            <PageButtonsContent>
+                <div onClick={onClick(firstPageNum)}> 맨앞</div>
+                <div onClick={onClick(pageFocus - 1)}> 이전</div>
+                <PageNums buttonCount={count} onMoveClick={onMoveClick} pageFocus={pageFocus} />
+                <div onClick={onClick(pageFocus + 1)}>이후</div>
+                <div onClick={onClick(count)}>맨뒤</div>
+            </PageButtonsContent>
         </PageButtonsContainer>
     )
 };

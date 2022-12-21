@@ -32,17 +32,18 @@ function App() {
 }
 const AppContainer = styled.div`
   height: 100vh;
-`
+`;
+
 const MainContainer = styled.div`
   display: grid;
   grid-template-columns: 20% 60% 20%;
   @media (max-width: 1000px) {
     grid-template-columns: 10% 80% 10%;
-  }
+  };
   @media (max-width: 640px) {
     grid-template-columns: 0 100% 0;
-  }
-  background-color: gray;
+  };
+  
   min-height: 100%;
 `;
 

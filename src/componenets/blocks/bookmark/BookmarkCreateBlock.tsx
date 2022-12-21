@@ -1,47 +1,12 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { CreateBookmarkData } from "../../../interface/bookmark";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
-import { Login } from "../auth/login/Login.page";
-import { Signup } from "../auth/signup/Signup.page";
+import { Login } from "../../pages/auth/login/Login.page";
+import { Signup } from "../../pages/auth/signup/Signup.page";
+import { BlockContainer, BlockContentContainer, ButtonContainer, CreateBookmarkContainer, InputContainer } from "./style";
 
-const ModalContainer = styled.div`
-  //position: absolute;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  background-color: #81818194;
-  width: 100%;
-  height: 10vh;
-`;
 
-//모달 내용
-const ModalContentContainer = styled.div`
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  background-color: #ffffff;
-  width: auto;
-  height: auto;
-`;
-export const EditBookmark = (props: any) => {
-  const useModal = props.useModal;
-  return (
-    <div></div>
-  )
-}
-const CreateBookmarkContainer = styled.div`
-   display: grid;
-   gap: 5px;
-`;
-const InputContainer = styled.div`
-   display: grid;
-`;
-const ButtonContainer = styled.div`
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-`;
 
 
 export const CreateBookmark = (props: any) => {
@@ -90,16 +55,16 @@ export const CreateBookmark = (props: any) => {
     </CreateBookmarkContainer>
   )
 }
-export const BookmarkModalPage = (props: any) => {
+export const BookmarkCreateBlock = (props: any) => {
   const useModal = props.useModal
 
   const [modalContent, setModalContent] = useState(<CreateBookmark useModal={useModal} setNewBookmark={props.setNewBookmark} />)
 
   return (
-    <ModalContainer className="modal-base">
-      <ModalContentContainer>
+    <BlockContainer className="modal-base">
+      <BlockContentContainer>
         {modalContent}
-      </ModalContentContainer>
-    </ModalContainer>
+      </BlockContentContainer>
+    </BlockContainer>
   )
 }
