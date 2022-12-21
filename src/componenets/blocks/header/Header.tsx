@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { customAxios } from '../../../utils/axios/customAxios';
 import { ModalPage } from '../../pages';
-import { CommonButton, HeaderContainer } from './style';
+import { ButtonContainer, ContentChangeButton, HeaderButtonContainer, HeaderContainer, HeaderContent, LogoutButton } from './style';
+import { faUser, faBookmark } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -39,16 +40,18 @@ const Header = (props: any) => {
     }
     const MypageButton = () => {
         return (
-            <CommonButton onClick={navUserInfo}>
+            <ContentChangeButton onClick={navUserInfo}>
+                <FontAwesomeIcon className="mr-1" icon={faUser} size='1x'></FontAwesomeIcon>
                 내정보
-            </CommonButton>
+            </ContentChangeButton>
         )
     }
     const MainButton = () => {
         return (
-            <CommonButton onClick={navMain}>
+            <ContentChangeButton onClick={navMain}>
+                <FontAwesomeIcon className="mr-1" icon={faBookmark} size='1x'></FontAwesomeIcon>
                 북마크
-            </CommonButton>
+            </ContentChangeButton>
         )
     }
     const sendLogout = async () => {
@@ -86,20 +89,10 @@ const Header = (props: any) => {
 
     const loginedHeader = () => {
 
-
-        const LoggedIn = () => {
-            return (
-                <LoggedInButton onMouseOver={() => setlogoutFocused(true)} >
-                    Logged In
-                </LoggedInButton>
-            )
-        };
-
-
         const Logout = () => {
             return (
                 <LogoutButton onClick={onLogout} onMouseOut={() => setlogoutFocused(false)}>
-                    Logout
+                    Log Out
                 </LogoutButton>
             )
         };
@@ -114,7 +107,9 @@ const Header = (props: any) => {
                     <div></div>
                     <ButtonContainer>
                         <HeaderButtonContainer>{ButtonHandle()}</HeaderButtonContainer>
-                        <HeaderButtonContainer >{logoutFocused ? <Logout /> : <LoggedIn />}</HeaderButtonContainer>
+                        <HeaderButtonContainer>
+                            <LogoutButton onClick={onLogout}>LogOut</LogoutButton>
+                        </HeaderButtonContainer>
                     </ButtonContainer>
                 </HeaderContent>
                 <div></div>
@@ -122,20 +117,7 @@ const Header = (props: any) => {
 
         )
     }
-    const ButtonContainer = styled.div`
-        display: grid;
-        grid-template-columns: auto auto;
-    `;
-    const HeaderButtonContainer = styled.div`
-        display:grid;
-        justify-items: end;
-    `;
-    const HeaderContent = styled.div`
-        display: grid;
-        align-items: center;
-        grid-template-columns: 20% auto auto;
-        padding: 0 10px 0 0;
-    `;
+    
     const unLoginHeader = () => {
         return (
             <HeaderContainer id='header'>
@@ -145,40 +127,27 @@ const Header = (props: any) => {
                     <div>Tag Mark</div>
                     <div></div>
                     <HeaderButtonContainer>
-                        <CommonButton onClick={onlogin}>로그인</CommonButton>
+                        <ContentChangeButton onClick={onlogin}>로그인</ContentChangeButton>
                     </HeaderButtonContainer>
                 </HeaderContent>
                 <div></div>
             </HeaderContainer>
         )
-    }
+    };
+
     const onlogin = () => {
         useModal.openModal();
-    }
+    };
+
     useEffect(() => {
         setIsLogin(props.isLogin)
-    }, [])
+    }, []);
+
     //이것도 컴포넌트로 만들어서 컴포넌트 반환하게 통일
     return isLogin ? loginedHeader() : unLoginHeader()
 };
 
 
 //기본은 파란 프레임만 보이는 디자인. 마우스 대면 하얀 바탕을 빨갛게 채우고 글자색 바뀜
-const LogoutButton = styled.button`
-        white-space: nowrap;
-        min-width: 75px;
-        height: 100%;
-        background-color: #ff5d5dcf;
-        border: 1px solid;
-        border-radius: 10px;
-`;
 
-const LoggedInButton = styled.button`
-    white-space: nowrap;
-    min-width: 75px;
-    height: 20px;
-    background-color: #d5e6ff;
-    border: 1px solid;
-    border-radius: 10px;
-`;
 export default Header;

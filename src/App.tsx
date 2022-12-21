@@ -32,7 +32,8 @@ function App() {
 }
 const AppContainer = styled.div`
   height: 100vh;
-`
+`;
+
 const MainContainer = styled.div`
   display: grid;
   grid-template-columns: 20% 60% 20%;

@@ -2,9 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { customAxios } from "../../../utils/axios/customAxios";
 import { secure } from "../../../utils/secure";
+import { LoadingBar } from "../../blocks/common/loading/loading";
 import { MyResponsivePie } from "../../blocks/userInfo/tagGraph";
 import { UserInfoModalPage } from "../modal/UserInfoModalPage";
-import { BookmarkAreaContainer, GraphContainer, MyDataContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
+import { BookmarkAreaContainer, CommonButton, GraphContainer, MyDataButtonContainer, MyDataContainer, MyInfoContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
 
 export const UserInfo = () => {
     const secureWrap = secure().wrapper()
@@ -15,6 +16,9 @@ export const UserInfo = () => {
         label: '없음',
         value: 1
     }])
+
+    const [load, setLoad] = useState(true);
+
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
 
@@ -91,6 +95,9 @@ export const UserInfo = () => {
             updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
             updateTagCount(tagCount.data.tags)
             updateTagGraphData(graphData)
+
+            setLoad(false);
+
         } catch (error) {
             console.log(error)
         }
@@ -119,8 +126,9 @@ export const UserInfo = () => {
         getUserInfo()
     }, [])
 
-    return (
-        <UserInfoContainer id="user-info">
+    const UserInfoContent = () => {
+        return (
+<UserInfoContainer id="user-info">
             {useModal.isShowModal ? modalHandle.modalPage() : null}
             <BookmarkAreaContainer className="bookmark-area">
                 <div>총 북마크 개수 : {userInfo.bookmarkCount} </div>
@@ -138,45 +146,29 @@ export const UserInfo = () => {
                     <MyInfoContainer>
                         <div className="email-info">
                             <div>이메일 : {userInfo.email}</div>
-                            {userInfo.type === 'BASIC' ? <div>소셜로그인입니다</div> : <div></div>}
+                            {userInfo.type !== 'BASIC' ? <div>소셜로그인입니다</div> : <div>&nbsp;</div>}
                         </div>
                         <div>닉네임 : {userInfo.nickname}</div>
                     </MyInfoContainer>
                     <MyDataButtonContainer>
-                        <button className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </button>
-                        <button className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </button>
+                        <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
+                        <CommonButton className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </CommonButton>
                     </MyDataButtonContainer>
                 </MyDataContainer>
             </SubContainer>
         </UserInfoContainer>
+        )
+    };
+
+    const Loading = () => {
+        return (
+            <LoadingBar />
+        )
+    };
+
+    return (
+        load ? <Loading/> : <UserInfoContent />
     )
 }
-const MyInfoContainer = styled.div`
-    display: grid;
-    align-self: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-    .email-info {
-        display: grid;
-        gap: 5px;
-    }
-`;
-const MyDataButtonContainer = styled.div`
-    display: grid;
-    gap: 30px;
-    justify-items: center;
-    height: 100%;
-    button {
-        width: 50%;
-        height: fit-content;
-    }
-    .edit-button{
-        display: grid;
-        align-self: flex-start;
-    }
-    .delete-button{
-        display: grid;
-        align-self: center;
-    }
-`;
+
 //export default BookMark

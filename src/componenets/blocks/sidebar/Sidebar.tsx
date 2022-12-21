@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { dumyTags } from '../../../dumy/dumy-tags';
 import { Bookmark } from '../../../interface/bookmark';
 import { Tag, TagCountObj } from '../../../interface/tag';
 import { customAxios } from '../../../utils/axios/customAxios';
 import { secure } from '../../../utils/secure';
-import { CommonButton, SideBarContainer, SideBarInput } from './style';
-
+import { CommonButton, CountContainer, SideBarContainer, SideBarInput, SideBarTagComponent, SideBarTagsContainer, SideBarTextContainer, TagNameContainer } from './style';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -26,29 +25,7 @@ const SideBarTagComponenet = (props: any) => {
         </SideBarTagComponent>
     )
 }
-const CountContainer = styled.div`
-    white-space: nowrap;
-`;
-const SideBarTagComponent = styled.div`
-    display: grid;
-    grid-template-columns: 80% 20%;
-    justify-items: center;
-    align-items: center;
-    max-width: 100%;
-    overflow-x: auto;
-    padding: 0 5px 0 10px;
-    word-break: break-all;
-    border-bottom: 2px solid white;
-    &:hover {
-        border-bottom: 2px solid transparent;
-        border-image: linear-gradient(to right, #ffffff, #eed69d,#ffffff);
-        border-image-slice: 1;
-    }
-`;
 
-const TagNameContainer = styled.div`
-    padding-right: 10px;
-`;
 
 
 
@@ -63,15 +40,7 @@ const SideBarTags = (props: any) => {
         </SideBarTagsContainer>
     )
 }
-const SideBarTagsContainer = styled.div`
-    border: 1px solid #1C3879;
-    border-radius: 5px;
-    display: grid;
-    margin-top: 20px;
-    padding: 5px 0 5px 0;
-    gap: 5px;
-    width: 100%;
-`;
+
 
 /*
 [tagName] [tagCount]
@@ -201,7 +170,9 @@ const SideBar = (props: any) => {
         <SideBarContainer>
             <SideBarTextContainer>
                 <div>태그검색</div>
-                <CommonButton onClick={tagSearchRefresh}>초기화</CommonButton>
+                <CommonButton onClick={tagSearchRefresh}>
+                    <FontAwesomeIcon className="mr-1" icon={faArrowsRotate} size='1x'></FontAwesomeIcon>
+                </CommonButton>
             </SideBarTextContainer>
             <SideBarInput type="text" id='side_bar_input' defaultValue={tagInput} onChange={inputOnChange} />
             <SideBarTags tagCountObjArr={tagWithCounts} getTagBookmarkSideBar={props.getTagBookmarkSideBar} />
@@ -211,11 +182,4 @@ const SideBar = (props: any) => {
 
 export default SideBar;
 
-const SideBarTextContainer = styled.div`
-display: grid;
-grid-template-columns: auto auto;
-gap: 2px;
-margin: 10px 0 5px 0;
-align-items: center;
-width: 100%;
-`;
+

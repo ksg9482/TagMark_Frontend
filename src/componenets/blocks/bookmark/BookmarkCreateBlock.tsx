@@ -1,46 +1,12 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { CreateBookmarkData } from "../../../interface/bookmark";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
 import { Login } from "../../pages/auth/login/Login.page";
 import { Signup } from "../../pages/auth/signup/Signup.page";
-
-const BlockContainer = styled.div`
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  background-color: #ffffff;
-  border: 1px solid;
-  border-radius: 5px;
-  margin: 15px 0 10px 0;
-  max-width: 100%;
-  height: 10vh;
-`;
+import { BlockContainer, BlockContentContainer, ButtonContainer, CreateBookmarkContainer, InputContainer } from "./style";
 
 
-const BlockContentContainer = styled.div`
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  background-color: #ffffff;
-  width: auto;
-  height: auto;
-`;
-
-const CreateBookmarkContainer = styled.div`
-   display: grid;
-   gap: 5px;
-`;
-const InputContainer = styled.div`
-   display: grid;
-   gap: 5px;
-`;
-const ButtonContainer = styled.div`
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   gap: 5px;
-`;
 
 
 export const CreateBookmark = (props: any) => {

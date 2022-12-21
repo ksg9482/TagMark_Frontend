@@ -1,4 +1,3 @@
-import styled from "styled-components"
 import { Bookmark } from "../../../interface/bookmark"
 import BookmarkComponent from "./BookmarkComponent"
 import { BookmarksContainer } from "./style"

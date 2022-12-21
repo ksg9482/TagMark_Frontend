@@ -1,16 +1,18 @@
 import styled from "styled-components";
 
-export const UrlContainer = styled.div`
+export const UrlContainer = styled.a`
     max-width: 300px;
     overflow-x: hidden;
     text-overflow: ellipsis;
 `;
 
-export const FocusedUrlContainer = styled.div`
+export const FocusedUrlContainer = styled.a`
     display: grid;
     max-width: 300px;
     word-break: break-all;
     align-self: center;
+    text-decoration:none;
+    color: black;
 `;
 
 export const BookmarkComponentContainer = styled.div`
@@ -101,4 +103,52 @@ export const BookmarksContainer = styled.div`
     padding: 5px;
     border: 1px solid;
     border-radius: 8px;
+`;
+
+export const BlockContainer = styled.div`
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 15px 0 10px 0;
+  max-width: 100%;
+  height: 10vh;
+`;
+
+export const BlockContentContainer = styled.div`
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: #ffffff;
+  width: auto;
+  height: auto;
+`;
+
+export const CreateBookmarkContainer = styled.div`
+   display: grid;
+   gap: 5px;
+`;
+
+export const InputContainer = styled.div`
+   display: grid;
+   gap: 5px;
+`;
+
+export const ButtonContainer = styled.div`
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 5px;
+`;
+
+export const BookmarkContent = styled.div`
+    display: grid;
+    justify-items: center;
+`;
+
+export const FocusedBookmarkComponentInner = styled.div`
+    display: grid;
+    grid-template-columns: auto min-content;
+    width: 100%;
 `;

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import styled from "styled-components"
 import { Tag } from "../../../interface/tag";
 import { secure } from "../../../utils/secure";
 import Tags from "../tag/tags"
 import BookmarkOptionButtons from "./BookmarkOptionButtons"
-import { BookmarkComponentContainer, BookmarkComponentEditInner, BookmarkComponentInner, EditButtonContainer, EditContainer, FocusedUrlContainer, UnFocusedBookmarkComponentInner, UrlContainer } from "./style";
+import { BookmarkComponentContainer, BookmarkComponentEditInner, BookmarkComponentInner, BookmarkContent, EditButtonContainer, EditContainer, FocusedBookmarkComponentInner, FocusedUrlContainer, UnFocusedBookmarkComponentInner, UrlContainer } from "./style";
 //클릭시 -> 색바뀜, 옵션창 나옴
 
 
@@ -130,7 +129,7 @@ const BookmarkComponent = (props: any) => {
                 </UnFocusedBookmarkComponentInner>
                 <FocusedBookmarkComponentInner id="focused" className="focused">
                     <BookmarkContent>
-                    <FocusedUrlContainer>{a}</FocusedUrlContainer>
+                    <FocusedUrlContainer href={a} target='_blank'>{a}</FocusedUrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                     </BookmarkContent>
                     {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} /> : null}
@@ -138,15 +137,7 @@ const BookmarkComponent = (props: any) => {
             </BookmarkComponentInner>
         )
     };
-const BookmarkContent = styled.div`
-    display: grid;
-    justify-items: center;
-`;
-const FocusedBookmarkComponentInner = styled.div`
-    display: grid;
-    grid-template-columns: auto min-content;
-    width: 100%;
-`;
+
     const BookmarkEditContent = () => {
         const editInputInit = () => {
             const tags = view.tags.map((tag: any) => {

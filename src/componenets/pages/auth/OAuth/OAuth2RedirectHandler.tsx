@@ -68,6 +68,7 @@ const OAuth2RedirectHandler = (props: any) => {
       }
     }
   }
+  
   useEffect(() => {
     handle();
   }, []);

@@ -1,6 +1,5 @@
 import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
 import { dumyBookmark } from "../../../dumy/dumy-bookmarks";
 import { dumyTags } from "../../../dumy/dumy-tags";
 import { Bookmark, CreateBookmarkData } from "../../../interface/bookmark";
@@ -11,7 +10,9 @@ import Bookmarks from "../../blocks/bookmark/Bookmarks";
 import { PageMove } from "../../blocks/bookmark/pageMove/PageMove";
 import SideBar from "../../blocks/sidebar/Sidebar";
 import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
-import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, ContentBox } from "./styles";
+import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, CommonButton, ContentBox, ManageButtonContainer, TagText } from "./styles";
+import { LoadingBar } from "../../blocks/common/loading/loading";
+
 
 //로딩중 페이지 만들기
 /*
@@ -92,6 +93,8 @@ export const BookMark = (props: any) => {
     const [currentSearch, setCurrentSearch] = useState(CurrentSearch.Bookmark);
 
     const [firstPage, setFirstPage] = useState([bookmarkInitData])
+
+    const [load, setLoad] = useState(true);
 
     const updateCurrentTag = (targetTag: any) => {
         if (currentTag.includes(targetTag)) {
@@ -372,6 +375,7 @@ export const BookMark = (props: any) => {
             // //해당하는페이지 보여줌
             createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1)
             // return setBookmarkView(bookmark);
+            setLoad(false);
         } catch (error) {
             console.log(error)
         }
@@ -698,8 +702,15 @@ export const BookMark = (props: any) => {
     //         createBookmarkView(setLocalPagenation(originBookmarks, 20), currentPageNum - 1)
     //     }
     // }, [originBookmarks, currentPageNum])
-    
-    return (
+
+    const Loading = () => {
+        return (
+            <LoadingBar />
+        )
+    }
+
+    const MainContent = () => {
+        return (
         <BookmarkContainer id='main-content'>
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
             <div></div>
@@ -708,8 +719,12 @@ export const BookMark = (props: any) => {
                 <BookmarkManagebuttonContainer>
                     <div>총 {totalCount}개 북마크</div>
                     <ManageButtonContainer>
-                        <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
-                        <CommonButton onClick={bookmarkCreate}>북마크생성</CommonButton>
+                        <CommonButton onClick={bookmarkRefresh}>
+                            새로고침
+                        </CommonButton>
+                        <CommonButton onClick={bookmarkCreate}>
+                            북마크생성
+                        </CommonButton>
                     </ManageButtonContainer>
                 </BookmarkManagebuttonContainer>
                 {useModal.isShowModal ? <BookmarkCreateBlock useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
@@ -719,27 +734,13 @@ export const BookMark = (props: any) => {
                 <PageMove count={paginationCount()} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
             </BookmarkManageContainer>
         </BookmarkContainer>
+        )
+    }
+    return (
+        load ? <Loading/> : <MainContent/>
     )
 };
-const CommonButton = styled.button`
-    white-space: nowrap;
-    min-width: fit-content;
-    width: 85px;
-`;
 
-const ManageButtonContainer = styled.div`
-        display:grid;
-        grid-template-columns: auto auto;
-        gap:5px;
-        justify-items: end;
-        width: 100%;
-        margin-right: 5px;
-    `;
-const TagText = styled.div`
-    display: grid;
-    align-items: center;
-    margin: 10px 0 10px 0;
-`;
 //로컬에 저장된거 암호화 못시키나? 가져올때 원복시키면 되지 않을까?
 //export default BookMark
 

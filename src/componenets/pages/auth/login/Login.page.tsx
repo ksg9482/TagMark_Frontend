@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { secure } from "../../../../utils/secure";
 import config from "../../../../config";
-import { CommonButtonContainer, MoveSignupPage, ModalTitle } from "./style";
+import { CommonButtonContainer, MoveSignupPage, ModalTitle, LoginContent, ContentTop, CommonButton, ContentBody } from "./style";
 import { LoginBlock } from "../../../blocks/auth/login/login.block";
 import { OAuthButtonBlock } from "../../../blocks/auth/login/OAuthButton.block";
 import styled from "styled-components";
@@ -95,51 +95,4 @@ export const Login = (props: any) => {
     </LoginContent>
   )
 }
-export const ContentTop = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid;
-  border-color: #c5c5c5;
-  padding: 8px 10px 8px 10px;
-  margin: 0 0 100px 0;
-  
-  height: fit-content;
-  #title {
-    justify-self: left;
-    
-    height: fit-content;
-  }
-  #exit {
-    justify-self: end;
-  }
-`;
-export const ContentBody = styled.div`
-  display: grid;
-  grid-template-rows: min-content min-content min-content auto;
-  justify-items: center;
-  justify-self: center;
-  //align-self: center;
-  align-items: center;
-  //align-content: center;
-  width: 400px;
-  #move-signup {
-    align-self: flex-start;
-    margin-bottom: 20px;
-  }
-  #social-login{
-    align-self: flex-start;
-  }
-`;
-export const LoginContent = styled.div`
-  display: grid;
-  grid-template-rows: min-content auto;
-  height: 700px;
-  width: 500px;
-`;
-export const CommonButton = styled.button`
-    white-space: nowrap;
-    min-width: fit-content;
-    
-    height: fit-content;
-`;
 

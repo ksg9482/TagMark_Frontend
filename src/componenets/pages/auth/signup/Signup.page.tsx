@@ -5,7 +5,7 @@ import config from "../../../../config";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
-import { CommonInput, ModalTitle, SignupContainer, SignupInput } from "./style";
+import { CommonButton, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalTitle, SignUpBlock, SignupContainer, SignupInput } from "./style";
 
 
 
@@ -120,53 +120,4 @@ export const Signup = (props: any) => {
         </SignupContainer>
     )
 };
-const ErrorMessageBlock = styled.div`
-    margin-top: 10px;
-    color: red;
-    font-size: small;
-`;
-const SignUpBlock = styled.div`
-    display: grid;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-self: flex-start;
-`;
-const ContentTop = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid;
-  border-color: #c5c5c5;
-  padding: 8px 10px 8px 10px;
-  margin: 0 0 100px 0;
-  
-  height: fit-content;
-  #title {
-    justify-self: left;
-    
-    height: fit-content;
-  }
-  #exit {
-    justify-self: end;
-  }
-`;
-const ContentBody = styled.div`
-  display: grid;
-  grid-template-rows: min-content auto;
-  justify-items: center;
-  justify-self: center;
-  //align-self: center;
-  align-items: center;
-  //align-content: center;
-  width: 400px;
-  #move-signup {
-    align-self: flex-start;
-    margin-bottom: 20px;
-  }
-`;
 
-const CommonButton = styled.button`
-    white-space: nowrap;
-    min-width: fit-content;
-    
-    height: fit-content;
-`;
