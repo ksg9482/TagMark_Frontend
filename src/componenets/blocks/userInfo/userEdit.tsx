@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
-import { CommonButtonContainer, CommonInput, ModalTitle, UserEditContainer } from "./style";
+import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, InputContainer, ModalTitle, UserEditContainer } from "./style";
 
 type EditKey = 'nickName' | 'password' | 'passwordCheck';
 
@@ -55,27 +55,33 @@ export const EditUserInfo = (props: any) => {
     }
     return (
         <UserEditContainer>
-            <ModalTitle>
-            유저정보 변경
-            </ModalTitle>
-            
-            <CommonInput>
-                <div>닉네임변경</div>
-                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
-            </CommonInput>
-            <CommonInput>
-                <div>비밀번호변경</div>
-                <input type="text" placeholder="비밀번호변경" onChange={onEditInput('password')} defaultValue={editInput.password} />
-            </CommonInput>
-            <CommonInput>
-                <div>비밀번호확인</div>
-                <input type="text" placeholder="비밀번호확인" onChange={onEditInput('passwordCheck')} defaultValue={editInput.passwordCheck} />
-            </CommonInput>
-            <CommonButtonContainer>
-                <button onClick={onEdit}>확인</button>
-                <button onClick={onClose}>취소</button>
-            </CommonButtonContainer>
-
+            <ContentTop>
+                <div id="title">User Edit</div>
+                <CommonButton id="exit" onClick={onClose}>X</CommonButton>
+            </ContentTop>
+            <ContentBody>
+                <ModalTitle>
+                    유저정보 변경
+                </ModalTitle>
+                <InputContainer>
+                    <CommonInput>
+                        <div>닉네임변경</div>
+                        <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
+                    </CommonInput>
+                    <CommonInput>
+                        <div>비밀번호변경</div>
+                        <input type="text" placeholder="비밀번호변경" onChange={onEditInput('password')} defaultValue={editInput.password} />
+                    </CommonInput>
+                    <CommonInput>
+                        <div>비밀번호확인</div>
+                        <input type="text" placeholder="비밀번호확인" onChange={onEditInput('passwordCheck')} defaultValue={editInput.passwordCheck} />
+                    </CommonInput>
+                </InputContainer>
+                <CommonButtonContainer>
+                    <button onClick={onClose}>취소</button>
+                    <button onClick={onEdit}>확인</button>
+                </CommonButtonContainer>
+            </ContentBody>
         </UserEditContainer>
     )
 }

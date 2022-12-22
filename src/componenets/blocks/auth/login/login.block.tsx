@@ -38,7 +38,10 @@ export const LoginBlock = (props: any) => {
         if(!inputCheck(loginInput)){
             return ;
         }
-        sendLoginData(loginInput)
+        let loginData;
+        loginData = secureWrap.decryptWrapper(loginInput.email)
+        loginData = secureWrap.decryptWrapper(loginInput.password)
+        sendLoginData(loginData)
         useModal.closeModal()
         // eslint-disable-next-line no-restricted-globals
         location.reload()

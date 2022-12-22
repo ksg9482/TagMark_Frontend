@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { Login } from "../auth/login/Login.page";
 import { Signup } from "../auth/signup/Signup.page";
 import { ModalContainer, ModalContentContainer } from "./style";
