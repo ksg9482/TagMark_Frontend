@@ -124,12 +124,12 @@ const BookmarkComponent = (props: any) => {
         return (
             <BookmarkComponentInner id="bookmark-component-inner">
                 <UnFocusedBookmarkComponentInner id="un-focused" className="un-focused">
-                    <UrlContainer>{a}</UrlContainer>
+                    <UrlContainer>{decodeURI(a)}</UrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                 </UnFocusedBookmarkComponentInner>
                 <FocusedBookmarkComponentInner id="focused" className="focused">
                     <BookmarkContent>
-                    <FocusedUrlContainer href={a} target='_blank'>{a}</FocusedUrlContainer>
+                    <FocusedUrlContainer href={a} target='_blank'>{decodeURI(a)}</FocusedUrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                     </BookmarkContent>
                     {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} /> : null}

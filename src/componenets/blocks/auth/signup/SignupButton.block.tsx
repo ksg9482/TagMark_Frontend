@@ -5,8 +5,8 @@ export const SignUpButtonBlock = (props:any) => {
     const onSignup = props.onSignup
     return (
         <CommonButtonContainer>
-            <button onClick={onClose}>취소</button>
             <button onClick={onSignup}>가입</button>
+            <button onClick={onClose}>취소</button>
         </CommonButtonContainer>
     )
 }

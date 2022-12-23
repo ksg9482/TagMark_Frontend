@@ -59,8 +59,8 @@ export const LoginBlock = (props: any) => {
             </CommonInput>
             {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
             <CommonButtonContainer>
-            <button onClick={onClose}>취소</button>
             <button onClick={onLogin}>로그인</button>
+            <button onClick={onClose}>취소</button>
             </CommonButtonContainer>
         </LoginContainer>
     )

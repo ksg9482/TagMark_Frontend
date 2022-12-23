@@ -60,6 +60,9 @@ export const HeaderContent = styled.div`
     align-items: center;
     grid-template-columns: 20% auto 40%;
     padding: 0 10px 0 0;
+    .title {
+        transform : rotate(0.04deg);
+    }
 `;
 
 export const LogoutButton = styled.button`

@@ -78,8 +78,8 @@ export const EditUserInfo = (props: any) => {
                     </CommonInput>
                 </InputContainer>
                 <CommonButtonContainer>
-                    <button onClick={onClose}>취소</button>
                     <button onClick={onEdit}>확인</button>
+                    <button onClick={onClose}>취소</button>
                 </CommonButtonContainer>
             </ContentBody>
         </UserEditContainer>
