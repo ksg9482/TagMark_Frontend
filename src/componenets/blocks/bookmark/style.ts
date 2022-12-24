@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const UrlContainer = styled.a`
-    max-width: 300px;
+    max-width: 280px;
     overflow-x: hidden;
     text-overflow: ellipsis;
 `;
 
 export const FocusedUrlContainer = styled.a`
     display: grid;
-    max-width: 300px;
+    max-width: 280px;
     word-break: break-all;
     align-self: center;
     text-decoration:none;
@@ -84,13 +84,13 @@ export const BookmarkOptionButtonsContainer = styled.div`
     gap: 5px;
     max-height: 200px;
     grid-template-rows: 1fr 1fr;
-    padding: 3px 3px 3px 0;
+    margin: 3px 3px 3px 0;
     justify-self: right;
 `;
 export const BookmarkOptionButton = styled.button`
     border: none;
     border-radius: 5px;
-    width: fit-content;
+    width: 42px;
     height: fit-content;
     white-space: nowrap;
 `;
@@ -145,6 +145,7 @@ export const ButtonContainer = styled.div`
 export const BookmarkContent = styled.div`
     display: grid;
     justify-items: center;
+    margin-left: 42px;
 `;
 
 export const FocusedBookmarkComponentInner = styled.div`
