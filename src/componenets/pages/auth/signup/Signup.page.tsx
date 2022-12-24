@@ -50,8 +50,10 @@ export const Signup = (props: any) => {
         passwordCheck: string;
     }) => {
         Reflect.deleteProperty(signupInput, 'passwordCheck')
-        console.log(signupInput)
-        return signupInput;
+        let signupData;
+        signupData = secureWrap.decryptWrapper(signupInput.email)
+        signupData = secureWrap.decryptWrapper(signupInput.password)
+        return signupData;
     };
 
     
@@ -82,6 +84,7 @@ export const Signup = (props: any) => {
         if(!inputCheck(signupInput)){
             return ;
         }
+        
         //const securedData: string = securedSendData(signupDataForm(signupInput))
         const signupResp = await sendSignupData(signupDataForm(signupInput))
         if(signupResp?.data.error){

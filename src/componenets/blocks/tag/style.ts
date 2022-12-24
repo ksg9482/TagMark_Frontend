@@ -12,4 +12,5 @@ export const TagButton = styled.button`
     border-color: #355ba3ef;
     border-radius: 5px;
     margin: 2px 5px 3px 5px;
+    transition: 0.2s;
 `;

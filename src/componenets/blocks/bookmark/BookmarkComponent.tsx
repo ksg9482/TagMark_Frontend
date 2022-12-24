@@ -28,7 +28,7 @@ const BookmarkComponent = (props: any) => {
         return result.join('\n');
     };
     const tagStrToArr = (tagStr: string) => {
-        if(Array.isArray(tagStr)){
+        if (Array.isArray(tagStr)) {
             return tagStr
         }
         const tagArr = tagStr.split('\n').map((tagName) => { return { tag: tagName } })
@@ -124,15 +124,15 @@ const BookmarkComponent = (props: any) => {
         return (
             <BookmarkComponentInner id="bookmark-component-inner">
                 <UnFocusedBookmarkComponentInner id="un-focused" className="un-focused">
-                    <UrlContainer>{a}</UrlContainer>
+                    <UrlContainer>{decodeURI(a)}</UrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                 </UnFocusedBookmarkComponentInner>
                 <FocusedBookmarkComponentInner id="focused" className="focused">
                     <BookmarkContent>
-                    <FocusedUrlContainer href={a} target='_blank'>{a}</FocusedUrlContainer>
-                    {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
+                        <FocusedUrlContainer href={a} target='_blank'>{decodeURI(a)}</FocusedUrlContainer>
+                        {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                     </BookmarkContent>
-                    {focused ? <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} /> : null}
+                    <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} />
                 </FocusedBookmarkComponentInner>
             </BookmarkComponentInner>
         )
@@ -149,7 +149,7 @@ const BookmarkComponent = (props: any) => {
         return (
             <BookmarkComponentEditInner>
                 <EditContainer>
-                    <textarea  defaultValue={secureWrap.decryptWrapper(editInputInit().url)} onChange={onEditInput('url')} />
+                    <textarea defaultValue={secureWrap.decryptWrapper(editInputInit().url)} onChange={onEditInput('url')} />
                     <textarea name="" id="" cols={40} defaultValue={tagArrToStr(editInputInit().tags)} onChange={onEditInput('tags')} />
                 </EditContainer>
                 <EditButtonContainer>

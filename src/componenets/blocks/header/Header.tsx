@@ -103,7 +103,7 @@ const Header = (props: any) => {
                 <div></div>
                 {useModal.isShowModal ? <ModalPage useModal={useModal} /> : null}
                 <HeaderContent>
-                    <div>Tag Mark</div>
+                    <div className='title'>Tag Mark</div>
                     <div></div>
                     <ButtonContainer>
                         <HeaderButtonContainer>{ButtonHandle()}</HeaderButtonContainer>

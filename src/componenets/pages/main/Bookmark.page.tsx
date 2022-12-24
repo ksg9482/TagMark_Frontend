@@ -128,8 +128,9 @@ export const BookMark = (props: any) => {
 
         //띄어쓰기 문제 해결!!
         //사이드바 검색이 우선되게. 같은 로직 공유하니 and로 자동 적용됨
+        console.log(blankChange)
         const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}&pageNo=1`)
-
+        console.log(andSearch)
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -149,9 +150,10 @@ export const BookMark = (props: any) => {
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
         currentPageRefresh(1)
-        const andSearch = await customAxios.get(`/tag/search-or?tags=${targetTags}&pageNo=1`)
-
-        if (andSearch.data.bookmarks.length <= 0) {
+        console.log(targetTags)
+        const orSearch = await customAxios.get(`/tag/search-or?tags=${targetTags}&pageNo=1`)
+        console.log(orSearch)
+        if (orSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
         const bookmarkArr: Bookmark[] = originBookmarks;
@@ -166,7 +168,7 @@ export const BookMark = (props: any) => {
             })
             if (1 <= tagFilter.length) return tagFilter
         })
-        return andSearch.data
+        return orSearch.data
     }
     //로컬시 pageMove로 움직이면 원래 없어야 하는 북마크도 보임. 1로 옮기면서 그대로 복붙하니 그런듯?
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {

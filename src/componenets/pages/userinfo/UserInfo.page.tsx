@@ -68,10 +68,7 @@ export const UserInfo = () => {
     const sendGetTagCount = async () => {
         return await customAxios.get(`/tag`)
     }
-    //객체 내용물을 재귀를 통해 암호화함
-    const encryptWrapper = (data: any) => {
-
-    }
+    
     const updateTagCount = (tagCount: any) => {
         setTagCount(tagCount)
     }
@@ -90,8 +87,8 @@ export const UserInfo = () => {
                     value: tag.count
                 }
             })
-            const user = JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
-            encryptWrapper('')
+            const user = userInfo.data.user;//JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
+            
             updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
             updateTagCount(tagCount.data.tags)
             updateTagGraphData(graphData)

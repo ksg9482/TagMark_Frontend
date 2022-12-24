@@ -32,7 +32,7 @@ export const ContentChangeButton = styled.button`
     box-sizing: border-box;
     min-width: 80px;
     min-height: 30px;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     &:hover {
         background-color: #deebff;
     }
@@ -40,6 +40,8 @@ export const ContentChangeButton = styled.button`
     border-radius: 15px;
     font-size: medium;
     transition: 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
 `;
 
 export const ButtonContainer = styled.div`
@@ -58,6 +60,9 @@ export const HeaderContent = styled.div`
     align-items: center;
     grid-template-columns: 20% auto 40%;
     padding: 0 10px 0 0;
+    .title {
+        transform : rotate(0.04deg);
+    }
 `;
 
 export const LogoutButton = styled.button`
@@ -65,11 +70,13 @@ export const LogoutButton = styled.button`
     box-sizing: border-box;
     width: 100px;
     min-height: 30px;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     border: 3px solid #97b5e1;
     &:hover {
         border: 3px solid #ff8d8d;
     }
     border-radius: 15px;
     font-size: medium;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
 `;

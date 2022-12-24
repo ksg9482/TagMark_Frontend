@@ -1,10 +1,6 @@
-import { useState } from "react";
-import styled from "styled-components";
 import { DeleteUser } from "../../blocks/userInfo/userDelete";
 import { EditUserInfo } from "../../blocks/userInfo/userEdit";
-import { Login } from "../auth/login/Login.page";
-import { Signup } from "../auth/signup/Signup.page";
-import { ModalContainer, ModalContentContainer, UserInfoModalContainer } from "./style";
+import { ModalContentContainer, UserInfoModalContainer } from "./style";
 
 
 interface ContentKey {
