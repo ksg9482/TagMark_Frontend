@@ -453,12 +453,12 @@ export const BookMark = (props: any) => {
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
         const url = createBookmarkData.url //암호? 평문? 공백인거 보면 문제가?
-        const tags = createBookmarkData.tags.map((tag, i) => {
-            return { id: 'tempTag' + i, tag: tag }
+        const tags = createBookmarkData.tagNames.map((tagName, i) => {
+            return { id: 'tempTag' + i, tag: tagName }
         })
         let createdResp;
         if (isLogin) {
-            const saveResp = await sendCreateBookmark({ url, tags: createBookmarkData.tags })
+            const saveResp = await sendCreateBookmark({ url, tagNames: createBookmarkData.tagNames })
             const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageNum}`)
             createdResp = bookmarkResponse.data
             console.log(bookmarkResponse.data)
