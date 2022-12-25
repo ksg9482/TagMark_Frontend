@@ -35,8 +35,8 @@ export const CreateBookmark = (props: any) => {
   const onCreate = () => {
     //console.log(createInput)
     const url = secureWrap.decryptWrapper(createInput.url);
-    const tags = tagStringToArray(secureWrap.decryptWrapper(createInput.tags));
-    const createBookmark:CreateBookmarkData = {url, tags}
+    const tagNames = tagStringToArray(secureWrap.decryptWrapper(createInput.tags));
+    const createBookmark:CreateBookmarkData = {url, tagNames}
     //console.log(createBookmark)
     setNewBookmark(createBookmark)
     useModal.closeModal()
