@@ -10,7 +10,7 @@ export const ModalText = styled.div`
 export const LoginContainer = styled.div`
     display: grid;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 `;
 export const CommonInput = styled.div`
     display: grid;
@@ -26,6 +26,15 @@ export const CommonButtonContainer = styled.div`
     gap: 5px;
     margin-top: 15px;
     grid-template-columns: 1fr 1fr;
+`;
+
+export const OauthButtonContainer = styled.div`
+    display: grid;
+    justify-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    gap: 15px;
+    width: 100%;
 `;
 
 export const ErrorMessageBlock = styled.div`

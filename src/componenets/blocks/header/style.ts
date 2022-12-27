@@ -44,6 +44,28 @@ export const ContentChangeButton = styled.button`
 
 `;
 
+export const LoginButton = styled.button`
+    display: grid;
+    gap: 2px;
+    //grid-template-columns: auto auto;
+    align-items: center;
+    justify-items: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    min-width: 80px;
+    min-height: 30px;
+    background-color: #f9f9f9;
+    &:hover {
+        background-color: #deebff;
+    }
+    border: 3px solid #97b5e1;
+    border-radius: 15px;
+    font-size: medium;
+    transition: 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+`;
+
 export const ButtonContainer = styled.div`
     display: grid;
     grid-template-columns: auto auto;

@@ -2,7 +2,10 @@ import { useState } from "react";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { CommonButtonContainer, CommonInput, ErrorMessageBlock, LoginContainer } from "./styles";
-
+interface LoginData {
+    email:string;
+    password:string
+}
 export const LoginBlock = (props: any) => {
     const useModal: UseModal = props.useModal;
     const onClose = props.onClose
@@ -38,9 +41,12 @@ export const LoginBlock = (props: any) => {
         if(!inputCheck(loginInput)){
             return ;
         }
-        let loginData;
-        loginData = secureWrap.decryptWrapper(loginInput.email)
-        loginData = secureWrap.decryptWrapper(loginInput.password)
+        let loginData:LoginData = {
+            email: "",
+            password: ""
+        };
+        loginData.email = loginInput.email
+        loginData.password = loginInput.password
         sendLoginData(loginData)
         useModal.closeModal()
         // eslint-disable-next-line no-restricted-globals

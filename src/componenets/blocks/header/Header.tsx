@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { customAxios } from '../../../utils/axios/customAxios';
 import { ModalPage } from '../../pages';
-import { ButtonContainer, ContentChangeButton, HeaderButtonContainer, HeaderContainer, HeaderContent, LogoutButton } from './style';
+import { ButtonContainer, ContentChangeButton, HeaderButtonContainer, HeaderContainer, HeaderContent, LoginButton, LogoutButton } from './style';
 import { faUser, faBookmark } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -127,7 +127,7 @@ const Header = (props: any) => {
                     <div>Tag Mark</div>
                     <div></div>
                     <HeaderButtonContainer>
-                        <ContentChangeButton onClick={onlogin}>로그인</ContentChangeButton>
+                        <LoginButton onClick={onlogin}>로그인</LoginButton>
                     </HeaderButtonContainer>
                 </HeaderContent>
                 <div></div>
@@ -143,11 +143,8 @@ const Header = (props: any) => {
         setIsLogin(props.isLogin)
     }, []);
 
-    //이것도 컴포넌트로 만들어서 컴포넌트 반환하게 통일
     return isLogin ? loginedHeader() : unLoginHeader()
 };
 
-
-//기본은 파란 프레임만 보이는 디자인. 마우스 대면 하얀 바탕을 빨갛게 채우고 글자색 바뀜
 
 export default Header;

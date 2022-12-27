@@ -16,6 +16,7 @@ export const MoveSignupPage = styled.div`
     color: blue;
     font-size: small;
     text-decoration-line: underline;
+    margin-bottom: 40px;
 `;
 
 export const LoginContainer = styled.div`
@@ -63,10 +64,7 @@ export const ContentBody = styled.div`
   align-items: center;
   //align-content: center;
   width: 400px;
-  #move-signup {
-    align-self: flex-start;
-    margin-bottom: 20px;
-  }
+  
   #social-login{
     align-self: flex-start;
   }

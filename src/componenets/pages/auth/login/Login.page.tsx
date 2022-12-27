@@ -49,7 +49,8 @@ export const Login = (props: any) => {
     return secureWrap.encryptWrapper(JSON.stringify(data))
   }
   const sendLoginData = async (sendData: any) => {
-    const securedData: string = securedSendData(sendData)
+    //암호화된 유저정보 전송
+    //const securedData: string = securedSendData(sendData)
     try {
       const userLogin = await axios.post(
         `${config.SERVER_HOST}/api/user/login`,
@@ -57,8 +58,9 @@ export const Login = (props: any) => {
         { withCredentials: true }
       );
       //이거 한세트로 함수만드는게 나은듯? 어차피 응답오면 복호화하고 객체로 되돌려야 함
-      const user = JSON.parse(secureWrap.decryptWrapper(userLogin.data.user))
+      //const user = JSON.parse(secureWrap.decryptWrapper(userLogin.data.user))
       //어차피 토큰은 암호화되어 온다
+      console.log(userLogin.data)
       localStorage.setItem('accessToken', userLogin.data['accessToken'])
       // eslint-disable-next-line no-restricted-globals
       //location.reload()
@@ -74,7 +76,7 @@ export const Login = (props: any) => {
   const onClose = () => {
     useModal.closeModal()
   };
-  
+
   return (
     <LoginContent>
       <ContentTop>
@@ -86,10 +88,7 @@ export const Login = (props: any) => {
         <LoginBlock useModal={props.useModal} onClose={onClose} errorMessage={errorMessage} updateErrorMessage={updateErrorMessage} sendLoginData={sendLoginData} />
         <MoveSignupPage id="move-signup" onClick={onSignup}>회원가입은 여기를 클릭해 주세요</MoveSignupPage>
         <div id="social-login">
-        <div>소셜 로그인</div>
-        <CommonButtonContainer>
-          <OAuthButtonBlock oauthGoogle={oauthGoogle} oauthKakao={oauthKakao} />
-        </CommonButtonContainer>
+            <OAuthButtonBlock oauthGoogle={oauthGoogle} oauthKakao={oauthKakao} />
         </div>
       </ContentBody>
     </LoginContent>

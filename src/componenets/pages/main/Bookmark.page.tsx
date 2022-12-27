@@ -346,6 +346,7 @@ export const BookMark = (props: any) => {
     const getDBBookmarks = async () => {
         const currentPageCount = sessionStorage.getItem('current-page') || 1
         const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageCount}`)
+        console.log(bookmarkResponse.data)
         if (bookmarkResponse.data.bookmarks.length <= 0) {
             //결과 없을땐 어떻게??
             return bookmarkView
