@@ -25,13 +25,14 @@ const BookmarkComponent = (props: any) => {
             result.push(tag.tag);
         };
 
-        return result.join('\n');
+        return result.join(', ');
     };
     const tagStrToArr = (tagStr: string) => {
         if (Array.isArray(tagStr)) {
             return tagStr
         }
-        const tagArr = tagStr.split('\n').map((tagName) => { return { tag: tagName } })
+        tagStr = tagStr.replaceAll(', ', ',')
+        const tagArr = tagStr.split(',').map((tagName) => { return { tag: tagName } })
         return tagArr
     };
     const onEditInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {

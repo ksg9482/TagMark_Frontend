@@ -14,39 +14,39 @@ export const CreateBookmark = (props: any) => {
   const setNewBookmark = props.setNewBookmark;
   const secureWrap = secure().wrapper()
   const [createInput, setCreateInput] = useState({ url: '', tags: '' })
-  
+
   const tagStringToArray = (tagString: string) => {
-    const result = tagString.split(' ');
+    //정규표현식으로 , 뒤에 공백 많거나 있는거 잡아내기
+    //다른 형식이면 안내창으로 행동방침 안내할 것.
+    tagString = tagString.replaceAll(', ', ',')
+    const result = tagString.split(',');
     return result
   };
 
   const onCreateInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 0) {
       setCreateInput({ ...createInput, [key]: '' });
-      return ;
-  }
-    setCreateInput({ ...createInput, [key]:  secureWrap.encryptWrapper(e.target.value) });
+      return;
+    }
+    setCreateInput({ ...createInput, [key]: secureWrap.encryptWrapper(e.target.value) });
   };
-  
+
   const onCancle = () => {
     useModal.closeModal()
   };
 
   const onCreate = () => {
-    //console.log(createInput)
     const url = secureWrap.decryptWrapper(createInput.url);
     const tagNames = tagStringToArray(secureWrap.decryptWrapper(createInput.tags));
-    const createBookmark:CreateBookmarkData = {url, tagNames}
-    //console.log(createBookmark)
+    const createBookmark: CreateBookmarkData = { url, tagNames }
     setNewBookmark(createBookmark)
     useModal.closeModal()
   }
   return (
     <CreateBookmarkContainer>
       <InputContainer>
-        <input type="text" name="url" id="url_input" onChange={onCreateInput('url')} placeholder={'url'} />
-        <input type="text" name="tags" id="tags_input" onChange={onCreateInput('tags')} placeholder={'태그들'} />
-        {/* 여기에 자동완성 창? */}
+        <input type="text" name="url" id="url_input" onChange={onCreateInput('url')} placeholder={'https://...'} />
+        <input type="text" name="tags" id="tags_input" onChange={onCreateInput('tags')} placeholder={'Tag1, Tag2...'} />
       </InputContainer>
       <ButtonContainer>
         <button onClick={onCancle}>취소</button>
@@ -58,12 +58,10 @@ export const CreateBookmark = (props: any) => {
 export const BookmarkCreateBlock = (props: any) => {
   const useModal = props.useModal
 
-  const [modalContent, setModalContent] = useState(<CreateBookmark useModal={useModal} setNewBookmark={props.setNewBookmark} />)
-
   return (
     <BlockContainer className="modal-base">
       <BlockContentContainer>
-        {modalContent}
+        <CreateBookmark useModal={useModal} setNewBookmark={props.setNewBookmark} />
       </BlockContentContainer>
     </BlockContainer>
   )
