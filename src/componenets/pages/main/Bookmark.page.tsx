@@ -675,12 +675,53 @@ export const BookMark = (props: any) => {
         }
         return localBookmarkPage.length
     }
+
+    //getBookmark, syncBookmark 상태로 따로 관리. 다 완료되야 load 끝내게. 
+    const syncBookmark = async () => {
+        setLoad(true)
+        const localBookmarks = secure().local().getItem('local-bookmark-storage')
+        if(!localBookmarks) {
+            setLoad(false)
+            return ;
+        }
+        const dbBookmarkCount = await customAxios.get(`/bookmark/count`) //count
+
+         if(dbBookmarkCount.data.count > 0) {
+            const localBookmarkArr = bookmarkAdapter("local", localBookmarks);
+            const localTagNamesSet = new Set();
+            for(let localBookmark of localBookmarkArr) {
+                const tags = localBookmark.tags;
+                if(tags.length <= 0) {
+                    continue;
+                }
+                for(let tag of tags) {
+                    localTagNamesSet.add(tag.tag)
+                }
+            }
+            const localTagNamesArr = Array.from(localTagNamesSet)
+            const syncBookmarkBody = {
+                bookmarks: localBookmarkArr,
+                tagNames: localTagNamesArr
+            }
+            const syncBookmark = await customAxios.post(`/bookmark/sync`,
+                syncBookmarkBody
+            )
+            //url은 각각 하나씩만 있을 확률이 높지만, 태그는 결국 중복이 발생한다. 태그들은 set으로 중복없이 별도로 보낸다. 
+            console.log(syncBookmark)
+        }
+        setLoad(false)
+    }
     useEffect(() => {
         //이거 리덕스로 옮겨서 관리? 아니면 최상단으로 올려서 프롭스로 내릴까?
         if (!isLogin && !secure().local().getItem('local-bookmark-storage')) {
             secure().local().setItem('local-bookmark-storage', JSON.stringify(dumyBookmark))
         }
         getBookmark(isLogin)
+    }, [])
+    useEffect(() => {
+        if(isLogin){
+            syncBookmark()
+        }
     }, [])
     //세션스토리지 관련을 함수로 묶자
     const currentPageRefresh = (currentPage: number) => {
