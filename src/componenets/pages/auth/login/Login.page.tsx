@@ -5,6 +5,7 @@ import config from "../../../../config";
 import {  MoveSignupPage, ModalTitle, LoginContent, ContentTop, CommonButton, ContentBody } from "./style";
 import { LoginBlock } from "../../../blocks/auth/login/login.block";
 import { OAuthButtonBlock } from "../../../blocks/auth/login/OAuthButton.block";
+import { Helmet } from "react-helmet-async";
 
 
 
@@ -76,6 +77,7 @@ export const Login = (props: any) => {
 
   return (
     <LoginContent>
+      <Helmet>Login | TAG-MARK</Helmet>
       <ContentTop>
         <div id="title">Login</div>
         <CommonButton id="exit" onClick={onClose}>X</CommonButton>

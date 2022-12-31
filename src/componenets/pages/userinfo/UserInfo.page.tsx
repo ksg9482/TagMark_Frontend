@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import { customAxios } from "../../../utils/axios/customAxios";
 import { secure } from "../../../utils/secure";
@@ -68,7 +69,7 @@ export const UserInfo = () => {
     const sendGetTagCount = async () => {
         return await customAxios.get(`/tag`)
     }
-    
+
     const updateTagCount = (tagCount: any) => {
         setTagCount(tagCount)
     }
@@ -88,7 +89,7 @@ export const UserInfo = () => {
                 }
             })
             const user = userInfo.data.user;//JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
-            
+
             updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
             updateTagCount(tagCount.data.tags)
             updateTagGraphData(graphData)
@@ -125,35 +126,36 @@ export const UserInfo = () => {
 
     const UserInfoContent = () => {
         return (
-<UserInfoContainer id="user-info">
-            {useModal.isShowModal ? modalHandle.modalPage() : null}
-            <BookmarkAreaContainer className="bookmark-area">
-                <div>총 북마크 개수 : {userInfo.bookmarkCount} </div>
-                {/* <div>북마크 DB 동기화 (자동 on/off) </div>
+            <UserInfoContainer id="user-info">
+                <Helmet>MyPage | TAG-MARK</Helmet>
+                {useModal.isShowModal ? modalHandle.modalPage() : null}
+                <BookmarkAreaContainer className="bookmark-area">
+                    <div>총 북마크 개수 : {userInfo.bookmarkCount} </div>
+                    {/* <div>북마크 DB 동기화 (자동 on/off) </div>
                 <button>북마크 가져오기 </button>
                 <button>내 북마크 공유하기 </button> */}
-            </BookmarkAreaContainer>
-            <SubContainer id="sub-container">
-                <TagAreaContainer className="tag-area">
-                    <div>총 태그 개수 : {userInfo.tagCount}</div>
-                    <GraphContainer className="graph_con">{MyResponsivePie(tagGraphData)}</GraphContainer>
-                </TagAreaContainer>
-                <MyDataContainer className="userinfo-area">
-                    <div>내 정보</div>
-                    <MyInfoContainer>
-                        <div className="email-info">
-                            <div>이메일 : {userInfo.email}</div>
-                            {userInfo.type !== 'BASIC' ? <div>소셜로그인입니다</div> : <div>&nbsp;</div>}
-                        </div>
-                        <div>닉네임 : {userInfo.nickname}</div>
-                    </MyInfoContainer>
-                    <MyDataButtonContainer>
-                        <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
-                        <CommonButton className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </CommonButton>
-                    </MyDataButtonContainer>
-                </MyDataContainer>
-            </SubContainer>
-        </UserInfoContainer>
+                </BookmarkAreaContainer>
+                <SubContainer id="sub-container">
+                    <TagAreaContainer className="tag-area">
+                        <div>총 태그 개수 : {userInfo.tagCount}</div>
+                        <GraphContainer className="graph_con">{MyResponsivePie(tagGraphData)}</GraphContainer>
+                    </TagAreaContainer>
+                    <MyDataContainer className="userinfo-area">
+                        <div>내 정보</div>
+                        <MyInfoContainer>
+                            <div className="email-info">
+                                <div>이메일 : {userInfo.email}</div>
+                                {userInfo.type !== 'BASIC' ? <div>소셜로그인입니다</div> : <div>&nbsp;</div>}
+                            </div>
+                            <div>닉네임 : {userInfo.nickname}</div>
+                        </MyInfoContainer>
+                        <MyDataButtonContainer>
+                            <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
+                            <CommonButton className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </CommonButton>
+                        </MyDataButtonContainer>
+                    </MyDataContainer>
+                </SubContainer>
+            </UserInfoContainer>
         )
     };
 
@@ -164,7 +166,7 @@ export const UserInfo = () => {
     };
 
     return (
-        load ? <Loading/> : <UserInfoContent />
+        load ? <Loading /> : <UserInfoContent />
     )
 }
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import config from "../../../../config";
 import { UseModal } from "../../../../interface/header";
@@ -97,6 +98,7 @@ export const Signup = (props: any) => {
     
     return (
         <SignupContainer>
+            <Helmet>Signup | TAG-MARK</Helmet>
             <ContentTop>
                 <div id="title">Login</div>
                 <CommonButton id="exit" onClick={onClose}>X</CommonButton>

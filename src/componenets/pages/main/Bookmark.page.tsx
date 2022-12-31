@@ -12,6 +12,7 @@ import SideBar from "../../blocks/sidebar/Sidebar";
 import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
 import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, CommonButton, ContentBox, ManageButtonContainer, TagText } from "./styles";
 import { LoadingBar } from "../../blocks/common/loading/loading";
+import { Helmet } from "react-helmet-async";
 
 
 //로딩중 페이지 만들기
@@ -686,7 +687,7 @@ export const BookMark = (props: any) => {
         }
         const dbBookmarkCount = await customAxios.get(`/bookmark/count`) //count
 
-         if(dbBookmarkCount.data.count > 0) {
+         if(dbBookmarkCount.data.count <= 0) {
             const localBookmarkArr = bookmarkAdapter("local", localBookmarks);
             const localTagNamesSet = new Set();
             for(let localBookmark of localBookmarkArr) {
@@ -756,6 +757,7 @@ export const BookMark = (props: any) => {
     const MainContent = () => {
         return (
         <BookmarkContainer id='main-content'>
+            <Helmet>TagMark | TAG-MARK</Helmet>
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
             <div></div>
             <BookmarkManageContainer>

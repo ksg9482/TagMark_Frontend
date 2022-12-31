@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 const OauthErrorModal = (props: any) => {
   const nav = useNavigate();
@@ -18,6 +19,7 @@ const OauthErrorModal = (props: any) => {
 
   return (
     <div className="fixed bg-slate-400 top-0 h-full w-full bg-opacity-50 flex justify-center items-center">
+      <Helmet>Error | TAG-MARK</Helmet>
       <div className="bg-white w-1/3 pt-1 min-w-min max-w-sm rounded-sm">
         <div className="flex mb-5">
           <div className="w-64"></div>
