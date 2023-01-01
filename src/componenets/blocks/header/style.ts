@@ -4,7 +4,6 @@ export const HeaderContainer = styled.div`
 display: grid;
 grid-template-columns: 20% 60% 20%;
 height: 30px;
-//align-items: center;
 button{
     width: fit-content;
     height: fit-content;
@@ -47,7 +46,6 @@ export const ContentChangeButton = styled.button`
 export const LoginButton = styled.button`
     display: grid;
     gap: 2px;
-    //grid-template-columns: auto auto;
     align-items: center;
     justify-items: center;
     white-space: nowrap;

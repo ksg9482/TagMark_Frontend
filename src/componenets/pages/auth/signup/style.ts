@@ -72,9 +72,7 @@ export const ContentBody = styled.div`
   grid-template-rows: min-content auto;
   justify-items: center;
   justify-self: center;
-  //align-self: center;
   align-items: center;
-  //align-content: center;
   width: 400px;
   #move-signup {
     align-self: flex-start;

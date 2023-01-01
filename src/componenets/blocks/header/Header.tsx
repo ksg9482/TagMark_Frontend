@@ -55,27 +55,23 @@ const Header = (props: any) => {
         )
     }
     const sendLogout = async () => {
-        //서버요청
         try {
             await customAxios.get(`/user/logout`);
             localStorage.removeItem('accessToken')
             // eslint-disable-next-line no-restricted-globals
-            //location.reload()
-            //console.log('로그아웃 응답 반환')
+            location.reload()
         } catch (error) {
-            console.log(error)
+            //메시지모달창 로그아웃 실패
         }
 
     }
     const deleteLocalUserData = () => {
-        //액세스토큰 삭제
         localStorage.removeItem('user')
         navigate('/', { replace: true });
     }
     const onLogout = async () => {
 
         deleteLocalUserData()
-        //로그아웃인데 굳이 응답 기다려야 하나? 이럭 위한 메시지큐?
         localStorage.removeItem('accessToken')
         await sendLogout()
         // eslint-disable-next-line no-restricted-globals
@@ -88,16 +84,6 @@ const Header = (props: any) => {
 
 
     const loginedHeader = () => {
-
-        const Logout = () => {
-            return (
-                <LogoutButton onClick={onLogout} onMouseOut={() => setlogoutFocused(false)}>
-                    Log Out
-                </LogoutButton>
-            )
-        };
-
-        //그냥 로그아웃, 로그인중 버튼은 따로 만들어서 쓰자. 내용이랑 색이랑 따로논다.
         return (
             <HeaderContainer id='header'>
                 <div></div>

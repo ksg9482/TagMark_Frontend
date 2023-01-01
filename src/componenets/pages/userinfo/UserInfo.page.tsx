@@ -78,7 +78,7 @@ export const UserInfo = () => {
     }
     const getUserInfo = async () => {
         try {
-            const userInfo = await sendGetUserInfo(); //암호문
+            const userInfo = await sendGetUserInfo(); 
             const bookmarkCount = await sendGetBookmarkCount()
             const tagCount = await sendGetTagCount()
             const graphData = tagCount.data.tags.map((tag: any) => {
@@ -113,12 +113,11 @@ export const UserInfo = () => {
         return result.data.valid
     }
     const sendDeleteUser = async (password: string) => {
-        //비번검사 거친다
         if (!await deletePasswordCheck(password)) {
             return '비밀번호 다름 에러'
         }
-        return;
         const userInfo = await customAxios.delete(`/user`)
+        return;
     }
     useEffect(() => {
         getUserInfo()

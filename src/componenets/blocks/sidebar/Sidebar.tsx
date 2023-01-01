@@ -105,18 +105,16 @@ const SideBar = (props: any) => {
         return await customAxios.get(`/tag`)
     }
     const getTags = async (isLogin: boolean, bookmark: any) => {
-        //로컬 스토리지에서. 뷰는 페이지네이션 적용해서 직접가져와야 정확
         if (!isLogin) {
             const localBookmarks: Bookmark[] = JSON.parse(secure().local().getItem('local-bookmark-storage')!)
 
-            const localTagArr: Tag[] = createLocalTagArr(localBookmarks)//createLocalTagArr(originBookmarks)
+            const localTagArr: Tag[] = createLocalTagArr(localBookmarks)
             const createdTagObj = createTagObj(localTagArr)
             setTagObj(createdTagObj);
             const tagCountObjArr = setTagCount(createdTagObj);
             return setTagWithCounts(tagCountObjArr)
         }
         else {
-            //서버 연결
             const tagData = await sendGetTagCount()
             const tempForm = tagData.data.tags.map((tag: any) => {
                 return { ...tag, name: tag.tag }

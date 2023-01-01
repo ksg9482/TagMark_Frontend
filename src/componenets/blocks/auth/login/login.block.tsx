@@ -48,9 +48,6 @@ export const LoginBlock = (props: any) => {
         loginData.email = loginInput.email
         loginData.password = loginInput.password
         sendLoginData(loginData)
-        //useModal.closeModal() //이게 여기 있으니까 에러 뜨기도 전에 그냥 꺼짐
-        // eslint-disable-next-line no-restricted-globals
-        //location.reload()
     }
     
     //비밀번호 옆에 비번볼수 있는 눈 아이콘

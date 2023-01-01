@@ -50,13 +50,8 @@ export const secure = () => {
             encryptWrapper, decryptWrapper
         }
     }
-    //secure().local()
     return {
         local, wrapper
     }
-    //secure().wrapper()
-    //
 }
 
-
-// there is no need to stringify/parse you objects before and after storing.

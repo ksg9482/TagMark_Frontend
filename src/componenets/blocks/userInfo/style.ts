@@ -68,9 +68,7 @@ export const ContentBody = styled.div`
   grid-template-rows: min-content min-content min-content min-content;
   justify-items: center;
   justify-self: center;
-  //align-self: center;
   align-items: center;
-  //align-content: center;
   width: 300px;
   
 `;
