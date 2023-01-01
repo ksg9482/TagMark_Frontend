@@ -11,7 +11,6 @@ export const EditUserInfo = (props: any) => {
     const userData = props.userData;
     const secureWrap = secure().wrapper()
     const sendEditUserData = props.sendEditUserData
-    //초기화는 평문임. 변동있으면 암호화 그때. 암호화로 통일해야함.
     const [editInput, setEditInput] = useState({ nickName: secureWrap.encryptWrapper(userData.nickname), password: '', passwordCheck: '' })
 
     const onEditInput = (key: EditKey) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -29,7 +28,6 @@ export const EditUserInfo = (props: any) => {
     }
 
     const passwordValid = () => {
-        //복호화 해서 체크해야함
         if (editInput.password !== editInput.passwordCheck) {
             return false;
         }
@@ -38,7 +36,8 @@ export const EditUserInfo = (props: any) => {
     const onEdit = () => {
         if (!passwordValid()) {
             console.log('비번 서로 다름')
-            return false; //비번 안맞다 에러.
+            //에러메시지칸 만들기
+            return false;
         }
         let editData: any = {}
         if (editInput.nickName.length > 0) {

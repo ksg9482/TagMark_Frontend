@@ -2,14 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { secure } from "../../../../utils/secure";
 import config from "../../../../config";
-import { CommonButtonContainer, MoveSignupPage, ModalTitle, LoginContent, ContentTop, CommonButton, ContentBody } from "./style";
+import {  MoveSignupPage, ModalTitle, LoginContent, ContentTop, CommonButton, ContentBody } from "./style";
 import { LoginBlock } from "../../../blocks/auth/login/login.block";
 import { OAuthButtonBlock } from "../../../blocks/auth/login/OAuthButton.block";
-import styled from "styled-components";
+import { Helmet } from "react-helmet-async";
 
-
-
-//모달 변경되게
 export const Login = (props: any) => {
   const onSignup = props.onSignup;
   const secureWrap = secure().wrapper()
@@ -29,6 +26,8 @@ export const Login = (props: any) => {
       `scope=${googleParametor.scope_email}`;
     window.location.href = googleOAuthURL;
   };
+  
+  
   const oauthKakao = () => {
     const kakaoHost = "kauth.kakao.com";
     const kakaoParametor = {
@@ -44,28 +43,24 @@ export const Login = (props: any) => {
     window.location.href = kakaoOAuthURL;
   };
 
-
-  const securedSendData = (data: any) => {
-    return secureWrap.encryptWrapper(JSON.stringify(data))
-  }
   const sendLoginData = async (sendData: any) => {
-    //암호화된 유저정보 전송
-    //const securedData: string = securedSendData(sendData)
     try {
       const userLogin = await axios.post(
         `${config.SERVER_HOST}/api/user/login`,
         sendData,
         { withCredentials: true }
       );
-      //이거 한세트로 함수만드는게 나은듯? 어차피 응답오면 복호화하고 객체로 되돌려야 함
-      //const user = JSON.parse(secureWrap.decryptWrapper(userLogin.data.user))
-      //어차피 토큰은 암호화되어 온다
-      console.log(userLogin.data)
+      
       localStorage.setItem('accessToken', userLogin.data['accessToken'])
       // eslint-disable-next-line no-restricted-globals
-      //location.reload()
-    } catch (error) {
-      console.log(error)
+      location.reload()
+      useModal.closeModal()
+    } catch (error:any) {
+      if(error.response.data.message){
+        updateErrorMessage(error.response.data.message)
+        return ;
+      }
+      updateErrorMessage('로그인 할 수 없습니다.')
     }
   }
 
@@ -79,6 +74,7 @@ export const Login = (props: any) => {
 
   return (
     <LoginContent>
+      <Helmet>Login | TAG-MARK</Helmet>
       <ContentTop>
         <div id="title">Login</div>
         <CommonButton id="exit" onClick={onClose}>X</CommonButton>

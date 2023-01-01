@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import config from "../../../../config";
 import { UseModal } from "../../../../interface/header";
@@ -7,11 +8,6 @@ import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
 import { CommonButton, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalTitle, SignUpBlock, SignupContainer, SignupInput } from "./style";
 
-
-
-
-
-//모달 변경되게
 export const Signup = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper()
@@ -29,20 +25,14 @@ export const Signup = (props: any) => {
     const onClose = () => {
         useModal.closeModal()
     }
-    const securedSendData = (data: any) => {
-        return secureWrap.encryptWrapper(JSON.stringify(data))
-    }
+    
     const sendSignupData = async (signupData: any) => {
-        try {
             const userSignup = await axios.post(
                 `${config.SERVER_HOST}/api/user`,
                 signupData,
                 { withCredentials: true }
             );
-            return userSignup
-        } catch (error) {
-            console.log(error)
-        }
+            return userSignup;
     }
     const signupDataForm = (signupInput: {
         email: string;
@@ -81,22 +71,26 @@ export const Signup = (props: any) => {
     };
     
     const onSignup = async () => {
-        if(!inputCheck(signupInput)){
-            return ;
+        try {
+            if(!inputCheck(signupInput)){
+                return ;
+            }
+            const signupResp = await sendSignupData(signupDataForm(signupInput))
+            useModal.closeModal()
+        } catch (error:any) {
+            console.log(error)
+            if(error.response.data.message && !Array.isArray(error.response.data.message)){
+                setErrorMessage(error.response.data.message)
+                return ;
+            }
+            setErrorMessage('회원가입에 실패했습니다.')
         }
-        
-        //const securedData: string = securedSendData(signupDataForm(signupInput))
-        const signupResp = await sendSignupData(signupDataForm(signupInput))
-        if(signupResp?.data.error){
-            setErrorMessage(signupResp?.data.error)
-            return ;
-        }
-        useModal.closeModal()
     }
 
     
     return (
         <SignupContainer>
+            <Helmet>Signup | TAG-MARK</Helmet>
             <ContentTop>
                 <div id="title">Login</div>
                 <CommonButton id="exit" onClick={onClose}>X</CommonButton>

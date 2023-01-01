@@ -20,5 +20,4 @@ export const PageButtonsContent = styled.div`
     grid-template-columns: 15% 15% 40% 15% 15%;
     margin-top: 5px;
     align-content:flex-end;
-    //border-radius: 5px;
 `;

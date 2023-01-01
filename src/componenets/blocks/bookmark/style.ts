@@ -21,9 +21,7 @@ export const BookmarkComponentContainer = styled.div`
     align-items: center;
     border: 1px solid;
     background-color: white;
-    .un-focused {
-        //justify-self: end;
-    };
+    
     .focused {
         display: none;
     };
@@ -48,7 +46,6 @@ export const BookmarkComponentEditInner = styled.div`
 `;
 export const BookmarkComponentInner = styled.div`
     display: grid ;
-    //grid-template-columns: 9fr 1fr;
     justify-items: center;
     width: 90%;
     min-width: 330px;
@@ -58,7 +55,6 @@ export const UnFocusedBookmarkComponentInner = styled.div`
     display: grid ;
     grid-template-rows: auto auto;
     justify-items: center;
-    //margin-left: 20px;
     width: 90%;
     min-width: 330px;
     background-color: white;
