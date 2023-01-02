@@ -78,7 +78,6 @@ export const Signup = (props: any) => {
             const signupResp = await sendSignupData(signupDataForm(signupInput))
             useModal.closeModal()
         } catch (error:any) {
-            console.log(error)
             if(error.response.data.message && !Array.isArray(error.response.data.message)){
                 setErrorMessage(error.response.data.message)
                 return ;

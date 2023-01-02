@@ -19,6 +19,7 @@ export const UserInfo = () => {
     }])
 
     const [load, setLoad] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('')
 
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
@@ -45,7 +46,7 @@ export const UserInfo = () => {
 
         const modalPage = () => {
             //전송함수 묶어서 보내기 데이터랑 함수 단위로 하나로 묶어 보내는게 좋지 않을까? 인터페이스 만들기도 편하고
-            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} />
+            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage}/>
         }
         const openModal = (key: 'edit' | 'delete') => {
             setContentKey(key)
@@ -76,6 +77,9 @@ export const UserInfo = () => {
     const updateTagGraphData = (tagGraphData: any) => {
         setTagGraphData(tagGraphData)
     }
+    const updateErrorMessage = (message: string) => {
+        setErrorMessage(message)
+      };
     const getUserInfo = async () => {
         try {
             const userInfo = await sendGetUserInfo(); 
@@ -97,6 +101,7 @@ export const UserInfo = () => {
             setLoad(false);
 
         } catch (error) {
+            //에러 모달창
             console.log(error)
         }
     }
@@ -105,7 +110,7 @@ export const UserInfo = () => {
             const encrypted = secureWrap.encryptWrapper('test')
             const userInfo = await customAxios.patch(`/user`, editUser)
         } catch (error) {
-            console.log(error)
+            updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
         }
     }
     const deletePasswordCheck = async (password: string) => {
@@ -114,10 +119,11 @@ export const UserInfo = () => {
     }
     const sendDeleteUser = async (password: string) => {
         if (!await deletePasswordCheck(password)) {
-            return '비밀번호 다름 에러'
+            updateErrorMessage('비밀번호가 다릅니다.')
+            return {error:'비밀번호가 다릅니다.'}
         }
         const userInfo = await customAxios.delete(`/user`)
-        return;
+        return {message:'deleted'}
     }
     useEffect(() => {
         getUserInfo()

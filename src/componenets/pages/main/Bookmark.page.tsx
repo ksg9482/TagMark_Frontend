@@ -115,9 +115,8 @@ export const BookMark = (props: any) => {
             return tag.replaceAll(' ', '%20')
         })
 
-        console.log(blankChange)
         const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}&pageNo=1`)
-        console.log(andSearch)
+        
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -137,9 +136,8 @@ export const BookMark = (props: any) => {
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
         currentPageRefresh(1)
-        console.log(targetTags)
         const orSearch = await customAxios.get(`/tag/search-or?tags=${targetTags}&pageNo=1`)
-        console.log(orSearch)
+        
         if (orSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -311,7 +309,6 @@ export const BookMark = (props: any) => {
     const getDBBookmarks = async () => {
         const currentPageCount = sessionStorage.getItem('current-page') || 1
         const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageCount}`)
-        console.log(bookmarkResponse.data)
         if (bookmarkResponse.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -341,6 +338,8 @@ export const BookMark = (props: any) => {
             setLoad(false);
             return ;
         } catch (error) {
+            //에러 모달창
+            //삭제도 삭제 못했다 알려줘야함
             console.log(error)
         }
 
@@ -395,6 +394,7 @@ export const BookMark = (props: any) => {
             })
             return bookmarks
         } catch (error) {
+            //에러 모달창
             console.log(error)
         }
     }
@@ -410,15 +410,14 @@ export const BookMark = (props: any) => {
             const saveResp = await sendCreateBookmark({ url, tagNames: createBookmarkData.tagNames })
             const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageNum}`)
             createdResp = bookmarkResponse.data
-            console.log(bookmarkResponse.data)
         }
         let newBookmarkArr: Bookmark[] = [{ id, url, tags }]
         const decrypted = originBookmarks.map((bookmark) => {
             const url = secureWrap.decryptWrapper(bookmark.url)
             return { ...bookmark, url: url }
         })
+        
         newBookmarkArr.push(...decrypted);
-        newBookmarkArr.pop();
         if(createdResp){
             newBookmarkArr = [...createdResp.bookmarks]
         }   
@@ -454,19 +453,15 @@ export const BookMark = (props: any) => {
         try {
             const boookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`)
         } catch (error) {
-            console.log(error)
+
         }
     }
     const onBookmarkDelete = async (targetBookmarkId: any) => {
-        let deletedResp; //{totalCount, totalPage, bookmarks}
+        let deletedResp;
         if (isLogin) {
             await sendDeleteBookmark(targetBookmarkId)
             const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageNum}`)
-            console.log(bookmarkResponse.data)
             deletedResp = bookmarkResponse.data;
-        }
-        else {
-
         }
         const length = originBookmarks.length;
         const isMachedIndex = getMachedIndex(targetBookmarkId)
@@ -488,7 +483,7 @@ export const BookMark = (props: any) => {
     }
 
     //북마크 수정
-    const editForm = (booomarkId: any, originBookmark: Bookmark, editContent: Bookmark) => {
+    const editForm = (originBookmark: Bookmark, editContent: Bookmark) => {
        const decrypytedOrigin = { ...originBookmark, url: secureWrap.decryptWrapper(originBookmark.url) }
         const decrypytedEdit = { ...editContent, url: secureWrap.decryptWrapper(editContent.url) }
         let changeForm: any = {};
@@ -526,6 +521,7 @@ export const BookMark = (props: any) => {
                 { ...editContent }
             )
         } catch (error) {
+            //에러 모달창
             console.log(error)
         }
     }
@@ -536,7 +532,7 @@ export const BookMark = (props: any) => {
         })
         if (isLogin) {
 
-            const editFrom = editForm(targetBookmarkId, originBookmark, editContent)
+            const editFrom = editForm(originBookmark, editContent)
             sendEditBookmark(targetBookmarkId, editFrom)
         }
         const length = originBookmarks.length;
@@ -583,7 +579,6 @@ export const BookMark = (props: any) => {
             currentPageRefresh(num)
         }
         else {
-            console.log(localBookmarkPage)
             updateBookmarkView(localBookmarkPage[num-1]) 
             setCurrentPageNum(num)
             currentPageRefresh(num)
@@ -627,7 +622,6 @@ export const BookMark = (props: any) => {
             const syncBookmark = await customAxios.post(`/bookmark/sync`,
                 syncBookmarkBody
             )
-            console.log(syncBookmark)
         }
         setLoad(false)
     }

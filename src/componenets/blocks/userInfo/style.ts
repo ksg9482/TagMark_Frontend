@@ -84,3 +84,9 @@ export const TextContainer = styled.div`
     gap: 10px;
     margin-bottom: 20px;
 `;
+
+export const ErrorMessageBlock = styled.div`
+    margin-top: 10px;
+    color: red;
+    font-size: small;
+`;
