@@ -155,7 +155,7 @@ export const UserInfo = () => {
                             <div>닉네임 : {userInfo.nickname}</div>
                         </MyInfoContainer>
                         <MyDataButtonContainer>
-                            <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
+                            <CommonButton className="edit-button"  onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
                             <CommonButton className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </CommonButton>
                         </MyDataButtonContainer>
                     </MyDataContainer>

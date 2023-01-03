@@ -54,7 +54,7 @@ const OAuth2RedirectHandler = (props: any) => {
         }
         const accessToken = getGoogleAccessToken()
         const sendCode = await axios.post(
-          `${HOST}/api/auth/google`,
+          `${HOST}/api/user/google`,
           { accessToken: accessToken },
           { 
             withCredentials: true,

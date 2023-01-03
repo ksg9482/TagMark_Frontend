@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { CommonButtonContainer, OauthButtonContainer } from "./styles";
+import { OauthButtonContainer } from "./styles";
 
 export const OAuthButtonBlock = (props: any) => {
-    const oauthGoogle = props.oauthGoogle
-    const oauthKakao = props.oauthKakao
+    const oauthGoogle = props.oauthGoogle;
     return (
         <OauthButtonContainer>
             <OAuthButton onClick={oauthGoogle}>
@@ -12,13 +11,6 @@ export const OAuthButtonBlock = (props: any) => {
                     alt="social"
                 />
                 <span>GOOGLE 아이디로 로그인</span>
-            </OAuthButton>
-            <OAuthButton onClick={oauthKakao}>
-                <Img
-                    src="Social-kakao.png"
-                    alt="social"
-                />
-                <span>KAKAO 아이디로 로그인</span>
             </OAuthButton>
         </OauthButtonContainer>
     )

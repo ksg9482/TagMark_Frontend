@@ -8,14 +8,15 @@ type EditKey = 'nickName' | 'password' | 'passwordCheck';
 
 export const EditUserInfo = (props: any) => {
     const useModal: UseModal = props.useModal;
+    const propsErrorMessage = props.errorMessage;
     const userData = props.userData;
     const secureWrap = secure().wrapper()
     const sendEditUserData = props.sendEditUserData
     const [editInput, setEditInput] = useState({ nickName: secureWrap.encryptWrapper(userData.nickname), password: '', passwordCheck: '' })
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState(propsErrorMessage)
 
     const onEditInput = (key: EditKey) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        
+
         if (e.target.value.length <= 0) {
             setEditInput({ ...editInput, [key]: '' });
         }
@@ -52,8 +53,17 @@ export const EditUserInfo = (props: any) => {
 
     };
     const updateErrorMessage = (message: string) => {
-        setErrorMessage(message)
-      }
+        setErrorMessage(message);
+    };
+
+
+    //변경시 암호화관련 -> 컴포넌트 분할이 문제
+    //인풋하면 한글자에 포커스 끝남 -> 컴포넌트 분할이 문제
+    //에러 모달창
+    //수정하면 수정된 북마크가 뒤로감(리모트에서만??)
+    console.log(secureWrap.decryptWrapper(editInput.nickName))
+    console.log(secureWrap.decryptWrapper(editInput.password))
+    console.log(secureWrap.decryptWrapper(editInput.passwordCheck))
     return (
         <UserEditContainer>
             <ContentTop>
@@ -64,20 +74,29 @@ export const EditUserInfo = (props: any) => {
                 <ModalTitle>
                     유저정보 변경
                 </ModalTitle>
-                <InputContainer>
-                    <CommonInput>
-                        <div>닉네임변경</div>
-                        <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
-                    </CommonInput>
-                    <CommonInput>
-                        <div>비밀번호변경</div>
-                        <input type="password" placeholder="비밀번호변경" onChange={onEditInput('password')} defaultValue={editInput.password} />
-                    </CommonInput>
-                    <CommonInput>
-                        <div>비밀번호확인</div>
-                        <input type="password" placeholder="비밀번호확인" onChange={onEditInput('passwordCheck')} defaultValue={editInput.passwordCheck} />
-                    </CommonInput>
-                </InputContainer>
+                {
+                    userData.type === 'BASIC'
+                        ? <InputContainer>
+                            <CommonInput>
+                                <div>닉네임변경</div>
+                                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
+                            </CommonInput>
+                            <CommonInput>
+                                <div>비밀번호변경</div>
+                                <input type="password" placeholder="비밀번호변경" onChange={onEditInput('password')} defaultValue={editInput.password} />
+                            </CommonInput>
+                            <CommonInput>
+                                <div>비밀번호확인</div>
+                                <input type="password" placeholder="비밀번호확인" onChange={onEditInput('passwordCheck')} defaultValue={editInput.passwordCheck} />
+                            </CommonInput>
+                        </InputContainer>
+                        : <InputContainer>
+                            <CommonInput>
+                                <div>닉네임변경</div>
+                                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
+                            </CommonInput>
+                        </InputContainer>
+                }
                 {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
                 <CommonButtonContainer>
                     <button onClick={onEdit}>확인</button>
