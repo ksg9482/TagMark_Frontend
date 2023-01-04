@@ -13,6 +13,7 @@ import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
 import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, CommonButton, ContentBox, ManageButtonContainer, TagText } from "./styles";
 import { LoadingBar } from "../../blocks/common/loading/loading";
 import { Helmet } from "react-helmet-async";
+import { AlramModalPage } from "../modal/AlramModalPage";
 
 
 export enum FindType {
@@ -55,7 +56,25 @@ export const BookMark = (props: any) => {
 
         return { isShowModal, openModal, closeModal, toggleModal };
     }
-    const useModal = UseModal()
+    const UseCreate = () => {
+        const [isShowModal, setIsShowModal] = useState(false);
+
+        const openModal = useCallback(() => {
+            setIsShowModal(true);
+        }, [setIsShowModal]);
+
+        const closeModal = useCallback(() => {
+            setIsShowModal(false);
+        }, [setIsShowModal]);
+
+        const toggleModal = useCallback(() => {
+            setIsShowModal(prev => !prev);
+        }, [setIsShowModal]);
+
+        return { isShowModal, openModal, closeModal, toggleModal };
+    }
+    const useModal = UseModal();
+    const useCreate = UseCreate();
 
     const bookmarkInitData: Bookmark = {
         id: 'init',
@@ -65,25 +84,27 @@ export const BookMark = (props: any) => {
             tag: ''
         }]
     }
-    //전부 갖고 있음. 유지용
+   
     const [originBookmarks, setOriginBookmarks] = useState([bookmarkInitData]);
     const [originPageCount, setOriginPageCount] = useState(0);
     const [originTotalCount, setOriginTotalCount] = useState(0);
-    //페이지 보이기용
     const [bookmarkView, setBookmarkView] = useState([bookmarkInitData]);
-    //로컬 페이지네이션
-    //비로그인시 이거 length로 페이지카운트 삼음
     const [localBookmarkPage, setLocalBookmarkPage] = useState([[bookmarkInitData]]);
-    //로컬 스토리지에 숫자 저장해서 쓰는걸로? 
     const [currentPageNum, setCurrentPageNum] = useState(1);
     const [currentTag, setCurrentTag] = useState(['']);
     const [totalCount, setTotalCount] = useState(0);
-    const [pageCount, setPageCount] = useState(0); //로그인시 페이지 카운트
+    const [pageCount, setPageCount] = useState(0); 
     const [currentSearch, setCurrentSearch] = useState(CurrentSearch.Bookmark);
 
     const [firstPage, setFirstPage] = useState([bookmarkInitData])
 
+    const [errorMessage, setErrorMessage] = useState('') 
+
     const [load, setLoad] = useState(true);
+
+    const updateErrorMessage = (message: string) => {
+        setErrorMessage(message)
+      };
 
     const updateCurrentTag = (targetTag: any) => {
         if (currentTag.includes(targetTag)) {
@@ -155,7 +176,6 @@ export const BookMark = (props: any) => {
         })
         return orSearch.data
     }
-    //로컬시 pageMove로 움직이면 원래 없어야 하는 북마크도 보임. 1로 옮기면서 그대로 복붙하니 그런듯?
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
         
         currentPageRefresh(1)
@@ -323,9 +343,9 @@ export const BookMark = (props: any) => {
     }
 
     const getBookmark = async (isLogin: boolean) => {
-        try {
+            setLoad(true);
             const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks()
-            //로그인했으면 20개가 오는데 비로그인이면 20개가 아니라 그냥 다 넣는다.
+
             if(isLogin){
                 setFirstPage(bookmark)
             } else {
@@ -337,12 +357,6 @@ export const BookMark = (props: any) => {
             createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1)
             setLoad(false);
             return ;
-        } catch (error) {
-            //에러 모달창
-            //삭제도 삭제 못했다 알려줘야함
-            console.log(error)
-        }
-
     };
 
 
@@ -367,7 +381,7 @@ export const BookMark = (props: any) => {
     };
 
     const bookmarkCreate = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        useModal.openModal();
+        useCreate.openModal();
     };
     const saveNewBookmarkStorage = (newBookmarkData: Bookmark | Bookmark[]) => {
        if (!isLogin) {
@@ -392,10 +406,13 @@ export const BookMark = (props: any) => {
             const bookmarks = await customAxios.post(`/bookmark`, {
                 ...newBookmarkData
             })
+            if(!bookmarks.data.success && bookmarks.data.message){
+                throw new Error('이미 존재하는 북마크 입니다.')
+            }
             return bookmarks
-        } catch (error) {
-            //에러 모달창
-            console.log(error)
+        } catch (error:any) {
+            updateErrorMessage(error.message)
+            useModal.openModal();
         }
     }
     const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
@@ -432,6 +449,8 @@ export const BookMark = (props: any) => {
         createBookmarkView(setLocalPagenation(encryptedArr, 20), currentPageNum - 1)
         updateTotalCount(createdResp? createdResp.totalCount : newBookmarkArr.length)
         updatePageCount(createdResp? createdResp.totalPage : Math.ceil(newBookmarkArr.length/20))
+        
+        useCreate.closeModal()
     };
 
     const getMachedIndex = (targetBookmarkId: any) => {
@@ -451,9 +470,13 @@ export const BookMark = (props: any) => {
     // 북마크 제거
     const sendDeleteBookmark = async (bookmarkId: any) => {
         try {
-            const boookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`)
-        } catch (error) {
-
+            const bookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`)
+            if(!bookmarks.data.success){
+                throw new Error('북마크 삭제에 실패했습니다.')
+            }
+        } catch (error:any) {
+            updateErrorMessage(error.message)
+            useModal.openModal();
         }
     }
     const onBookmarkDelete = async (targetBookmarkId: any) => {
@@ -470,7 +493,7 @@ export const BookMark = (props: any) => {
             return { ...bookmark, url: url }
         })
         const deletedBookmark = deletedResp? deletedResp.bookmarks: [...decrypted.slice(0, isMachedIndex), ...decrypted.slice(isMachedIndex + 1, length)]
-        //오리진이랑 퍼스트랑 역할이 겹친다. 정돈하자
+        
         setFirstPage(deletedBookmark)
         bookmarkSequence(deletedBookmark)
 
@@ -520,9 +543,12 @@ export const BookMark = (props: any) => {
                 `/bookmark/${targetBookmarkId}`,
                 { ...editContent }
             )
-        } catch (error) {
-            //에러 모달창
-            console.log(error)
+            if(!editResult.data.success){
+                throw new Error('북마크 수정에 실패했습니다.')
+            }
+        } catch (error:any) {
+            updateErrorMessage(error.message)
+            useModal.openModal();
         }
     }
     const editSave = (targetBookmarkId: any, originBookmark: any, editContent: any) => {
@@ -663,6 +689,7 @@ export const BookMark = (props: any) => {
         return (
         <BookmarkContainer id='main-content'>
             <Helmet>TagMark | TAG-MARK</Helmet>
+            {useModal.isShowModal ? <AlramModalPage useModal={useModal} errorMessage={errorMessage} /> : null}
             <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
             <div></div>
             <BookmarkManageContainer>
@@ -678,7 +705,7 @@ export const BookMark = (props: any) => {
                         </CommonButton>
                     </ManageButtonContainer>
                 </BookmarkManagebuttonContainer>
-                {useModal.isShowModal ? <BookmarkCreateBlock useModal={useModal} setNewBookmark={setNewBookmark} /> : null}
+                {useCreate.isShowModal ? <BookmarkCreateBlock useCreate={useCreate} setNewBookmark={setNewBookmark} /> : null}
                 <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
                 <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
                 </ContentBox>
@@ -691,3 +718,12 @@ export const BookMark = (props: any) => {
         load ? <Loading/> : <MainContent/>
     )
 };
+
+export const ErrorModalcontent = (props:any) => {
+    const errorMessage = props.errorMessage;
+    return (
+        <div>
+            {errorMessage}
+        </div>
+    )
+}

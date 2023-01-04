@@ -50,7 +50,6 @@ export const LoginBlock = (props: any) => {
         sendLoginData(loginData)
     }
     
-    //비밀번호 옆에 비번볼수 있는 눈 아이콘
     return (
         <LoginContainer>
             <CommonInput >

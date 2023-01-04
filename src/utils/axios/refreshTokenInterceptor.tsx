@@ -18,5 +18,5 @@ export const getRefresh = async (error: AxiosError | any) => {
         return axios(originalRequest);
      }
     
-    return error;
+    return error.response;
   }

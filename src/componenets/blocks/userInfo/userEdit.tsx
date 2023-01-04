@@ -56,14 +56,6 @@ export const EditUserInfo = (props: any) => {
         setErrorMessage(message);
     };
 
-
-    //변경시 암호화관련 -> 컴포넌트 분할이 문제
-    //인풋하면 한글자에 포커스 끝남 -> 컴포넌트 분할이 문제
-    //에러 모달창
-    //수정하면 수정된 북마크가 뒤로감(리모트에서만??)
-    console.log(secureWrap.decryptWrapper(editInput.nickName))
-    console.log(secureWrap.decryptWrapper(editInput.password))
-    console.log(secureWrap.decryptWrapper(editInput.passwordCheck))
     return (
         <UserEditContainer>
             <ContentTop>

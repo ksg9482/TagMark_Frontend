@@ -24,6 +24,19 @@ export const UserInfoModalContainer = styled.div`
   z-index: 2;
 `;
 
+export const AlramModalContainer = styled.div`
+  position: fixed;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: #81818194;
+  top:0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  z-index: 2;
+`;
+
 
 export const ModalContentContainer = styled.div`
   display: grid;
@@ -36,4 +49,18 @@ export const ModalContentContainer = styled.div`
   border: 1px solid;
   padding: 0 5px 0 5px;
   border-radius: 3px;
+`;
+
+export const AlramModalContentContainer = styled.div`
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: #ffffff;
+  width: 300px;
+  height: 150px;
+  z-index: 1;
+  border: 1px solid;
+  padding: 0 5px 0 5px;
+  border-radius: 3px;
+  gap: 10px;
 `;

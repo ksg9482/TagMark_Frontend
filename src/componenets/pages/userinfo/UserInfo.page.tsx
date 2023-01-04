@@ -45,7 +45,6 @@ export const UserInfo = () => {
         const [modalContent, setModalContent] = useState(<UserInfoModalPage useModal={useModal} content={contentKey} />)
 
         const modalPage = () => {
-            //전송함수 묶어서 보내기 데이터랑 함수 단위로 하나로 묶어 보내는게 좋지 않을까? 인터페이스 만들기도 편하고
             return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage}/>
         }
         const openModal = (key: 'edit' | 'delete') => {
@@ -81,7 +80,7 @@ export const UserInfo = () => {
         setErrorMessage(message)
       };
     const getUserInfo = async () => {
-        try {
+            setLoad(true);
             const userInfo = await sendGetUserInfo(); 
             const bookmarkCount = await sendGetBookmarkCount()
             const tagCount = await sendGetTagCount()
@@ -92,23 +91,19 @@ export const UserInfo = () => {
                     value: tag.count
                 }
             })
-            const user = userInfo.data.user;//JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
+            const user = userInfo.data.user;
 
             updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
             updateTagCount(tagCount.data.tags)
             updateTagGraphData(graphData)
 
             setLoad(false);
-
-        } catch (error) {
-            //에러 모달창
-            console.log(error)
-        }
     }
     const sendEditUserData = async (editUser: any) => {
         try {
             const encrypted = secureWrap.encryptWrapper('test')
             const userInfo = await customAxios.patch(`/user`, editUser)
+            setUserInfo((oldUserInfo)=>{return {...oldUserInfo, nickname:secureWrap.decryptWrapper(editUser.changeNickname)}})
         } catch (error) {
             updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
         }
@@ -174,5 +169,3 @@ export const UserInfo = () => {
         load ? <Loading /> : <UserInfoContent />
     )
 }
-
-//export default BookMark

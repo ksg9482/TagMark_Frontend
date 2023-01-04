@@ -21,7 +21,7 @@ const OAuth2RedirectHandler = (props: any) => {
     oauthLoginIsTrue()
     navigate("/", { replace: true, state: { isLoginTrue: true } });
     // eslint-disable-next-line no-restricted-globals
-    location.reload(); //새로고침해서 axios인스턴스 재생성. 맨처음 생성은 토큰이 안들어가 있다
+    location.reload(); 
   }
 
   async function handle() {
