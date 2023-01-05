@@ -3,7 +3,6 @@ import BookmarkComponent from "./BookmarkComponent"
 import { BookmarksContainer } from "./style"
 
 const Bookmarks = (props: any) => {
-    console.log(props.bookmarkView)
     const bookmarkView: Bookmark[] = props.bookmarkView
     return (
         <BookmarksContainer id="bookmarks">

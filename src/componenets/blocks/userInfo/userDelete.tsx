@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
-import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, InputContainer, ModalText, ModalTitle, TextContainer, UserDeleteContainer } from "./style";
+import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, InputContainer, ModalText, ModalTitle, TextContainer, UserDeleteContainer } from "./style";
 
 export const DeleteUser = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper();
     const sendDeleteUser = props.sendDeleteUser;
+    const propsErrorMessage = props.errorMessage;
 
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('')
 
     const onDeleteInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setPassword(secureWrap.encryptWrapper(e.target.value));
@@ -17,13 +19,20 @@ export const DeleteUser = (props: any) => {
 
     const onClose = () => {
         useModal.closeModal()
-    }
+    };
 
-    const onDelete = () => {
-        sendDeleteUser(password)
+    const onDelete = async() => {
+        const result = await sendDeleteUser(password)
+        if(result.error){
+            updateErrorMessage(result.error)
+            return ;
+        }
         useModal.closeModal()
+    };
 
-    }
+    const updateErrorMessage = (message: string) => {
+        setErrorMessage(message)
+      };
     return (
         <UserDeleteContainer>
             <ContentTop>
@@ -46,6 +55,7 @@ export const DeleteUser = (props: any) => {
                     <div>비밀번호</div>
                     <input type="password" onChange={onDeleteInput} placeholder="비밀번호" />
                 </CommonInput>
+                {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
                 <CommonButtonContainer>
                     <button onClick={onDelete}>확인</button>
                     <button onClick={onClose}>취소</button>

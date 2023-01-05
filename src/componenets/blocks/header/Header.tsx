@@ -55,14 +55,11 @@ const Header = (props: any) => {
         )
     }
     const sendLogout = async () => {
-        try {
             await customAxios.get(`/user/logout`);
             localStorage.removeItem('accessToken')
             // eslint-disable-next-line no-restricted-globals
             location.reload()
-        } catch (error) {
-            //메시지모달창 로그아웃 실패
-        }
+        
 
     }
     const deleteLocalUserData = () => {

@@ -28,20 +28,20 @@ export const Login = (props: any) => {
   };
   
   
-  const oauthKakao = () => {
-    const kakaoHost = "kauth.kakao.com";
-    const kakaoParametor = {
-      clientid: config.KAKAO_REST_API_KEY,
-      redirect_uri: config.KAKAO_REDIRECT_URI,
-    };
-    const kakaoOAuthURL =
-      `https://${kakaoHost}/oauth/authorize?` +
-      `clientid=${kakaoParametor.clientid}` +
-      `&redirect_uri=${kakaoParametor.redirect_uri}` +
-      `&response_type=code`;
+  // const oauthKakao = () => {
+  //   const kakaoHost = "kauth.kakao.com";
+  //   const kakaoParametor = {
+  //     clientid: config.KAKAO_REST_API_KEY,
+  //     redirect_uri: config.KAKAO_REDIRECT_URI,
+  //   };
+  //   const kakaoOAuthURL =
+  //     `https://${kakaoHost}/oauth/authorize?` +
+  //     `clientid=${kakaoParametor.clientid}` +
+  //     `&redirect_uri=${kakaoParametor.redirect_uri}` +
+  //     `&response_type=code`;
 
-    window.location.href = kakaoOAuthURL;
-  };
+  //   window.location.href = kakaoOAuthURL;
+  // };
 
   const sendLoginData = async (sendData: any) => {
     try {
@@ -84,7 +84,7 @@ export const Login = (props: any) => {
         <LoginBlock useModal={props.useModal} onClose={onClose} errorMessage={errorMessage} updateErrorMessage={updateErrorMessage} sendLoginData={sendLoginData} />
         <MoveSignupPage id="move-signup" onClick={onSignup}>회원가입은 여기를 클릭해 주세요</MoveSignupPage>
         <div id="social-login">
-            <OAuthButtonBlock oauthGoogle={oauthGoogle} oauthKakao={oauthKakao} />
+            <OAuthButtonBlock oauthGoogle={oauthGoogle} />
         </div>
       </ContentBody>
     </LoginContent>

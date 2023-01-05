@@ -10,7 +10,7 @@ import { BlockContainer, BlockContentContainer, ButtonContainer, CreateBookmarkC
 
 
 export const CreateBookmark = (props: any) => {
-  const useModal: UseModal = props.useModal;
+  const useCreate = props.useCreate;
   const setNewBookmark = props.setNewBookmark;
   const secureWrap = secure().wrapper()
   const [createInput, setCreateInput] = useState({ url: '', tags: '' })
@@ -32,7 +32,7 @@ export const CreateBookmark = (props: any) => {
   };
 
   const onCancle = () => {
-    useModal.closeModal()
+    useCreate.closeModal()
   };
 
   const onCreate = () => {
@@ -40,7 +40,6 @@ export const CreateBookmark = (props: any) => {
     const tagNames = tagStringToArray(secureWrap.decryptWrapper(createInput.tags));
     const createBookmark: CreateBookmarkData = { url, tagNames }
     setNewBookmark(createBookmark)
-    useModal.closeModal()
   }
   return (
     <CreateBookmarkContainer>
@@ -56,12 +55,12 @@ export const CreateBookmark = (props: any) => {
   )
 }
 export const BookmarkCreateBlock = (props: any) => {
-  const useModal = props.useModal
+  const useCreate = props.useCreate
 
   return (
     <BlockContainer className="modal-base">
       <BlockContentContainer>
-        <CreateBookmark useModal={useModal} setNewBookmark={props.setNewBookmark} />
+        <CreateBookmark useCreate={useCreate} setNewBookmark={props.setNewBookmark} />
       </BlockContentContainer>
     </BlockContainer>
   )

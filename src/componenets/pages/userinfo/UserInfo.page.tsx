@@ -19,6 +19,7 @@ export const UserInfo = () => {
     }])
 
     const [load, setLoad] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('')
 
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
@@ -44,8 +45,7 @@ export const UserInfo = () => {
         const [modalContent, setModalContent] = useState(<UserInfoModalPage useModal={useModal} content={contentKey} />)
 
         const modalPage = () => {
-            //전송함수 묶어서 보내기 데이터랑 함수 단위로 하나로 묶어 보내는게 좋지 않을까? 인터페이스 만들기도 편하고
-            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} />
+            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage}/>
         }
         const openModal = (key: 'edit' | 'delete') => {
             setContentKey(key)
@@ -76,8 +76,11 @@ export const UserInfo = () => {
     const updateTagGraphData = (tagGraphData: any) => {
         setTagGraphData(tagGraphData)
     }
+    const updateErrorMessage = (message: string) => {
+        setErrorMessage(message)
+      };
     const getUserInfo = async () => {
-        try {
+            setLoad(true);
             const userInfo = await sendGetUserInfo(); 
             const bookmarkCount = await sendGetBookmarkCount()
             const tagCount = await sendGetTagCount()
@@ -88,24 +91,21 @@ export const UserInfo = () => {
                     value: tag.count
                 }
             })
-            const user = userInfo.data.user;//JSON.parse(secureWrap.decryptWrapper(userInfo.data.user))
+            const user = userInfo.data.user;
 
             updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
             updateTagCount(tagCount.data.tags)
             updateTagGraphData(graphData)
 
             setLoad(false);
-
-        } catch (error) {
-            console.log(error)
-        }
     }
     const sendEditUserData = async (editUser: any) => {
         try {
             const encrypted = secureWrap.encryptWrapper('test')
             const userInfo = await customAxios.patch(`/user`, editUser)
+            setUserInfo((oldUserInfo)=>{return {...oldUserInfo, nickname:secureWrap.decryptWrapper(editUser.changeNickname)}})
         } catch (error) {
-            console.log(error)
+            updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
         }
     }
     const deletePasswordCheck = async (password: string) => {
@@ -114,10 +114,11 @@ export const UserInfo = () => {
     }
     const sendDeleteUser = async (password: string) => {
         if (!await deletePasswordCheck(password)) {
-            return '비밀번호 다름 에러'
+            updateErrorMessage('비밀번호가 다릅니다.')
+            return {error:'비밀번호가 다릅니다.'}
         }
         const userInfo = await customAxios.delete(`/user`)
-        return;
+        return {message:'deleted'}
     }
     useEffect(() => {
         getUserInfo()
@@ -149,7 +150,7 @@ export const UserInfo = () => {
                             <div>닉네임 : {userInfo.nickname}</div>
                         </MyInfoContainer>
                         <MyDataButtonContainer>
-                            <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
+                            <CommonButton className="edit-button"  onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
                             <CommonButton className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </CommonButton>
                         </MyDataButtonContainer>
                     </MyDataContainer>
@@ -168,5 +169,3 @@ export const UserInfo = () => {
         load ? <Loading /> : <UserInfoContent />
     )
 }
-
-//export default BookMark

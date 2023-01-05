@@ -2,19 +2,21 @@ import { useState } from "react";
 import styled from "styled-components";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
-import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, InputContainer, ModalTitle, UserEditContainer } from "./style";
+import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, InputContainer, ModalTitle, UserEditContainer } from "./style";
 
 type EditKey = 'nickName' | 'password' | 'passwordCheck';
 
 export const EditUserInfo = (props: any) => {
     const useModal: UseModal = props.useModal;
+    const propsErrorMessage = props.errorMessage;
     const userData = props.userData;
     const secureWrap = secure().wrapper()
     const sendEditUserData = props.sendEditUserData
     const [editInput, setEditInput] = useState({ nickName: secureWrap.encryptWrapper(userData.nickname), password: '', passwordCheck: '' })
+    const [errorMessage, setErrorMessage] = useState(propsErrorMessage)
 
     const onEditInput = (key: EditKey) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log(e.target.value.length)
+
         if (e.target.value.length <= 0) {
             setEditInput({ ...editInput, [key]: '' });
         }
@@ -35,8 +37,7 @@ export const EditUserInfo = (props: any) => {
     }
     const onEdit = () => {
         if (!passwordValid()) {
-            console.log('비번 서로 다름')
-            //에러메시지칸 만들기
+            updateErrorMessage('비밀번호와 확인이 맞지 않습니다.')
             return false;
         }
         let editData: any = {}
@@ -47,11 +48,14 @@ export const EditUserInfo = (props: any) => {
             editData.changePassword = editInput.password
         }
         Reflect.deleteProperty(editData, 'passwordCheck')
-        //비밀번호에 변동있으면 비번 보내서 바꾸기
         sendEditUserData(editData)
         useModal.closeModal()
 
-    }
+    };
+    const updateErrorMessage = (message: string) => {
+        setErrorMessage(message);
+    };
+
     return (
         <UserEditContainer>
             <ContentTop>
@@ -62,20 +66,30 @@ export const EditUserInfo = (props: any) => {
                 <ModalTitle>
                     유저정보 변경
                 </ModalTitle>
-                <InputContainer>
-                    <CommonInput>
-                        <div>닉네임변경</div>
-                        <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
-                    </CommonInput>
-                    <CommonInput>
-                        <div>비밀번호변경</div>
-                        <input type="text" placeholder="비밀번호변경" onChange={onEditInput('password')} defaultValue={editInput.password} />
-                    </CommonInput>
-                    <CommonInput>
-                        <div>비밀번호확인</div>
-                        <input type="text" placeholder="비밀번호확인" onChange={onEditInput('passwordCheck')} defaultValue={editInput.passwordCheck} />
-                    </CommonInput>
-                </InputContainer>
+                {
+                    userData.type === 'BASIC'
+                        ? <InputContainer>
+                            <CommonInput>
+                                <div>닉네임변경</div>
+                                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
+                            </CommonInput>
+                            <CommonInput>
+                                <div>비밀번호변경</div>
+                                <input type="password" placeholder="비밀번호변경" onChange={onEditInput('password')} defaultValue={editInput.password} />
+                            </CommonInput>
+                            <CommonInput>
+                                <div>비밀번호확인</div>
+                                <input type="password" placeholder="비밀번호확인" onChange={onEditInput('passwordCheck')} defaultValue={editInput.passwordCheck} />
+                            </CommonInput>
+                        </InputContainer>
+                        : <InputContainer>
+                            <CommonInput>
+                                <div>닉네임변경</div>
+                                <input type="text" placeholder="닉네임" onChange={onEditInput('nickName')} defaultValue={secureWrap.decryptWrapper(editInput.nickName)} />
+                            </CommonInput>
+                        </InputContainer>
+                }
+                {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
                 <CommonButtonContainer>
                     <button onClick={onEdit}>확인</button>
                     <button onClick={onClose}>취소</button>
