@@ -231,6 +231,7 @@ export const BookMark = (props: any) => {
         if (isLogin) {
             const result = await getRemoteTagBookmarkSideBar(targetTags)
             searched = result.bookmarks
+            
             updateTotalCount(result.totalCount)
             updatePageCount(result.totalPage)
         }
@@ -252,7 +253,7 @@ export const BookMark = (props: any) => {
         }
         setCurrentSearch(CurrentSearch.SideBarSearch)
         updateCurrentTagSideBar(targetTags.join())
-
+        
         setLocalBookmarkPage(setLocalPagenation(searched, 20))
         createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1)
         updateBookmarkView(searched)
@@ -286,6 +287,7 @@ export const BookMark = (props: any) => {
         }
     };
     const setLocalPagenation = (bookmark: Bookmark[], pageCount: number) => {
+        
         const copy = deepCopy(bookmark)
         const length = bookmark.length;
         const cnt = Math.floor(length / pageCount) + (Math.floor(length % pageCount) > 0 ? 1 : 0);

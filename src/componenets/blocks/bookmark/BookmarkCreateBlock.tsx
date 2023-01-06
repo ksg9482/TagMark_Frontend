@@ -16,8 +16,7 @@ export const CreateBookmark = (props: any) => {
   const [createInput, setCreateInput] = useState({ url: '', tags: '' })
 
   const tagStringToArray = (tagString: string) => {
-    //정규표현식으로 , 뒤에 공백 많거나 있는거 잡아내기
-    //다른 형식이면 안내창으로 행동방침 안내할 것.
+    
     tagString = tagString.replaceAll(', ', ',')
     const result = tagString.split(',');
     return result
