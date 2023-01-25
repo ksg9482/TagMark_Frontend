@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { dumyBookmark } from "../../../dumy/dumy-bookmarks";
-import { dumyTags } from "../../../dumy/dumy-tags";
+import { defaultBookmark } from "../../../defaultBookmark/defaultBookmark";
 import { Bookmark, CreateBookmarkData } from "../../../interface/bookmark";
 import { Tag } from "../../../interface/tag";
 import { deepCopy, secure } from "../../../utils";
@@ -655,7 +654,7 @@ export const BookMark = (props: any) => {
     }
     useEffect(() => {
         if (!isLogin && !secure().local().getItem('local-bookmark-storage')) {
-            secure().local().setItem('local-bookmark-storage', JSON.stringify(dumyBookmark))
+            secure().local().setItem('local-bookmark-storage', JSON.stringify(defaultBookmark))
         }
         getBookmark(isLogin)
     }, [])

@@ -42,7 +42,7 @@ export const EditUserInfo = (props: any) => {
         }
         let editData: any = {}
         if (editInput.nickName.length > 0) {
-            editData.changeNickname = editInput.nickName
+            editData.changeNickname = secureWrap.decryptWrapper(editInput.nickName)
         }
         if (editInput.password.length > 0) {
             editData.changePassword = editInput.password
