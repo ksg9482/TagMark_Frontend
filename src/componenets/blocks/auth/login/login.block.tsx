@@ -45,8 +45,8 @@ export const LoginBlock = (props: any) => {
             email: "",
             password: ""
         };
-        loginData.email = loginInput.email
-        loginData.password = loginInput.password
+        loginData.email = secureWrap.decryptWrapper(loginInput.email);
+        loginData.password = secureWrap.decryptWrapper(loginInput.password);
         sendLoginData(loginData)
     }
     

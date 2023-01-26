@@ -344,7 +344,6 @@ export const BookMark = (props: any) => {
     }
 
     const getBookmark = async (isLogin: boolean) => {
-            setLoad(true);
             const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks()
 
             if(isLogin){
@@ -356,7 +355,6 @@ export const BookMark = (props: any) => {
             setOriginBookmarks(bookmark);
             setLocalBookmarkPage(setLocalPagenation(bookmark, 20))
             createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1)
-            setLoad(false);
             return ;
     };
 
@@ -621,7 +619,6 @@ export const BookMark = (props: any) => {
     }
 
     const syncBookmark = async () => {
-        setLoad(true)
         const localBookmarks = secure().local().getItem('local-bookmark-storage')
         if(!localBookmarks) {
             setLoad(false)
@@ -643,25 +640,31 @@ export const BookMark = (props: any) => {
             }
             const localTagNamesArr = Array.from(localTagNamesSet)
             const syncBookmarkBody = {
-                bookmarks: localBookmarkArr,
+                bookmarks: localBookmarkArr.map(localBookmark => {
+                    return {...localBookmark, url:secureWrap.decryptWrapper(localBookmark.url)}
+                }),
                 tagNames: localTagNamesArr
             }
-            const syncBookmark = await customAxios.post(`/bookmark/sync`,
+            await customAxios.post(`/bookmark/sync`,
                 syncBookmarkBody
-            )
+            );
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
         }
-        setLoad(false)
+    }
+    const startsequence = async () => {
+        setLoad(true);
+        if(isLogin){
+            await syncBookmark();
+        }
+        await getBookmark(isLogin);
+        setLoad(false);
     }
     useEffect(() => {
         if (!isLogin && !secure().local().getItem('local-bookmark-storage')) {
             secure().local().setItem('local-bookmark-storage', JSON.stringify(defaultBookmark))
         }
-        getBookmark(isLogin)
-    }, [])
-    useEffect(() => {
-        if(isLogin){
-            syncBookmark()
-        }
+        startsequence()
     }, [])
    
     const currentPageRefresh = (currentPage: number) => {

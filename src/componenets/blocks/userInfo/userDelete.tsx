@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
 import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, InputContainer, ModalText, ModalTitle, TextContainer, UserDeleteContainer } from "./style";
@@ -8,7 +9,7 @@ export const DeleteUser = (props: any) => {
     const secureWrap = secure().wrapper();
     const sendDeleteUser = props.sendDeleteUser;
     const propsErrorMessage = props.errorMessage;
-
+    const navigate = useNavigate()
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -22,12 +23,17 @@ export const DeleteUser = (props: any) => {
     };
 
     const onDelete = async() => {
-        const result = await sendDeleteUser(password)
+        const result = await sendDeleteUser(secureWrap.decryptWrapper(password))
+        
         if(result.error){
             updateErrorMessage(result.error)
             return ;
         }
+        localStorage.removeItem('accessToken')
         useModal.closeModal()
+        navigate('/', {replace: true, state: { isLoginTrue: false }})
+        // eslint-disable-next-line no-restricted-globals
+        location.reload()
     };
 
     const updateErrorMessage = (message: string) => {

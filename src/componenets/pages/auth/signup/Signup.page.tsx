@@ -7,7 +7,10 @@ import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
 import { CommonButton, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalTitle, SignUpBlock, SignupContainer, SignupInput } from "./style";
-
+interface Singupform{
+    email:string;
+    password:string;
+}
 export const Signup = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper()
@@ -40,9 +43,9 @@ export const Signup = (props: any) => {
         passwordCheck: string;
     }) => {
         Reflect.deleteProperty(signupInput, 'passwordCheck')
-        let signupData;
-        signupData = secureWrap.decryptWrapper(signupInput.email)
-        signupData = secureWrap.decryptWrapper(signupInput.password)
+        let signupData:Singupform ={email:'', password:''};
+        signupData.email = secureWrap.decryptWrapper(signupInput.email)
+        signupData.password = secureWrap.decryptWrapper(signupInput.password)
         return signupData;
     };
 
@@ -75,10 +78,14 @@ export const Signup = (props: any) => {
             if(!inputCheck(signupInput)){
                 return ;
             }
-            const signupResp = await sendSignupData(signupDataForm(signupInput))
+            await sendSignupData(signupDataForm(signupInput))
             useModal.closeModal()
         } catch (error:any) {
-            if(error.response.data.message && !Array.isArray(error.response.data.message)){
+            if(Array.isArray(error.response?.data.message)){
+                setErrorMessage('회원가입 양식에 맞지 않습니다.')
+                return ;
+            }
+            if(error.response?.data.message){
                 setErrorMessage(error.response.data.message)
                 return ;
             }

@@ -45,7 +45,7 @@ export const EditUserInfo = (props: any) => {
             editData.changeNickname = secureWrap.decryptWrapper(editInput.nickName)
         }
         if (editInput.password.length > 0) {
-            editData.changePassword = editInput.password
+            editData.changePassword = secureWrap.decryptWrapper(editInput.password)
         }
         Reflect.deleteProperty(editData, 'passwordCheck')
         sendEditUserData(editData)
