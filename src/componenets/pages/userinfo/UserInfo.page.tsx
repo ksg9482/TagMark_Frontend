@@ -101,8 +101,7 @@ export const UserInfo = () => {
     }
     const sendEditUserData = async (editUser: any) => {
         try {
-            const encrypted = secureWrap.encryptWrapper('test')
-            const userInfo = await customAxios.patch(`/user`, editUser)
+            await customAxios.patch(`/user`, editUser)
             setUserInfo((oldUserInfo)=>{return {...oldUserInfo, nickname:secureWrap.decryptWrapper(editUser.changeNickname)}})
         } catch (error) {
             updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
