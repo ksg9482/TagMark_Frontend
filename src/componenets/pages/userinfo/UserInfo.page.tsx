@@ -112,11 +112,11 @@ export const UserInfo = () => {
         return result.data.valid
     }
     const sendDeleteUser = async (password: string) => {
-        if (!await deletePasswordCheck(password)) {
+        if (!await deletePasswordCheck(password) && userInfo.type === 'BASIC') {
             updateErrorMessage('비밀번호가 다릅니다.')
             return {error:'비밀번호가 다릅니다.'}
         }
-        const userInfo = await customAxios.delete(`/user`)
+         await customAxios.delete(`/user`)
         return {message:'deleted'}
     }
     useEffect(() => {

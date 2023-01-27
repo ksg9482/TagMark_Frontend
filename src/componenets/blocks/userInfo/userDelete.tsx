@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
-import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, InputContainer, ModalText, ModalTitle, TextContainer, UserDeleteContainer } from "./style";
+import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalText, ModalTitle, TextContainer, UserDeleteContainer } from "./style";
 
 export const DeleteUser = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper();
     const sendDeleteUser = props.sendDeleteUser;
+    const userData = props.userData;
     const propsErrorMessage = props.errorMessage;
     const navigate = useNavigate()
     const [password, setPassword] = useState('');
@@ -22,23 +23,23 @@ export const DeleteUser = (props: any) => {
         useModal.closeModal()
     };
 
-    const onDelete = async() => {
+    const onDelete = async () => {
         const result = await sendDeleteUser(secureWrap.decryptWrapper(password))
-        
-        if(result.error){
+
+        if (result.error) {
             updateErrorMessage(result.error)
-            return ;
+            return;
         }
         localStorage.removeItem('accessToken')
         useModal.closeModal()
-        navigate('/', {replace: true, state: { isLoginTrue: false }})
+        navigate('/', { replace: true, state: { isLoginTrue: false } })
         // eslint-disable-next-line no-restricted-globals
         location.reload()
     };
 
     const updateErrorMessage = (message: string) => {
         setErrorMessage(message)
-      };
+    };
     return (
         <UserDeleteContainer>
             <ContentTop>
@@ -57,10 +58,13 @@ export const DeleteUser = (props: any) => {
                         소셜로그인의 경우 비밀번호 확인과정 없이 회원탈퇴가 진행됩니다.
                     </ModalText>
                 </TextContainer>
-                <CommonInput>
-                    <div>비밀번호</div>
-                    <input type="password" onChange={onDeleteInput} placeholder="비밀번호" />
-                </CommonInput>
+                {userData.type === 'BASIC'
+                    ? <CommonInput>
+                        <div>비밀번호</div>
+                        <input type="password" onChange={onDeleteInput} placeholder="비밀번호" />
+                    </CommonInput>
+                    : null
+                }
                 {errorMessage ? <ErrorMessageBlock>{errorMessage}</ErrorMessageBlock> : <ErrorMessageBlock>&nbsp;</ErrorMessageBlock>}
                 <CommonButtonContainer>
                     <button onClick={onDelete}>확인</button>
