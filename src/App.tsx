@@ -3,8 +3,8 @@ import AppRouter from "./routers/router";
 import './App.css';
 import Header from './componenets/blocks/header/Header';
 import styled from 'styled-components';
-import { secure } from './utils/secure';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 const getJwtToken = () => {
   if (localStorage.getItem('accessToken') === 'undefined') {
     return false;
@@ -19,6 +19,7 @@ function App() {
 
   return (
     <AppContainer className="App">
+      <Helmet>TagMark</Helmet>
       <Router>
         <Header isLogin={isLoggedIn} />
       <MainContainer>
