@@ -7,9 +7,6 @@ import { CommonButton, CountContainer, SideBarContainer, SideBarInput, SideBarTa
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
-
-
-
 const SideBarTagComponenet = (props: any) => {
     const getTagBookmarkSideBar = props.getTagBookmarkSideBar;
     const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

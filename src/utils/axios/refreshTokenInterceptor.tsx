@@ -1,5 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import jwt from 'jsonwebtoken';
+import axios, { AxiosError } from 'axios';
 import serverConfig from '../../config';
 
 export const getRefresh = async (error: AxiosError | any) => {

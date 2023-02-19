@@ -1,16 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import styled from "styled-components";
 import config from "../../../../config";
+import { Singupform } from "../../../../interface/auth";
 import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
-import { CommonButton, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalTitle, SignUpBlock, SignupContainer, SignupInput } from "./style";
-interface Singupform{
-    email:string;
-    password:string;
-}
+import { CommonButton, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalTitle, SignUpBlock, SignupContainer } from "./style";
+
 export const Signup = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper()

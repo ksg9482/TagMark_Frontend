@@ -1,7 +1,6 @@
-import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { defaultBookmark } from "../../../defaultBookmark/defaultBookmark";
-import { Bookmark, CreateBookmarkData } from "../../../interface/bookmark";
+import { Bookmark, CreateBookmarkData, CurrentSearch, FindType } from "../../../interface/bookmark";
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
 import { deepCopy, secure } from "../../../utils";
@@ -16,24 +15,9 @@ import { Helmet } from "react-helmet-async";
 import { AlramModalPage } from "../modal/AlramModalPage";
 
 
-export enum FindType {
-    origin = 'origin',
-    view = 'view'
-}
 
-export interface LocalBookmark {
-    dataFrom: 'local', bookmark: string
-}
-export interface RemoteBookmark {
-    dataFrom: 'remote', bookmark: AxiosResponse
-}
 
-type GetBookmarkOption = LocalBookmark | RemoteBookmark;
-enum CurrentSearch {
-    Bookmark = 'Bookmark',
-    TagSearch = 'TagSearch',
-    SideBarSearch = 'SideBarSearch'
-}
+
 
 export const BookMark = (props: any) => {
     const isLogin = props.isLogin
@@ -141,18 +125,7 @@ export const BookMark = (props: any) => {
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
-        const bookmarkArr: Bookmark[] = originBookmarks;
-
-        const tempBookmark = bookmarkArr.map((bookmark) => {
-            const tags = bookmark.tags ? bookmark.tags : []
-            return { ...bookmark, tags: tags }
-        })
-        const bookmarkFilter = tempBookmark.filter((bookmark) => {
-            const tagFilter = bookmark.tags.filter((tag: any) => {
-                return targetTags.includes(tag.tag)
-            })
-            if (1 <= tagFilter.length) return tagFilter
-        })
+        
         return andSearch.data
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
@@ -162,18 +135,7 @@ export const BookMark = (props: any) => {
         if (orSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
-        const bookmarkArr: Bookmark[] = originBookmarks;
 
-        const tempBookmark = bookmarkArr.map((bookmark) => {
-            const tags = bookmark.tags ? bookmark.tags : []
-            return { ...bookmark, tags: tags }
-        })
-        const bookmarkFilter = tempBookmark.filter((bookmark) => {
-            const tagFilter = bookmark.tags.filter((tag: any) => {
-                return targetTags.includes(tag.tag)
-            })
-            if (1 <= tagFilter.length) return tagFilter
-        })
         return orSearch.data
     }
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
@@ -402,7 +364,6 @@ export const BookMark = (props: any) => {
     // 북마크 생성
     const sendCreateBookmark = async (newBookmarkData: CreateBookmarkData) => {
         try {
-            const encrypted = secureWrap.encryptWrapper('test')
             const bookmarks = await customAxios.post(`/bookmark`, {
                 ...newBookmarkData
             })
@@ -427,7 +388,7 @@ export const BookMark = (props: any) => {
         })
         let createdResp;
         if (isLogin) {
-            const saveResp = await sendCreateBookmark({ url, tagNames: createBookmarkData.tagNames })
+            await sendCreateBookmark({ url, tagNames: createBookmarkData.tagNames })
             const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageNum}`)
             createdResp = bookmarkResponse.data
         }
