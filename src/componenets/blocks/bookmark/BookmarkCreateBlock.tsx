@@ -3,9 +3,6 @@ import { CreateBookmarkData } from "../../../interface/bookmark";
 import { secure } from "../../../utils/secure";
 import { BlockContainer, BlockContentContainer, ButtonContainer, CreateBookmarkContainer, InputContainer } from "./style";
 
-
-
-
 export const CreateBookmark = (props: any) => {
   const useCreate = props.useCreate;
   const setNewBookmark = props.setNewBookmark;
