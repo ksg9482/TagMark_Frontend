@@ -24,22 +24,6 @@ export const Login = (props: any) => {
       `scope=${googleParametor.scope_email}`;
     window.location.href = googleOAuthURL;
   };
-  
-  
-  // const oauthKakao = () => {
-  //   const kakaoHost = "kauth.kakao.com";
-  //   const kakaoParametor = {
-  //     clientid: config.KAKAO_REST_API_KEY,
-  //     redirect_uri: config.KAKAO_REDIRECT_URI,
-  //   };
-  //   const kakaoOAuthURL =
-  //     `https://${kakaoHost}/oauth/authorize?` +
-  //     `clientid=${kakaoParametor.clientid}` +
-  //     `&redirect_uri=${kakaoParametor.redirect_uri}` +
-  //     `&response_type=code`;
-
-  //   window.location.href = kakaoOAuthURL;
-  // };
 
   const sendLoginData = async (sendData: any) => {
     try {

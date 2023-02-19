@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { TagButton } from "./style";
 
 const TagComponent = (props: any) => {

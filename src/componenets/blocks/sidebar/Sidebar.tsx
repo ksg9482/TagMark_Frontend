@@ -41,16 +41,6 @@ const SideBarTags = (props: any) => {
     )
 }
 
-
-/*
-[tagName] [tagCount]
-개발 12
-여행 8
-프랑스 7
-
-클릭하면 그것만 따로
-*/
-
 const SideBar = (props: any) => {
     const isLogin = props.isLogin
     const [originBookmarks, setOriginBookmarks] = useState([{ id: 0, url: '', tags: [{ id: 0, name: '' }] }])
@@ -98,13 +88,10 @@ const SideBar = (props: any) => {
         return resultArr
     };
 
-    const tagCountObjArr = setTagCount(tagWithCounts);
-
-
     const sendGetTagCount = async () => {
         return await customAxios.get(`/tag`)
     }
-    const getTags = async (isLogin: boolean, bookmark: any) => {
+    const getTags = async (isLogin: boolean) => {
         if (!isLogin) {
             const localBookmarks: Bookmark[] = JSON.parse(secure().local().getItem('local-bookmark-storage')!)
 
@@ -159,7 +146,7 @@ const SideBar = (props: any) => {
         tagSearch(tagObj, tagInput)
     }, [tagInput])
     useEffect(() => {
-        getTags(isLogin, props.originBookmarks)
+        getTags(isLogin)
     }, [originBookmarks])
     useEffect(() => {
         setOriginBookmarks(props.originBookmarks)

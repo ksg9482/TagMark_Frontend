@@ -37,11 +37,7 @@ export const Signup = (props: any) => {
             );
             return userSignup;
     }
-    const signupDataForm = (signupInput: {
-        email: string;
-        password: string;
-        passwordCheck: string;
-    }) => {
+    const signupDataForm = (signupInput: Singupform) => {
         Reflect.deleteProperty(signupInput, 'passwordCheck')
         let signupData:Singupform ={email:'', password:''};
         signupData.email = secureWrap.decryptWrapper(signupInput.email)

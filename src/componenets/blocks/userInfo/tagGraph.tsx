@@ -1,14 +1,5 @@
 import { ResponsivePie } from '@nivo/pie'
 
-export const TagGraph = (props:any) => {
-    return (
-        <div></div>
-    )
-}
-
-interface Data {
-    data:any
-}
 export const MyResponsivePie = (data:any[]) => (
     <ResponsivePie
         data={data}

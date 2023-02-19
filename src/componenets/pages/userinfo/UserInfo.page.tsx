@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import styled from "styled-components";
 import { customAxios } from "../../../utils/axios/customAxios";
 import { secure } from "../../../utils/secure";
 import { LoadingBar } from "../../blocks/common/loading/loading";
@@ -11,7 +10,6 @@ import { BookmarkAreaContainer, CommonButton, GraphContainer, MyDataButtonContai
 export const UserInfo = () => {
     const secureWrap = secure().wrapper()
     const [userInfo, setUserInfo] = useState({ email: '', nickname: '', type: '', bookmarkCount: 0, tagCount: 0 })
-    const [tagCount, setTagCount] = useState([{ id: 0, tag: '', count: '' }])
     const [tagGraphData, setTagGraphData] = useState([{
         id: '없음',
         label: '없음',
@@ -42,10 +40,9 @@ export const UserInfo = () => {
 
     const ModalHandle = () => {
         const [contentKey, setContentKey] = useState('edit')
-        const [modalContent, setModalContent] = useState(<UserInfoModalPage useModal={useModal} content={contentKey} />)
-
+    
         const modalPage = () => {
-            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage}/>
+            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage} />
         }
         const openModal = (key: 'edit' | 'delete') => {
             setContentKey(key)
@@ -70,39 +67,35 @@ export const UserInfo = () => {
         return await customAxios.get(`/tag`)
     }
 
-    const updateTagCount = (tagCount: any) => {
-        setTagCount(tagCount)
-    }
     const updateTagGraphData = (tagGraphData: any) => {
         setTagGraphData(tagGraphData)
     }
     const updateErrorMessage = (message: string) => {
         setErrorMessage(message)
-      };
+    };
     const getUserInfo = async () => {
-            setLoad(true);
-            const userInfo = await sendGetUserInfo(); 
-            const bookmarkCount = await sendGetBookmarkCount()
-            const tagCount = await sendGetTagCount()
-            const graphData = tagCount.data.tags.map((tag: any) => {
-                return {
-                    id: tag.tag,
-                    label: tag.tag,
-                    value: tag.count
-                }
-            })
-            const user = userInfo.data.user;
+        setLoad(true);
+        const userInfo = await sendGetUserInfo();
+        const bookmarkCount = await sendGetBookmarkCount()
+        const tagCount = await sendGetTagCount()
+        const graphData = tagCount.data.tags.map((tag: any) => {
+            return {
+                id: tag.tag,
+                label: tag.tag,
+                value: tag.count
+            }
+        })
+        const user = userInfo.data.user;
 
-            updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
-            updateTagCount(tagCount.data.tags)
-            updateTagGraphData(graphData)
+        updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
+        updateTagGraphData(graphData)
 
-            setLoad(false);
+        setLoad(false);
     }
     const sendEditUserData = async (editUser: any) => {
         try {
             await customAxios.patch(`/user`, editUser)
-            setUserInfo((oldUserInfo)=>{return {...oldUserInfo, nickname:secureWrap.decryptWrapper(editUser.changeNickname)}})
+            setUserInfo((oldUserInfo) => { return { ...oldUserInfo, nickname: secureWrap.decryptWrapper(editUser.changeNickname) } })
         } catch (error) {
             updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
         }
@@ -112,12 +105,12 @@ export const UserInfo = () => {
         return result.data.valid
     }
     const sendDeleteUser = async (password: string) => {
-        if (!await deletePasswordCheck(password)) {
+        if (!await deletePasswordCheck(password) && userInfo.type === 'BASIC') {
             updateErrorMessage('비밀번호가 다릅니다.')
-            return {error:'비밀번호가 다릅니다.'}
+            return { error: '비밀번호가 다릅니다.' }
         }
-        const userInfo = await customAxios.delete(`/user`)
-        return {message:'deleted'}
+        await customAxios.delete(`/user`)
+        return { message: 'deleted' }
     }
     useEffect(() => {
         getUserInfo()
@@ -130,9 +123,6 @@ export const UserInfo = () => {
                 {useModal.isShowModal ? modalHandle.modalPage() : null}
                 <BookmarkAreaContainer className="bookmark-area">
                     <div>총 북마크 개수 : {userInfo.bookmarkCount} </div>
-                    {/* <div>북마크 DB 동기화 (자동 on/off) </div>
-                <button>북마크 가져오기 </button>
-                <button>내 북마크 공유하기 </button> */}
                 </BookmarkAreaContainer>
                 <SubContainer id="sub-container">
                     <TagAreaContainer className="tag-area">
@@ -149,7 +139,7 @@ export const UserInfo = () => {
                             <div>닉네임 : {userInfo.nickname}</div>
                         </MyInfoContainer>
                         <MyDataButtonContainer>
-                            <CommonButton className="edit-button"  onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
+                            <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
                             <CommonButton className="delete-button" onClick={e => modalHandle.openModal('delete')}>회원탈퇴 </CommonButton>
                         </MyDataButtonContainer>
                     </MyDataContainer>

@@ -2,14 +2,15 @@ import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { defaultBookmark } from "../../../defaultBookmark/defaultBookmark";
 import { Bookmark, CreateBookmarkData } from "../../../interface/bookmark";
-import { Tag } from "../../../interface/tag";
+import 'react-tooltip/dist/react-tooltip.css'
+import { Tooltip } from 'react-tooltip'
 import { deepCopy, secure } from "../../../utils";
 import { customAxios } from "../../../utils/axios/customAxios";
 import Bookmarks from "../../blocks/bookmark/Bookmarks";
 import { PageMove } from "../../blocks/bookmark/pageMove/PageMove";
 import SideBar from "../../blocks/sidebar/Sidebar";
 import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
-import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, CommonButton, ContentBox, ManageButtonContainer, TagText } from "./styles";
+import { BookmarkContainer, BookmarkManagebuttonContainer, BookmarkManageContainer, CommonButton, ContentBox, DisableCommonButton, ManageButtonContainer, TagText } from "./styles";
 import { LoadingBar } from "../../blocks/common/loading/loading";
 import { Helmet } from "react-helmet-async";
 import { AlramModalPage } from "../modal/AlramModalPage";
@@ -83,7 +84,7 @@ export const BookMark = (props: any) => {
             tag: ''
         }]
     }
-   
+
     const [originBookmarks, setOriginBookmarks] = useState([bookmarkInitData]);
     const [originPageCount, setOriginPageCount] = useState(0);
     const [originTotalCount, setOriginTotalCount] = useState(0);
@@ -92,18 +93,18 @@ export const BookMark = (props: any) => {
     const [currentPageNum, setCurrentPageNum] = useState(1);
     const [currentTag, setCurrentTag] = useState(['']);
     const [totalCount, setTotalCount] = useState(0);
-    const [pageCount, setPageCount] = useState(0); 
+    const [pageCount, setPageCount] = useState(0);
     const [currentSearch, setCurrentSearch] = useState(CurrentSearch.Bookmark);
 
     const [firstPage, setFirstPage] = useState([bookmarkInitData])
 
-    const [errorMessage, setErrorMessage] = useState('') 
+    const [errorMessage, setErrorMessage] = useState('')
 
     const [load, setLoad] = useState(true);
 
     const updateErrorMessage = (message: string) => {
         setErrorMessage(message)
-      };
+    };
 
     const updateCurrentTag = (targetTag: any) => {
         if (currentTag.includes(targetTag)) {
@@ -130,13 +131,13 @@ export const BookMark = (props: any) => {
             targetTags = prevTag
         }
 
-        
+
         const blankChange = targetTags.map((tag) => {
             return tag.replaceAll(' ', '%20')
         })
 
         const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}&pageNo=1`)
-        
+
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -157,7 +158,7 @@ export const BookMark = (props: any) => {
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
         currentPageRefresh(1)
         const orSearch = await customAxios.get(`/tag/search-or?tags=${targetTags}&pageNo=1`)
-        
+
         if (orSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
@@ -176,7 +177,7 @@ export const BookMark = (props: any) => {
         return orSearch.data
     }
     const getTagBookmark = async (targetTags: string[], findType: FindType) => {
-        
+
         currentPageRefresh(1)
         if (!currentTag.includes(targetTags[0])) {
             updateCurrentTag(targetTags.join())
@@ -212,12 +213,12 @@ export const BookMark = (props: any) => {
                     })
                 })
             })
-            
+
             searched = bookmarkFilter
             updateBookmarkView(setLocalPagenation(searched, 20)[0])
             setLocalBookmarkPage(setLocalPagenation(searched, 20))
             updateTotalCount(bookmarkFilter.length)
-            updatePageCount(Math.ceil(bookmarkFilter.length/20))
+            updatePageCount(Math.ceil(bookmarkFilter.length / 20))
         }
 
         setCurrentSearch(CurrentSearch.TagSearch)
@@ -230,7 +231,7 @@ export const BookMark = (props: any) => {
         if (isLogin) {
             const result = await getRemoteTagBookmarkSideBar(targetTags)
             searched = result.bookmarks
-            
+
             updateTotalCount(result.totalCount)
             updatePageCount(result.totalPage)
         }
@@ -248,16 +249,16 @@ export const BookMark = (props: any) => {
             })
             searched = bookmarkFilter
             updateTotalCount(bookmarkFilter.length)
-            updatePageCount(Math.ceil(bookmarkFilter.length/20))
+            updatePageCount(Math.ceil(bookmarkFilter.length / 20))
         }
         setCurrentSearch(CurrentSearch.SideBarSearch)
         updateCurrentTagSideBar(targetTags.join())
-        
+
         setLocalBookmarkPage(setLocalPagenation(searched, 20))
         createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1)
         updateBookmarkView(searched)
         setCurrentPageNum(1)
-        
+
     };
 
     const bookmarkAdapter = (storageType: 'local' | 'remote', bookmarks: any): Bookmark[] => {
@@ -267,7 +268,7 @@ export const BookMark = (props: any) => {
                 return { ...bookmark, url: secureWrap.encryptWrapper(bookmark.url) }
             })
             if (!jsonParsedData) {
-                return [bookmarkInitData]; 
+                return [bookmarkInitData];
             };
             return encrypted;
         };
@@ -286,7 +287,7 @@ export const BookMark = (props: any) => {
         }
     };
     const setLocalPagenation = (bookmark: Bookmark[], pageCount: number) => {
-        
+
         const copy = deepCopy(bookmark)
         const length = bookmark.length;
         const cnt = Math.floor(length / pageCount) + (Math.floor(length % pageCount) > 0 ? 1 : 0);
@@ -297,9 +298,9 @@ export const BookMark = (props: any) => {
         return result
     }
 
-   
+
     const createBookmarkView = (pagenationBookmark: Bookmark[][], targetPage: number) => {
-        
+
         setBookmarkView(pagenationBookmark[targetPage])
     }
 
@@ -307,7 +308,7 @@ export const BookMark = (props: any) => {
         setBookmarkView(bookmarks)
     }
 
-    //북마크 읽기
+    // 북마크 읽기
     const getLocalBookmarks = () => {
         const localBookmarks = secure().local().getItem('local-bookmark-storage')!
         const bookmark = bookmarkAdapter("local", localBookmarks);
@@ -326,7 +327,7 @@ export const BookMark = (props: any) => {
     const updateOriginTotalCount = (count: number) => {
         setOriginTotalCount(count)
     }
-    
+
     const getDBBookmarks = async () => {
         const currentPageCount = sessionStorage.getItem('current-page') || 1
         const bookmarkResponse = await customAxios.get(`/bookmark?pageNo=${currentPageCount}`)
@@ -344,29 +345,29 @@ export const BookMark = (props: any) => {
     }
 
     const getBookmark = async (isLogin: boolean) => {
-            const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks()
+        const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks()
 
-            if(isLogin){
-                setFirstPage(bookmark)
-            } else {
-                setFirstPage(setLocalPagenation(bookmark, 20)[0])
-            }
-            
-            setOriginBookmarks(bookmark);
-            setLocalBookmarkPage(setLocalPagenation(bookmark, 20))
-            createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1)
-            return ;
+        if (isLogin) {
+            setFirstPage(bookmark)
+        } else {
+            setFirstPage(setLocalPagenation(bookmark, 20)[0])
+        }
+
+        setOriginBookmarks(bookmark);
+        setLocalBookmarkPage(setLocalPagenation(bookmark, 20))
+        createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1)
+        return;
     };
 
 
     const bookmarkRefresh = () => {
-        setCurrentSearch(CurrentSearch.Bookmark) 
-        setBookmarkView(firstPage) 
-        
-        setCurrentTag([]) 
-        updateOriginPageCount(originPageCount) 
-        updateOriginTotalCount(originTotalCount) 
-        setCurrentPageNum(1) 
+        setCurrentSearch(CurrentSearch.Bookmark)
+        setBookmarkView(firstPage)
+
+        setCurrentTag([])
+        updateOriginPageCount(originPageCount)
+        updateOriginTotalCount(originTotalCount)
+        setCurrentPageNum(1)
         currentPageRefresh(1)
         if (isLogin) {
             updatePageCount(originPageCount)
@@ -374,7 +375,7 @@ export const BookMark = (props: any) => {
         }
         else {
             setLocalBookmarkPage(setLocalPagenation(originBookmarks, 20))
-            updatePageCount(Math.ceil(originBookmarks.length/20))
+            updatePageCount(Math.ceil(originBookmarks.length / 20))
             updateTotalCount(originBookmarks.length)
         }
     };
@@ -383,7 +384,7 @@ export const BookMark = (props: any) => {
         useCreate.openModal();
     };
     const saveNewBookmarkStorage = (newBookmarkData: Bookmark | Bookmark[]) => {
-       if (!isLogin) {
+        if (!isLogin) {
             secureStorage.removeItem('local-bookmark-storage')
             secureStorage.setItem('local-bookmark-storage', JSON.stringify(newBookmarkData))
         }
@@ -405,19 +406,22 @@ export const BookMark = (props: any) => {
             const bookmarks = await customAxios.post(`/bookmark`, {
                 ...newBookmarkData
             })
-            if(!bookmarks.data.success && bookmarks.data.message){
+            if (!bookmarks.data.success && bookmarks.data.message) {
                 throw new Error('이미 존재하는 북마크 입니다.')
             }
             return bookmarks
-        } catch (error:any) {
+        } catch (error: any) {
             updateErrorMessage(error.message)
             useModal.openModal();
         }
     }
     const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
+        if(!isLogin && totalCount >= 100){
+            return ;
+        }
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
-        const url = createBookmarkData.url 
+        const url = createBookmarkData.url
         const tags = createBookmarkData.tagNames.map((tagName, i) => {
             return { id: 'tempTag' + i, tag: tagName }
         })
@@ -432,11 +436,11 @@ export const BookMark = (props: any) => {
             const url = secureWrap.decryptWrapper(bookmark.url)
             return { ...bookmark, url: url }
         })
-        
+
         newBookmarkArr.push(...decrypted);
-        if(createdResp){
+        if (createdResp) {
             newBookmarkArr = [...createdResp.bookmarks]
-        }   
+        }
         const encryptedArr = newBookmarkArr.map((bookmark) => {
             const url = secureWrap.encryptWrapper(bookmark.url)
             return { ...bookmark, url: url }
@@ -444,11 +448,11 @@ export const BookMark = (props: any) => {
         setFirstPage(newBookmarkArr)
         bookmarkSequence(newBookmarkArr)
         setLocalBookmarkPage(setLocalPagenation(encryptedArr, 20))
-        
+
         createBookmarkView(setLocalPagenation(encryptedArr, 20), currentPageNum - 1)
-        updateTotalCount(createdResp? createdResp.totalCount : newBookmarkArr.length)
-        updatePageCount(createdResp? createdResp.totalPage : Math.ceil(newBookmarkArr.length/20))
-        
+        updateTotalCount(createdResp ? createdResp.totalCount : newBookmarkArr.length)
+        updatePageCount(createdResp ? createdResp.totalPage : Math.ceil(newBookmarkArr.length / 20))
+
         useCreate.closeModal()
     };
 
@@ -470,10 +474,10 @@ export const BookMark = (props: any) => {
     const sendDeleteBookmark = async (bookmarkId: any) => {
         try {
             const bookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`)
-            if(!bookmarks.data.success){
+            if (!bookmarks.data.success) {
                 throw new Error('북마크 삭제에 실패했습니다.')
             }
-        } catch (error:any) {
+        } catch (error: any) {
             updateErrorMessage(error.message)
             useModal.openModal();
         }
@@ -491,22 +495,22 @@ export const BookMark = (props: any) => {
             const url = secureWrap.decryptWrapper(bookmark.url)
             return { ...bookmark, url: url }
         })
-        const deletedBookmark = deletedResp? deletedResp.bookmarks: [...decrypted.slice(0, isMachedIndex), ...decrypted.slice(isMachedIndex + 1, length)]
-        
+        const deletedBookmark = deletedResp ? deletedResp.bookmarks : [...decrypted.slice(0, isMachedIndex), ...decrypted.slice(isMachedIndex + 1, length)]
+
         setFirstPage(deletedBookmark)
         bookmarkSequence(deletedBookmark)
 
         setLocalBookmarkPage(setLocalPagenation(deletedBookmark, 20))
         updateBookmarkView(setLocalPagenation(deletedBookmark, 20)[currentPageNum - 1])
-        
-        updateTotalCount(deletedResp? deletedResp.totalCount : deletedBookmark.length)
-        updatePageCount(deletedResp? deletedResp.totalPage : Math.ceil(deletedBookmark.length/20))
-       
+
+        updateTotalCount(deletedResp ? deletedResp.totalCount : deletedBookmark.length)
+        updatePageCount(deletedResp ? deletedResp.totalPage : Math.ceil(deletedBookmark.length / 20))
+
     }
 
-    //북마크 수정
+    // 북마크 수정
     const editForm = (originBookmark: Bookmark, editContent: Bookmark) => {
-       const decrypytedOrigin = { ...originBookmark, url: secureWrap.decryptWrapper(originBookmark.url) }
+        const decrypytedOrigin = { ...originBookmark, url: secureWrap.decryptWrapper(originBookmark.url) }
         const decrypytedEdit = { ...editContent, url: secureWrap.decryptWrapper(editContent.url) }
         let changeForm: any = {};
 
@@ -542,10 +546,10 @@ export const BookMark = (props: any) => {
                 `/bookmark/${targetBookmarkId}`,
                 { ...editContent }
             )
-            if(!editResult.data.success){
+            if (!editResult.data.success) {
                 throw new Error('북마크 수정에 실패했습니다.')
             }
-        } catch (error:any) {
+        } catch (error: any) {
             updateErrorMessage(error.message)
             useModal.openModal();
         }
@@ -577,7 +581,7 @@ export const BookMark = (props: any) => {
     }
 
     const pagenationNum = async (num: number) => {
-        
+
         if (isLogin) {
             if (currentSearch === CurrentSearch.Bookmark) {
                 const bookmarks = await customAxios.get(`/bookmark?pageNo=${num}`)
@@ -604,13 +608,13 @@ export const BookMark = (props: any) => {
             currentPageRefresh(num)
         }
         else {
-            updateBookmarkView(localBookmarkPage[num-1]) 
+            updateBookmarkView(localBookmarkPage[num - 1])
             setCurrentPageNum(num)
             currentPageRefresh(num)
         }
 
     }
-    
+
     const paginationCount = () => {
         if (isLogin) {
             return pageCount
@@ -620,28 +624,28 @@ export const BookMark = (props: any) => {
 
     const syncBookmark = async () => {
         const localBookmarks = secure().local().getItem('local-bookmark-storage')
-        if(!localBookmarks) {
+        if (!localBookmarks) {
             setLoad(false)
-            return ;
+            return;
         }
-        const dbBookmarkCount = await customAxios.get(`/bookmark/count`) 
+        const dbBookmarkCount = await customAxios.get(`/bookmark/count`)
 
-         if(dbBookmarkCount.data.count <= 0) {
+        if (dbBookmarkCount.data.count <= 0) {
             const localBookmarkArr = bookmarkAdapter("local", localBookmarks);
             const localTagNamesSet = new Set();
-            for(let localBookmark of localBookmarkArr) {
+            for (let localBookmark of localBookmarkArr) {
                 const tags = localBookmark.tags;
-                if(tags.length <= 0) {
+                if (tags.length <= 0) {
                     continue;
                 }
-                for(let tag of tags) {
+                for (let tag of tags) {
                     localTagNamesSet.add(tag.tag)
                 }
             }
             const localTagNamesArr = Array.from(localTagNamesSet)
             const syncBookmarkBody = {
                 bookmarks: localBookmarkArr.map(localBookmark => {
-                    return {...localBookmark, url:secureWrap.decryptWrapper(localBookmark.url)}
+                    return { ...localBookmark, url: secureWrap.decryptWrapper(localBookmark.url) }
                 }),
                 tagNames: localTagNamesArr
             }
@@ -654,7 +658,7 @@ export const BookMark = (props: any) => {
     }
     const startsequence = async () => {
         setLoad(true);
-        if(isLogin){
+        if (isLogin) {
             await syncBookmark();
         }
         await getBookmark(isLogin);
@@ -666,7 +670,7 @@ export const BookMark = (props: any) => {
         }
         startsequence()
     }, [])
-   
+
     const currentPageRefresh = (currentPage: number) => {
 
         window.sessionStorage.removeItem('current-page')
@@ -691,43 +695,48 @@ export const BookMark = (props: any) => {
 
     const MainContent = () => {
         return (
-        <BookmarkContainer id='main-content'>
-            <Helmet>TagMark | TAG-MARK</Helmet>
-            {useModal.isShowModal ? <AlramModalPage useModal={useModal} errorMessage={errorMessage} /> : null}
-            <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
-            <div></div>
-            <BookmarkManageContainer>
-                <ContentBox>
-                <BookmarkManagebuttonContainer>
-                    <div>총 {totalCount}개 북마크</div>
-                    <ManageButtonContainer>
-                        <CommonButton onClick={bookmarkRefresh}>
-                            새로고침
-                        </CommonButton>
-                        <CommonButton onClick={bookmarkCreate}>
-                            북마크생성
-                        </CommonButton>
-                    </ManageButtonContainer>
-                </BookmarkManagebuttonContainer>
-                {useCreate.isShowModal ? <BookmarkCreateBlock useCreate={useCreate} setNewBookmark={setNewBookmark} /> : null}
-                <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
-                <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
-                </ContentBox>
-                <PageMove count={paginationCount()} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
-            </BookmarkManageContainer>
-        </BookmarkContainer>
+            <BookmarkContainer id='main-content'>
+                <Helmet>TagMark | TAG-MARK</Helmet>
+                {useModal.isShowModal ? <AlramModalPage useModal={useModal} errorMessage={errorMessage} /> : null}
+                <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} originBookmarks={originBookmarks} isLogin={props.isLogin} />
+                <div></div>
+                <BookmarkManageContainer>
+                    <ContentBox>
+                        <BookmarkManagebuttonContainer>
+                            {isLogin
+                                ? <div id="bookmark-count">
+                                    <div>총 {totalCount} 북마크</div>
+                                </div>
+                                :<div id="bookmark-count" data-tooltip-content="로그인하시면 북마크를 무제한으로 이용하실 수 있습니다.">
+                                    <div>총 {totalCount}/100개 북마크</div>
+                                    <Tooltip anchorId="bookmark-count" variant="info" />
+                                </div>
+                            }
+                            <ManageButtonContainer>
+                                <CommonButton onClick={bookmarkRefresh}>
+                                    새로고침
+                                </CommonButton>
+                                {!isLogin && totalCount >= 100
+                                ? <DisableCommonButton disabled>
+                                    <div>북마크생성</div>
+                                </DisableCommonButton>
+                                :<CommonButton onClick={bookmarkCreate}>
+                                북마크생성
+                                </CommonButton>
+                                }
+                            </ManageButtonContainer>
+                        </BookmarkManagebuttonContainer>
+                        {useCreate.isShowModal ? <BookmarkCreateBlock useCreate={useCreate} setNewBookmark={setNewBookmark} /> : null}
+                        <TagText>{currentTag[0]?.length > 0 ? <div>{currentTag.join(', ')}</div> : <div>&nbsp;</div>}</TagText>
+                        <Bookmarks bookmarkView={bookmarkView} getTagBookmark={getTagBookmark} onBookmarkDelete={onBookmarkDelete} editSave={editSave} />
+                    </ContentBox>
+                    <PageMove count={paginationCount()} pagenationNum={pagenationNum} currentPageNum={currentPageNum} />
+                </BookmarkManageContainer>
+            </BookmarkContainer>
         )
     }
     return (
-        load ? <Loading/> : <MainContent/>
+        load ? <Loading /> : <MainContent />
     )
 };
 
-export const ErrorModalcontent = (props:any) => {
-    const errorMessage = props.errorMessage;
-    return (
-        <div>
-            {errorMessage}
-        </div>
-    )
-}

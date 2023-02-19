@@ -6,14 +6,12 @@ import BookmarkOptionButtons from "./BookmarkOptionButtons"
 import { BookmarkComponentContainer, BookmarkComponentEditInner, BookmarkComponentInner, BookmarkContent, EditButtonContainer, EditContainer, FocusedBookmarkComponentInner, FocusedUrlContainer, UnFocusedBookmarkComponentInner, UrlContainer } from "./style";
 
 const BookmarkComponent = (props: any) => {
-    const id = props.id
     const secureWrap = secure().wrapper()
     const editSave = props.editSave
     const bookmark = props.bookmark;
     const url = bookmark.url;
     const tags = bookmark.tags ? bookmark.tags : []
 
-    const [focused, setFocused] = useState(false);
     const [editOn, setEditOn] = useState(false);
     const [view, setView] = useState({ url: url, tags: tags })
     const [editInput, setEditInput] = useState({ url: url, tags: tags })
@@ -43,7 +41,6 @@ const BookmarkComponent = (props: any) => {
 
     const editOut = () => {
         setEditOn(false);
-        setFocused(false);
     };
 
     const editHandle = () => {
@@ -134,7 +131,7 @@ const BookmarkComponent = (props: any) => {
         )
     }
     return (
-        <BookmarkComponentContainer id={`bookmark_${bookmark.id}`} onMouseOver={() => setFocused(true)} onMouseOut={() => setFocused(false)}>
+        <BookmarkComponentContainer id={`bookmark_${bookmark.id}`}>
             {editOn ? BookmarkEditContent() : BookmarkComponentContent()}
         </BookmarkComponentContainer>
 

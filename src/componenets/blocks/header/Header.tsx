@@ -11,7 +11,6 @@ import { faUser, faBookmark } from '@fortawesome/free-solid-svg-icons';
 const Header = (props: any) => {
     const reactLocation = useLocation()
     const [isLogin, setIsLogin] = useState(false)
-    const [logoutFocused, setlogoutFocused] = useState(false);
 
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);

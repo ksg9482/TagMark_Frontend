@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { CreateBookmarkData } from "../../../interface/bookmark";
-import { UseModal } from "../../../interface/header";
 import { secure } from "../../../utils/secure";
-import { Login } from "../../pages/auth/login/Login.page";
-import { Signup } from "../../pages/auth/signup/Signup.page";
 import { BlockContainer, BlockContentContainer, ButtonContainer, CreateBookmarkContainer, InputContainer } from "./style";
 
 
