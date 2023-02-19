@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import { CommonButtonContainer } from "./styles"
 
 export const SignUpButtonBlock = (props:any) => {
     const onClose = props.onClose
@@ -10,10 +10,3 @@ export const SignUpButtonBlock = (props:any) => {
         </CommonButtonContainer>
     )
 }
-export const CommonButtonContainer = styled.div`
-    display: grid;
-    justify-items: center;
-    gap: 5px;
-    margin-top: 10px;
-    grid-template-columns: 1fr 1fr;
-`;

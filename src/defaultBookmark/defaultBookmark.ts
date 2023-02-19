@@ -29,12 +29,3 @@ export const defaultBookmark = [
         ]
     }
 ];
-
-/*
-0 포털
-1 네이버 
-2 구글
-3 티스토리
-4 검색
-5 블로그
-*/

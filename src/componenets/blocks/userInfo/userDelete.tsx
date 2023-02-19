@@ -9,7 +9,6 @@ export const DeleteUser = (props: any) => {
     const secureWrap = secure().wrapper();
     const sendDeleteUser = props.sendDeleteUser;
     const userData = props.userData;
-    const propsErrorMessage = props.errorMessage;
     const navigate = useNavigate()
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('')

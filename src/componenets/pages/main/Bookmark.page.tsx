@@ -308,7 +308,7 @@ export const BookMark = (props: any) => {
         setBookmarkView(bookmarks)
     }
 
-    //북마크 읽기
+    // 북마크 읽기
     const getLocalBookmarks = () => {
         const localBookmarks = secure().local().getItem('local-bookmark-storage')!
         const bookmark = bookmarkAdapter("local", localBookmarks);
@@ -417,7 +417,6 @@ export const BookMark = (props: any) => {
     }
     const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
         if(!isLogin && totalCount >= 100){
-            //모달창 안내
             return ;
         }
         const lastId = originBookmarks[0].id
@@ -509,7 +508,7 @@ export const BookMark = (props: any) => {
 
     }
 
-    //북마크 수정
+    // 북마크 수정
     const editForm = (originBookmark: Bookmark, editContent: Bookmark) => {
         const decrypytedOrigin = { ...originBookmark, url: secureWrap.decryptWrapper(originBookmark.url) }
         const decrypytedEdit = { ...editContent, url: secureWrap.decryptWrapper(editContent.url) }
@@ -741,11 +740,3 @@ export const BookMark = (props: any) => {
     )
 };
 
-export const ErrorModalcontent = (props: any) => {
-    const errorMessage = props.errorMessage;
-    return (
-        <div>
-            {errorMessage}
-        </div>
-    )
-}

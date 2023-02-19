@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { CommonButtonContainer, CommonInput, ErrorMessageBlock, LoginContainer } from "./styles";
 interface LoginData {
@@ -7,7 +6,6 @@ interface LoginData {
     password:string
 }
 export const LoginBlock = (props: any) => {
-    const useModal: UseModal = props.useModal;
     const onClose = props.onClose
     const errorMessage = props.errorMessage;
     const updateErrorMessage = props.updateErrorMessage;

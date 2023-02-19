@@ -5,7 +5,6 @@ import { PageButtonsContainer, PageButtonsContent } from "./style";
 export const PageMove = (props: any) => {
     const pagenationNum = props.pagenationNum;
     const [pageFocus, setpageFocus] = useState(1)
-    const bookmarkMax = 20;
     const count = props.count;
     const firstPageNum = 1;
     const onMoveClick = (move: any) => {
