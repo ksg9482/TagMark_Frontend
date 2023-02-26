@@ -125,7 +125,7 @@ export const BookMark = (props: any) => {
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
         }
-        
+
         return andSearch.data
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
@@ -377,8 +377,8 @@ export const BookMark = (props: any) => {
         }
     }
     const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
-        if(!isLogin && totalCount >= 100){
-            return ;
+        if (!isLogin && totalCount >= 100) {
+            return;
         }
         const lastId = originBookmarks[0].id
         const id = lastId + 1;
@@ -664,26 +664,21 @@ export const BookMark = (props: any) => {
                 <BookmarkManageContainer>
                     <ContentBox>
                         <BookmarkManagebuttonContainer>
-                            {isLogin
-                                ? <div id="bookmark-count">
-                                    <div>총 {totalCount} 북마크</div>
-                                </div>
-                                :<div id="bookmark-count" data-tooltip-content="로그인하시면 북마크를 무제한으로 이용하실 수 있습니다.">
-                                    <div>총 {totalCount}/100개 북마크</div>
-                                    <Tooltip anchorId="bookmark-count" variant="info" />
-                                </div>
-                            }
+                            <div></div>
                             <ManageButtonContainer>
                                 <CommonButton onClick={bookmarkRefresh}>
                                     새로고침
                                 </CommonButton>
                                 {!isLogin && totalCount >= 100
-                                ? <DisableCommonButton disabled>
-                                    <div>북마크생성</div>
-                                </DisableCommonButton>
-                                :<CommonButton onClick={bookmarkCreate}>
-                                북마크생성
-                                </CommonButton>
+                                    ? <DisableCommonButton disabled>
+                                        <div id="bookmark-count" data-tooltip-content="로그인하시면 북마크를 무제한으로 이용하실 수 있습니다.">
+                                            <div>북마크생성</div>
+                                            <Tooltip anchorId="bookmark-count" variant="info" />
+                                        </div>
+                                    </DisableCommonButton>
+                                    : <CommonButton onClick={bookmarkCreate}>
+                                        <div>북마크생성</div>
+                                    </CommonButton>
                                 }
                             </ManageButtonContainer>
                         </BookmarkManagebuttonContainer>
