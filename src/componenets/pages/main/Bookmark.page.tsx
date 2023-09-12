@@ -120,7 +120,7 @@ export const BookMark = (props: any) => {
             return tag.replaceAll(' ', '%20')
         })
 
-        const andSearch = await customAxios.get(`/tag/search-and?tags=${blankChange}&pageNo=1`)
+        const andSearch = await customAxios.get(`/bookmark/search-and?tags=${blankChange}&pageNo=1`)
 
         if (andSearch.data.bookmarks.length <= 0) {
             return bookmarkView
@@ -130,7 +130,7 @@ export const BookMark = (props: any) => {
     }
     const getRemoteTagBookmarkSideBar = async (targetTags: string[]) => {
         currentPageRefresh(1)
-        const orSearch = await customAxios.get(`/tag/search-or?tags=${targetTags}&pageNo=1`)
+        const orSearch = await customAxios.get(`/bookmark/search-or?tags=${targetTags}&pageNo=1`)
 
         if (orSearch.data.bookmarks.length <= 0) {
             return bookmarkView
@@ -552,14 +552,14 @@ export const BookMark = (props: any) => {
                 updateBookmarkView(bookmarks.data.bookmarks)
             }
             if (currentSearch === CurrentSearch.TagSearch) {
-                const andSearch = await customAxios.get(`/tag/search-and?tags=${currentTag.join('+')}&pageNo=${num}`)
+                const andSearch = await customAxios.get(`/bookmark/search-and?tags=${currentTag.join('+')}&pageNo=${num}`)
                 setCurrentSearch(CurrentSearch.TagSearch)
                 setOriginBookmarks(andSearch.data.bookmarks);
                 setLocalBookmarkPage(setLocalPagenation(andSearch.data.bookmarks, 20))
                 updateBookmarkView(andSearch.data.bookmarks)
             }
             if (currentSearch === CurrentSearch.SideBarSearch) {
-                const orSearch = await customAxios.get(`/tag/search-or?tags=${currentTag.join('+')}&pageNo=${num}`)
+                const orSearch = await customAxios.get(`/bookmark/search-or?tags=${currentTag.join('+')}&pageNo=${num}`)
                 setCurrentSearch(CurrentSearch.SideBarSearch)
                 setOriginBookmarks(orSearch.data.bookmarks);
                 setLocalBookmarkPage(setLocalPagenation(orSearch.data.bookmarks, 20))
