@@ -489,7 +489,7 @@ export const BookMark = (props: any) => {
         })
 
         if (decrypytedOrigin.url !== decrypytedEdit.url) {
-            changeForm.changeUrl = decrypytedEdit.url
+            changeForm.url = decrypytedEdit.url
         }
         if (addTag.length > 0) {
             changeForm.addTag = addTag.map((tag) => { return tag.tag })
