@@ -344,25 +344,6 @@ export const BookMark = (props: any) => {
     return;
   };
 
-  const bookmarkRefresh = () => {
-    setCurrentSearch(CurrentSearch.Bookmark);
-    setBookmarkView(firstPage);
-
-    setCurrentTag([]);
-    updateOriginPageCount(originPageCount);
-    updateOriginTotalCount(originTotalCount);
-    setCurrentPageNum(1);
-    currentPageRefresh(1);
-    if (isLogin) {
-      updatePageCount(originPageCount);
-      updateTotalCount(originTotalCount);
-    } else {
-      setLocalBookmarkPage(setLocalPagenation(originBookmarks, 20));
-      updatePageCount(Math.ceil(originBookmarks.length / 20));
-      updateTotalCount(originBookmarks.length);
-    }
-  };
-
   const bookmarkCreate = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -743,7 +724,6 @@ export const BookMark = (props: any) => {
             <BookmarkManagebuttonContainer>
               <div></div>
               <ManageButtonContainer>
-                <CommonButton onClick={bookmarkRefresh}>새로고침</CommonButton>
                 {!isLogin && totalCount >= 100 ? (
                   <DisableCommonButton disabled>
                     <div
