@@ -27,9 +27,13 @@ import {
 import { LoadingBar } from "../../blocks/common/loading/loading";
 import { Helmet } from "react-helmet-async";
 import { AlramModalPage } from "../modal/AlramModalPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 export const BookMark = (props: any) => {
-  const isLogin = props.isLogin;
+  const isLogin = useSelector((state: RootState) => {
+    return state.user.islogin
+});
   const secureStorage = secure().local();
   const secureWrap = secure().wrapper();
   const UseModal = () => {

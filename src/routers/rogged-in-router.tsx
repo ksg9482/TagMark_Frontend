@@ -5,11 +5,10 @@ import { UserInfo } from "../componenets/pages/userinfo/UserInfo.page";
 
 
 export const LoggedInRouter = () => {
-    const isLogin = true
     return (
             <Routes>
                 {/* <Route path="/" element={<Login />} /> */}
-                <Route path="/" element={<BookMark isLogin={isLogin} />} />
+                <Route path="/" element={<BookMark/>} />
                 <Route path="/me" element={<UserInfo />} />
             </Routes>
     );

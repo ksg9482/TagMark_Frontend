@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { updateNickname, updateType, updateId, updateEmail, updateBookmarkCount, updateTagCount } from "../../../store/slices/userSlice";
 import { customAxios } from "../../../utils/axios/customAxios";
 import { secure } from "../../../utils/secure";
 import { LoadingBar } from "../../blocks/common/loading/loading";
@@ -8,6 +11,33 @@ import { UserInfoModalPage } from "../modal/UserInfoModalPage";
 import { BookmarkAreaContainer, CommonButton, GraphContainer, MyDataButtonContainer, MyDataContainer, MyInfoContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
 
 export const UserInfo = () => {
+    const dispach = useDispatch();
+    const userInfoHandle = {
+        updateId:(id:string)=>{
+            dispach(updateId(id))
+            return true
+        },
+        updateEmail:(id:string)=>{
+            dispach(updateEmail(id))
+            return id
+        },
+        updateNickname:(nickName:string)=>{
+            dispach(updateNickname(nickName))
+            return nickName
+        },
+        updateType:(type:string)=>{
+            dispach(updateType(type))
+            return type
+        },
+        updateBookmarkCount:(bookmarkCount:number)=>{
+            dispach(updateBookmarkCount(bookmarkCount))
+            return bookmarkCount
+        },
+        updateTagCount:(tagCount:number)=>{
+            dispach(updateTagCount(tagCount))
+            return tagCount
+        },
+    };
     const secureWrap = secure().wrapper()
     const [userInfo, setUserInfo] = useState({ email: '', nickname: '', type: '', bookmarkCount: 0, tagCount: 0 })
     const [tagGraphData, setTagGraphData] = useState([{
@@ -86,7 +116,12 @@ export const UserInfo = () => {
             }
         })
         const user = userInfo.data.user;
-
+        userInfoHandle.updateId(user.id)
+        userInfoHandle.updateEmail(user.email)
+        userInfoHandle.updateNickname(user.nickname)
+        userInfoHandle.updateType(user.type)
+        userInfoHandle.updateBookmarkCount(bookmarkCount.data.count)
+        userInfoHandle.updateTagCount(tagCount.data.tags.length)
         updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
         updateTagGraphData(graphData)
 
@@ -117,6 +152,10 @@ export const UserInfo = () => {
     }, [])
 
     const UserInfoContent = () => {
+        const savedUser = useSelector((state: RootState) => {
+            return state.user
+        });
+        console.log(savedUser)
         return (
             <UserInfoContainer id="user-info">
                 <Helmet>MyPage | TAG-MARK</Helmet>

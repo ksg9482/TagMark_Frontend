@@ -6,6 +6,8 @@ import { secure } from '../../../utils/secure';
 import { CommonButton, CountContainer, SideBarContainer, SideBarInput, SideBarTagComponent, SideBarTagsContainer, SideBarTextContainer, TagNameContainer } from './style';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 const SideBarTagComponenet = (props: any) => {
     const getTagBookmarkSideBar = props.getTagBookmarkSideBar;
@@ -39,7 +41,9 @@ const SideBarTags = (props: any) => {
 }
 
 const SideBar = (props: any) => {
-    const isLogin = props.isLogin
+    const isLogin = useSelector((state: RootState) => {
+        return state.user.islogin
+    });
     const [originBookmarks, setOriginBookmarks] = useState([{ id: 0, url: '', tags: [{ id: 0, name: '' }] }])
     const [tagObj, setTagObj] = useState({
         init: {
