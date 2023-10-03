@@ -24,11 +24,28 @@ const BookmarkComponent = (props: any) => {
         return result.join(', ');
     };
     const tagStrToArr = (tagStr: string) => {
+        /**
+         * (^\\s+): 문자열의 시작부분에 있는 공백문자
+         * 
+         * |: 또는
+         * 
+         * (\\s+(?=\\s)): 문자열 사이에 삽입된 스페이스 바 한 번을 제외한 모든 연속된 공백문자. 전방탐색 ((?=\\s)) 사용
+         * 
+         * (\\s+$): 문자열의 끝부분에 있는 공백문자
+         */
+        const emptyCheckReg = /(^\s+|\s+(?=\s)|\s+$)/g;
+        
         if (Array.isArray(tagStr)) {
             return tagStr
         }
-        tagStr = tagStr.replaceAll(', ', ',')
-        const tagArr = tagStr.split(',').map((tagName) => { return { tag: tagName } })
+        const tagArr = tagStr.split(',')
+        .map((tagName) => { 
+            tagName = tagName.replace(emptyCheckReg, '')
+            return { tag: tagName } 
+        })
+        .filter((tag)=>{
+            return tag.tag.length > 0
+        })
         return tagArr
     };
     const onEditInput = (key: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {

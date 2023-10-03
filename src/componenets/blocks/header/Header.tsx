@@ -5,12 +5,29 @@ import { customAxios } from '../../../utils/axios/customAxios';
 import { ModalPage } from '../../pages';
 import { ButtonContainer, ContentChangeButton, HeaderButtonContainer, HeaderContainer, HeaderContent, LoginButton, LogoutButton } from './style';
 import { faUser, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store";
+import { isLogin } from "../../../store/slices/userSlice";
 
 
-
-const Header = (props: any) => {
+const Header = () => {
     const reactLocation = useLocation()
-    const [isLogin, setIsLogin] = useState(false)
+
+    const login = useSelector((state: RootState) => {
+        return state.user.islogin
+    });
+
+    const dispach = useDispatch();
+    const loginHandle = {
+            login:()=>{
+                dispach(isLogin(true))
+                return true
+            },
+            logout:() =>{
+                dispach(isLogin(false))
+                return false
+            }
+    }
 
     const UseModal = () => {
         const [isShowModal, setIsShowModal] = useState(false);
@@ -70,6 +87,7 @@ const Header = (props: any) => {
         deleteLocalUserData()
         localStorage.removeItem('accessToken')
         await sendLogout()
+        loginHandle.logout()
         // eslint-disable-next-line no-restricted-globals
         location.reload()
     }
@@ -121,11 +139,11 @@ const Header = (props: any) => {
         useModal.openModal();
     };
 
-    useEffect(() => {
-        setIsLogin(props.isLogin)
-    }, []);
+    // useEffect(() => {
+    //     setIsLogin(props.isLogin)
+    // }, []);
 
-    return isLogin ? loginedHeader() : unLoginHeader()
+    return login ? loginedHeader() : unLoginHeader()
 };
 
 

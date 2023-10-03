@@ -6,10 +6,9 @@ import { UserInfo } from "../componenets/pages/userinfo/UserInfo.page";
 
 export const LoggedOutRouter = (props: any) => {
   const { oauthLoginIsTrue } = props;
-  const isLogin = false;
   return (
     <Routes>
-      <Route path="/" element={<BookMark isLogin={isLogin} />} />
+      <Route path="/" element={<BookMark/>} />
       <Route path="/signup" element={<Signup />} />
       <Route
         path="/oauth/callback/*"

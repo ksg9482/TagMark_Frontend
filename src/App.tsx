@@ -5,6 +5,8 @@ import Header from './componenets/blocks/header/Header';
 import styled from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useDispatch } from "react-redux";
+import { isLogin } from "./store/slices/userSlice";
 const getJwtToken = () => {
   if (localStorage.getItem('accessToken') === 'undefined') {
     return false;
@@ -15,16 +17,22 @@ const getJwtToken = () => {
 const isLoggedIn = getJwtToken();
 
 function App() {
-  const [logined, setLogined] = useState(false);
+  const dispach = useDispatch();
+  const userLogin = (bool:boolean) => {
+    dispach(isLogin(bool))
+    return bool
+  }
+
+  userLogin(isLoggedIn)
 
   return (
     <AppContainer className="App">
       <Helmet>TagMark</Helmet>
       <Router>
-        <Header isLogin={isLoggedIn} />
+        <Header/>
       <MainContainer>
         <div></div>
-        {AppRouter(isLoggedIn)}
+        {AppRouter()}
         <div></div>
       </MainContainer>
       </Router>
