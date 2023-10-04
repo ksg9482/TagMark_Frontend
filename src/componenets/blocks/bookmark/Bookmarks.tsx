@@ -1,9 +1,13 @@
+import { useSelector } from "react-redux";
 import { Bookmark } from "../../../interface/bookmark";
+import { RootState } from "../../../store";
 import BookmarkComponent from "./BookmarkComponent";
 import { BookmarksContainer } from "./style";
 
 const Bookmarks = (props: any) => {
-  const bookmarkView: Bookmark[] = props.bookmarkView;
+  const bookmarkView = useSelector((state: RootState) => {
+    return state.bookmark.bookmarkView;
+  });
   return (
     <BookmarksContainer id="bookmarks">
       {bookmarkView.map((bookmark: Bookmark) => (

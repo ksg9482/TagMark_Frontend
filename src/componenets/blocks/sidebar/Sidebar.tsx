@@ -44,7 +44,9 @@ const SideBar = (props: any) => {
     const isLogin = useSelector((state: RootState) => {
         return state.user.islogin
     });
-    const [originBookmarks, setOriginBookmarks] = useState([{ id: 0, url: '', tags: [{ id: 0, name: '' }] }])
+    const originBookmarks = useSelector((state: RootState) => {
+        return state.bookmark.originBookmarks;
+      });
     const [tagObj, setTagObj] = useState({
         init: {
             id: 0,
@@ -67,9 +69,9 @@ const SideBar = (props: any) => {
     };
     /**
      * @returns {
-     *  tagName:{
-     *      id: number,
-     *      name: string,
+     *  tag:{
+     *      id: string,
+     *      tag: string,
      *      count: number
      *  }}
      */
@@ -105,7 +107,7 @@ const SideBar = (props: any) => {
         else {
             const tagData = await sendGetTagCount()
             const tempForm = tagData.data.tags.map((tag: any) => {
-                return { ...tag, name: tag.tag }
+                return { ...tag, tag: tag.tag }
             })
             setTagObj(tempForm);
             return setTagWithCounts(tempForm)
@@ -149,9 +151,9 @@ const SideBar = (props: any) => {
     useEffect(() => {
         getTags(isLogin)
     }, [originBookmarks])
-    useEffect(() => {
-        setOriginBookmarks(props.originBookmarks)
-    })
+    // useEffect(() => {
+    //     setOriginBookmarks(originBookmarks)
+    // })
     return (
         <SideBarContainer>
             <SideBarTextContainer>

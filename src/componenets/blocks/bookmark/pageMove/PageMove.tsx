@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store";
 import { PageNums } from "./PageNums";
 import { PageButtonsContainer, PageButtonsContent } from "./style";
 
 export const PageMove = (props: any) => {
     const pagenationNum = props.pagenationNum;
+    const currentPageNum = useSelector((state: RootState) => {
+        return state.current.currentPageNum;
+      });
     const [pageFocus, setpageFocus] = useState(1)
     const count = props.count;
     const firstPageNum = 1;
@@ -19,7 +24,7 @@ export const PageMove = (props: any) => {
         onMoveClick(move)
     };
     useEffect(() => {
-        setpageFocus(props.currentPageNum)
+        setpageFocus(currentPageNum)
     })
     return (
         <PageButtonsContainer id="move-button">
