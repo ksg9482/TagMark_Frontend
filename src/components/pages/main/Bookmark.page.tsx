@@ -51,37 +51,37 @@ export const BookMark = (props: any) => {
   const isLogin = useSelector((state: RootState) => {
     return state.user.islogin
   });
-  const newOriginBookmarks = useSelector((state: RootState) => {
+  const originBookmarks = useSelector((state: RootState) => {
     return state.bookmark.originBookmarks;
   });
-  const newOriginPageCount = useSelector((state: RootState) => {
+  const originPageCount = useSelector((state: RootState) => {
     return state.bookmark.originPageCount;
   });
-  const newOriginTotalCount = useSelector((state: RootState) => {
+  const originTotalCount = useSelector((state: RootState) => {
     return state.bookmark.originTotalCount;
   });
-  const newPageCount = useSelector((state: RootState) => {
+  const pageCount = useSelector((state: RootState) => {
     return state.bookmark.pageCount;
   });
-  const newTotalCount = useSelector((state: RootState) => {
+  const totalCount = useSelector((state: RootState) => {
     return state.bookmark.totalCount;
   });
-  const newCurrentPageNum = useSelector((state: RootState) => {
+  const currentPageNum = useSelector((state: RootState) => {
     return state.current.currentPageNum;
   });
-  const newCurrentTag = useSelector((state: RootState) => {
+  const currentTag = useSelector((state: RootState) => {
     return state.current.currentTag;
   });
-  const newCurrentSearch = useSelector((state: RootState) => {
+  const currentSearch = useSelector((state: RootState) => {
     return state.current.currentSearch;
   });
-  const newBookmarkView = useSelector((state: RootState) => {
+  const bookmarkView = useSelector((state: RootState) => {
     return state.bookmark.bookmarkView;
   });
-  const newFirshPage = useSelector((state: RootState) => {
+  const firstPage = useSelector((state: RootState) => {
     return state.bookmark.firstPage;
   });
-  const newLocalBookmarkPage = useSelector((state: RootState) => {
+  const localBookmarkPage = useSelector((state: RootState) => {
     return state.bookmark.localBookmarkPage;
   });
   const originBookmarkHandle = {
@@ -198,25 +198,23 @@ export const BookMark = (props: any) => {
   };
 
   const updateCurrentTag = (targetTag: any) => {
-    if (newCurrentTag.includes(targetTag)) {
+    if (currentTag.includes(targetTag)) {
       return;
     }
-    if (!newCurrentTag[0]) {
+    if (!currentTag[0]) {
       currentHandle.newUpdateCurrentTag([targetTag]);
     } else {
-      currentHandle.newUpdateCurrentTag([...newCurrentTag, targetTag]);
+      currentHandle.newUpdateCurrentTag([...currentTag, targetTag]);
     }
   };
-  const updateCurrentTagSideBar = (targetTag: any) => {
-    currentHandle.newUpdateCurrentTag([targetTag]);
-  };
+
   const getRemoteTagBookmark = async (targetTags: string[]) => {
     currentPageRefresh(1);
-    const prevTag: any[] = newCurrentTag;
-    if (newCurrentTag[0] !== "" && !newCurrentTag.includes(targetTags[0])) {
+    const prevTag: any[] = currentTag;
+    if (currentTag[0] !== "" && !currentTag.includes(targetTags[0])) {
       targetTags.push(...prevTag);
     }
-    if (newCurrentTag.includes(targetTags[0])) {
+    if (currentTag.includes(targetTags[0])) {
       targetTags = prevTag;
     }
 
@@ -229,7 +227,7 @@ export const BookMark = (props: any) => {
     );
 
     if (andSearch.data.bookmarks.length <= 0) {
-      return newBookmarkView;
+      return bookmarkView;
     }
 
     return andSearch.data;
@@ -241,14 +239,14 @@ export const BookMark = (props: any) => {
     );
 
     if (orSearch.data.bookmarks.length <= 0) {
-      return newBookmarkView;
+      return bookmarkView;
     }
 
     return orSearch.data;
   };
   const getTagBookmark = async (targetTags: string[], findType: FindType) => {
     currentPageRefresh(1);
-    if (!newCurrentTag.includes(targetTags[0])) {
+    if (!currentTag.includes(targetTags[0])) {
       updateCurrentTag(targetTags.join());
     }
 
@@ -260,15 +258,15 @@ export const BookMark = (props: any) => {
       bookmarkHandle.updateTotalCount(result.totalCount);
       bookmarkHandle.updatePageCount(result.totalPage);
     } else {
-      const prevTag: any[] = newCurrentTag;
-      if (newCurrentTag[0] !== "" && !newCurrentTag.includes(targetTags[0])) {
+      const prevTag: any[] = currentTag;
+      if (currentTag[0] !== "" && !currentTag.includes(targetTags[0])) {
         targetTags.push(...prevTag);
       }
-      if (newCurrentTag.includes(targetTags[0])) {
+      if (currentTag.includes(targetTags[0])) {
         targetTags = prevTag;
       }
 
-      const bookmarkArr: Bookmark[] = findType === "origin" ? newOriginBookmarks : newBookmarkView;
+      const bookmarkArr: Bookmark[] = findType === "origin" ? originBookmarks : bookmarkView;
 
       const prevBookmark = bookmarkArr.map((bookmark) => {
         const tags = bookmark.tags ? bookmark.tags : [];
@@ -308,7 +306,7 @@ export const BookMark = (props: any) => {
       bookmarkHandle.updatePageCount(result.totalPage);
     } else {
       const bookmarkArr: Bookmark[] =
-        findType === "origin" ? newOriginBookmarks : newBookmarkView;
+        findType === "origin" ? originBookmarks : bookmarkView;
       const tempBookmark = bookmarkArr.map((bookmark) => {
         const tags = bookmark.tags ? bookmark.tags : [];
         return { ...bookmark, tags: tags };
@@ -324,10 +322,10 @@ export const BookMark = (props: any) => {
       bookmarkHandle.updatePageCount(Math.ceil(bookmarkFilter.length / 20));
     }
     currentHandle.updateCurrentSearch(CurrentSearch.SideBarSearch);
-    updateCurrentTagSideBar(targetTags.join());
+    currentHandle.newUpdateCurrentTag([targetTags.join()]);
 
     bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(searched, 20));
-    createBookmarkView(setLocalPagenation(searched, 20), newCurrentPageNum - 1);
+    createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1);
     bookmarkHandle.updateBookmarkView(searched);
     currentHandle.updateCurrentPageNum(1);
   };
@@ -394,7 +392,7 @@ export const BookMark = (props: any) => {
       `/bookmark?pageNo=${currentPageCount}`
     );
     if (bookmarkResponse.data.bookmarks.length <= 0) {
-      return newBookmarkView;
+      return bookmarkView;
     }
 
     updateOriginPageCount(bookmarkResponse.data.totalPage);
@@ -416,26 +414,26 @@ export const BookMark = (props: any) => {
 
     originBookmarkHandle.updateOriginBookmarks(bookmark);
     bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(bookmark, 20));
-    createBookmarkView(setLocalPagenation(bookmark, 20), newCurrentPageNum - 1);
+    createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1);
     return;
   };
 
   const bookmarkRefresh = () => {
     currentHandle.updateCurrentSearch(CurrentSearch.Bookmark);
-    bookmarkHandle.updateBookmarkView(newFirshPage);
+    bookmarkHandle.updateBookmarkView(firstPage);
 
     currentHandle.newUpdateCurrentTag([]);
-    originBookmarkHandle.updateOriginPageCount(newOriginPageCount)
-    originBookmarkHandle.updateOriginTotalCount(newOriginTotalCount)
+    originBookmarkHandle.updateOriginPageCount(originPageCount)
+    originBookmarkHandle.updateOriginTotalCount(originTotalCount)
     currentHandle.updateCurrentPageNum(1);
     currentPageRefresh(1);
     if (isLogin) {
-      bookmarkHandle.updatePageCount(newOriginPageCount);
-      bookmarkHandle.updateTotalCount(newOriginTotalCount);
+      bookmarkHandle.updatePageCount(originPageCount);
+      bookmarkHandle.updateTotalCount(originTotalCount);
     } else {
-      bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(newOriginBookmarks, 20));
-      bookmarkHandle.updatePageCount(Math.ceil(newOriginBookmarks.length / 20));
-      bookmarkHandle.updateTotalCount(newOriginBookmarks.length);
+      bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(originBookmarks, 20));
+      bookmarkHandle.updatePageCount(Math.ceil(originBookmarks.length / 20));
+      bookmarkHandle.updateTotalCount(originBookmarks.length);
     }
   };
 
@@ -479,10 +477,10 @@ export const BookMark = (props: any) => {
     }
   };
   const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
-    if (!isLogin && newTotalCount >= 100) {
+    if (!isLogin && totalCount >= 100) {
       return;
     }
-    const lastId = newOriginBookmarks[0]?.id || 1;
+    const lastId = originBookmarks[0]?.id || 1;
     const id = lastId + 1;
     const url = createBookmarkData.url;
     const tags = createBookmarkData.tagNames.map((tagName, i) => {
@@ -492,12 +490,12 @@ export const BookMark = (props: any) => {
     if (isLogin) {
       await sendCreateBookmark({ url, tagNames: createBookmarkData.tagNames });
       const bookmarkResponse = await customAxios.get(
-        `/bookmark?pageNo=${newCurrentPageNum}`
+        `/bookmark?pageNo=${currentPageNum}`
       );
       createdResp = bookmarkResponse.data;
     }
     let newBookmarkArr: Bookmark[] = [{ id, url, tags }];
-    const decrypted = newOriginBookmarks.map((bookmark) => {
+    const decrypted = originBookmarks.map((bookmark) => {
       const url = secureWrap.decryptWrapper(bookmark.url);
       return { ...bookmark, url: url };
     });
@@ -516,7 +514,7 @@ export const BookMark = (props: any) => {
 
     createBookmarkView(
       setLocalPagenation(encryptedArr, 20),
-      newCurrentPageNum - 1
+      currentPageNum - 1
     );
     bookmarkHandle.updateTotalCount(
       createdResp ? createdResp.totalCount : newBookmarkArr.length
@@ -533,10 +531,10 @@ export const BookMark = (props: any) => {
   const getMachedIndex = (targetBookmarkId: any) => {
     let isMachedIndex: any;
     const targetId = Number(targetBookmarkId);
-    const length = newOriginBookmarks.length;
+    const length = originBookmarks.length;
 
     for (let i = 0; i < length; i++) {
-      if (newOriginBookmarks[i].id === targetId) {
+      if (originBookmarks[i].id === targetId) {
         isMachedIndex = i;
         break;
       }
@@ -561,13 +559,13 @@ export const BookMark = (props: any) => {
     if (isLogin) {
       await sendDeleteBookmark(targetBookmarkId);
       const bookmarkResponse = await customAxios.get(
-        `/bookmark?pageNo=${newCurrentPageNum}`
+        `/bookmark?pageNo=${currentPageNum}`
       );
       deletedResp = bookmarkResponse.data;
     }
-    const length = newOriginBookmarks.length;
+    const length = originBookmarks.length;
     const isMachedIndex = getMachedIndex(targetBookmarkId);
-    const decrypted = newOriginBookmarks.map((bookmark) => {
+    const decrypted = originBookmarks.map((bookmark) => {
       const url = secureWrap.decryptWrapper(bookmark.url);
       return { ...bookmark, url: url };
     });
@@ -583,7 +581,7 @@ export const BookMark = (props: any) => {
 
     bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(deletedBookmark, 20));
     bookmarkHandle.updateBookmarkView(
-      setLocalPagenation(deletedBookmark, 20)[newCurrentPageNum - 1]
+      setLocalPagenation(deletedBookmark, 20)[currentPageNum - 1]
     );
 
     bookmarkHandle.updateTotalCount(
@@ -663,9 +661,9 @@ export const BookMark = (props: any) => {
       const editFrom = editForm(originBookmark, editContent);
       sendEditBookmark(targetBookmarkId, editFrom);
     }
-    const length = newOriginBookmarks.length;
+    const length = originBookmarks.length;
     const isMachedIndex = getMachedIndex(targetBookmarkId);
-    const decrypted = newOriginBookmarks.map((bookmark) => {
+    const decrypted = originBookmarks.map((bookmark) => {
       return { ...bookmark, url: secureWrap.decryptWrapper(bookmark.url) };
     });
 
@@ -684,31 +682,31 @@ export const BookMark = (props: any) => {
     bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(encryptedArr, 20));
     createBookmarkView(
       setLocalPagenation(encryptedArr, 20),
-      newCurrentPageNum - 1
+      currentPageNum - 1
     );
   };
 
   const pagenationNum = async (num: number) => {
     if (isLogin) {
-      if (newCurrentSearch === CurrentSearch.Bookmark) {
+      if (currentSearch === CurrentSearch.Bookmark) {
         const bookmarks = await customAxios.get(`/bookmark?pageNo=${num}`);
         currentHandle.updateCurrentSearch(CurrentSearch.Bookmark);
         originBookmarkHandle.updateOriginBookmarks(bookmarks.data.bookmarks);
         bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(bookmarks.data.bookmarks, 20));
         bookmarkHandle.updateBookmarkView(bookmarks.data.bookmarks);
       }
-      if (newCurrentSearch === CurrentSearch.TagSearch) {
+      if (currentSearch === CurrentSearch.TagSearch) {
         const andSearch = await customAxios.get(
-          `/bookmark/search-and?tags=${newCurrentTag.join("+")}&pageNo=${num}`
+          `/bookmark/search-and?tags=${currentTag.join("+")}&pageNo=${num}`
         );
         currentHandle.updateCurrentSearch(CurrentSearch.TagSearch);
         originBookmarkHandle.updateOriginBookmarks(andSearch.data.bookmarks);
         bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(andSearch.data.bookmarks, 20));
         bookmarkHandle.updateBookmarkView(andSearch.data.bookmarks);
       }
-      if (newCurrentSearch === CurrentSearch.SideBarSearch) {
+      if (currentSearch === CurrentSearch.SideBarSearch) {
         const orSearch = await customAxios.get(
-          `/bookmark/search-or?tags=${newCurrentTag.join("+")}&pageNo=${num}`
+          `/bookmark/search-or?tags=${currentTag.join("+")}&pageNo=${num}`
         );
         currentHandle.updateCurrentSearch(CurrentSearch.SideBarSearch);
         originBookmarkHandle.updateOriginBookmarks(orSearch.data.bookmarks);
@@ -718,7 +716,7 @@ export const BookMark = (props: any) => {
       currentHandle.updateCurrentPageNum(num);
       currentPageRefresh(num);
     } else {
-      bookmarkHandle.updateBookmarkView(newLocalBookmarkPage[num - 1]);
+      bookmarkHandle.updateBookmarkView(localBookmarkPage[num - 1]);
       currentHandle.updateCurrentPageNum(num);
       currentPageRefresh(num);
     }
@@ -726,9 +724,9 @@ export const BookMark = (props: any) => {
 
   const paginationCount = () => {
     if (isLogin) {
-      return newPageCount;
+      return pageCount;
     }
-    return newLocalBookmarkPage.length;
+    return localBookmarkPage.length;
   };
 
   const syncBookmark = async () => {
@@ -793,7 +791,7 @@ export const BookMark = (props: any) => {
     if (isPage) {
       currentHandle.updateCurrentPageNum(isPage);
     } else {
-      window.sessionStorage.setItem("current-page", String(newCurrentPageNum));
+      window.sessionStorage.setItem("current-page", String(currentPageNum));
     }
   }, []);
 
@@ -818,7 +816,7 @@ export const BookMark = (props: any) => {
               <div></div>
               <ManageButtonContainer>
                 <CommonButton onClick={bookmarkRefresh}>초기화</CommonButton>
-                {!isLogin && newTotalCount >= 100 ? (
+                {!isLogin && totalCount >= 100 ? (
                   <DisableCommonButton disabled>
                     <div
                       id="bookmark-count"
@@ -842,8 +840,8 @@ export const BookMark = (props: any) => {
               />
             ) : null}
             <TagText>
-              {newCurrentTag[0]?.length > 0 ? (
-                <div>{newCurrentTag.join(", ")}</div>
+              {currentTag[0]?.length > 0 ? (
+                <div>{currentTag.join(", ")}</div>
               ) : (
                 <div>&nbsp;</div>
               )}

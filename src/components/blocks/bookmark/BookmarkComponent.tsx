@@ -105,19 +105,19 @@ const BookmarkComponent = (props: any) => {
 
 
     const BookmarkComponentContent = () => {
-        const a = secureWrap.decryptWrapper(view.url)
+        const decrypted = secureWrap.decryptWrapper(view.url)
         const tagLength = view.tags?.length
 
 
         return (
             <BookmarkComponentInner id="bookmark-component-inner">
                 <UnFocusedBookmarkComponentInner id="un-focused" className="un-focused">
-                    <UrlContainer>{decodeURI(a)}</UrlContainer>
+                    <UrlContainer>{decodeURI(decrypted)}</UrlContainer>
                     {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                 </UnFocusedBookmarkComponentInner>
                 <FocusedBookmarkComponentInner id="focused" className="focused">
                     <BookmarkContent>
-                        <FocusedUrlContainer href={a} target='_blank'>{decodeURI(a)}</FocusedUrlContainer>
+                        <FocusedUrlContainer href={decrypted} target='_blank'>{decodeURI(decrypted)}</FocusedUrlContainer>
                         {tagLength >= 0 ? <Tags tags={view.tags} getTagBookmark={props.getTagBookmark} /> : <div>&nbsp;</div>}
                     </BookmarkContent>
                     <BookmarkOptionButtons bookmark={bookmark} onBookmarkDelete={props.onBookmarkDelete} editFocus={editFocus} />

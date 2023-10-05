@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { BookMark } from "../componenets/pages";
-import { UserInfo } from "../componenets/pages/userinfo/UserInfo.page";
+import { BookMark } from "../components/pages";
+import { UserInfo } from "../components/pages/userinfo/UserInfo.page";
 
 
 export const LoggedInRouter = () => {
