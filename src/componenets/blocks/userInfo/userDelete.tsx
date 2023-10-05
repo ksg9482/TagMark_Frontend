@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { UseModal } from "../../../interface/header";
+import { RootState } from "../../../store";
 import { secure } from "../../../utils/secure";
 import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, ModalText, ModalTitle, TextContainer, UserDeleteContainer } from "./style";
 
@@ -8,7 +10,16 @@ export const DeleteUser = (props: any) => {
     const useModal: UseModal = props.useModal;
     const secureWrap = secure().wrapper();
     const sendDeleteUser = props.sendDeleteUser;
-    const userData = props.userData;
+    // const userData = props.userData;
+    const userData = useSelector((state: RootState) => {
+        return {
+            email:state.user.email,
+            nickname:state.user.nickname,
+            type:state.user.type,
+            bookmarkCount:state.user.bookmarkCount,
+            tagCount:state.user.tagCount,
+        };
+    });
     const navigate = useNavigate()
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('')
