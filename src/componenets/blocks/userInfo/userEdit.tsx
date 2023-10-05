@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { UseModal } from "../../../interface/header";
+import { RootState } from "../../../store";
 import { secure } from "../../../utils/secure";
 import { CommonButton, CommonButtonContainer, CommonInput, ContentBody, ContentTop, ErrorMessageBlock, InputContainer, ModalTitle, UserEditContainer } from "./style";
 
@@ -8,7 +10,16 @@ type EditKey = 'nickName' | 'password' | 'passwordCheck';
 export const EditUserInfo = (props: any) => {
     const useModal: UseModal = props.useModal;
     const propsErrorMessage = props.errorMessage;
-    const userData = props.userData;
+    // const userData = props.userData;
+    const userData = useSelector((state: RootState) => {
+        return {
+            email:state.user.email,
+            nickname:state.user.nickname,
+            type:state.user.type,
+            bookmarkCount:state.user.bookmarkCount,
+            tagCount:state.user.tagCount,
+        };
+    });
     const secureWrap = secure().wrapper()
     const sendEditUserData = props.sendEditUserData
     const [editInput, setEditInput] = useState({ nickName: secureWrap.encryptWrapper(userData.nickname), password: '', passwordCheck: '' })

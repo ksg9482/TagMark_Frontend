@@ -4,7 +4,7 @@ type InitialState = {
   id: string;
   islogin:boolean;
   email:string;
-  nickName:string;
+  nickname:string;
   type: string;
   bookmarkCount: number; 
   tagCount: number; 
@@ -14,7 +14,7 @@ const initialState: InitialState = {
   id: '0',
   islogin:false,
   email:'',
-  nickName:'',
+  nickname:'',
   type: 'BASIC',
   bookmarkCount: 0,
   tagCount: 0,
@@ -33,7 +33,7 @@ const userSlice = createSlice({
       state.email = action.payload;
     },
     updateNickname: (state, action)=>{
-      state.nickName = action.payload;
+      state.nickname = action.payload;
     },
     updateType: (state, action)=>{
       state.type = action.payload;

@@ -269,8 +269,7 @@ export const BookMark = (props: any) => {
       }
 
       const bookmarkArr: Bookmark[] = findType === "origin" ? newOriginBookmarks : newBookmarkView;
-      console.log(newOriginBookmarks)
-      console.log(newBookmarkView)
+
       const prevBookmark = bookmarkArr.map((bookmark) => {
         const tags = bookmark.tags ? bookmark.tags : [];
         return { ...bookmark, tags: tags };
@@ -434,7 +433,6 @@ export const BookMark = (props: any) => {
       bookmarkHandle.updatePageCount(newOriginPageCount);
       bookmarkHandle.updateTotalCount(newOriginTotalCount);
     } else {
-      console.log(newOriginBookmarks)
       bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(newOriginBookmarks, 20));
       bookmarkHandle.updatePageCount(Math.ceil(newOriginBookmarks.length / 20));
       bookmarkHandle.updateTotalCount(newOriginBookmarks.length);

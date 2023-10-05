@@ -10,20 +10,36 @@ import { MyResponsivePie } from "../../blocks/userInfo/tagGraph";
 import { UserInfoModalPage } from "../modal/UserInfoModalPage";
 import { BookmarkAreaContainer, CommonButton, GraphContainer, MyDataButtonContainer, MyDataContainer, MyInfoContainer, SubContainer, TagAreaContainer, UserInfoContainer } from "./style";
 
+interface UserInfo {
+    email: string;
+    nickname: string;
+    type: string;
+    bookmarkCount: number;
+    tagCount: number;
+}
 export const UserInfo = () => {
     const dispach = useDispatch();
+    const newUserInfo = useSelector((state: RootState) => {
+        return {
+            email:state.user.email,
+            nickname:state.user.nickname,
+            type:state.user.type,
+            bookmarkCount:state.user.bookmarkCount,
+            tagCount:state.user.tagCount,
+        };
+    });
     const userInfoHandle = {
         updateId:(id:string)=>{
             dispach(updateId(id))
             return true
         },
-        updateEmail:(id:string)=>{
-            dispach(updateEmail(id))
-            return id
+        updateEmail:(email:string)=>{
+            dispach(updateEmail(email))
+            return email
         },
-        updateNickname:(nickName:string)=>{
-            dispach(updateNickname(nickName))
-            return nickName
+        updateNickname:(nickname:string)=>{
+            dispach(updateNickname(nickname))
+            return nickname
         },
         updateType:(type:string)=>{
             dispach(updateType(type))
@@ -37,9 +53,17 @@ export const UserInfo = () => {
             dispach(updateTagCount(tagCount))
             return tagCount
         },
+        updateUserInfo:(userInfo:UserInfo)=>{
+            const {email, nickname, type, bookmarkCount, tagCount} = userInfo;
+            dispach(updateEmail(email))
+            dispach(updateNickname(nickname))
+            dispach(updateType(type))
+            dispach(updateBookmarkCount(bookmarkCount))
+            dispach(updateTagCount(tagCount))
+            return tagCount
+        },
     };
     const secureWrap = secure().wrapper()
-    const [userInfo, setUserInfo] = useState({ email: '', nickname: '', type: '', bookmarkCount: 0, tagCount: 0 })
     const [tagGraphData, setTagGraphData] = useState([{
         id: '없음',
         label: '없음',
@@ -72,7 +96,7 @@ export const UserInfo = () => {
         const [contentKey, setContentKey] = useState('edit')
     
         const modalPage = () => {
-            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} userData={userInfo} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage} />
+            return <UserInfoModalPage useModal={useModal} contentKey={contentKey} sendEditUserData={sendEditUserData} sendDeleteUser={sendDeleteUser} errorMessage={errorMessage} />
         }
         const openModal = (key: 'edit' | 'delete') => {
             setContentKey(key)
@@ -84,9 +108,7 @@ export const UserInfo = () => {
         }
     }
     const modalHandle = ModalHandle()
-    const updateUserInfo = (userInfo: any) => {
-        setUserInfo(userInfo)
-    }
+
     const sendGetUserInfo = async () => {
         return await customAxios.get(`/user`)
     }
@@ -105,9 +127,15 @@ export const UserInfo = () => {
     };
     const getUserInfo = async () => {
         setLoad(true);
-        const userInfo = await sendGetUserInfo();
-        const bookmarkCount = await sendGetBookmarkCount()
-        const tagCount = await sendGetTagCount()
+        console.time('before')
+        let userInfo = await sendGetUserInfo();
+        let bookmarkCount = await sendGetBookmarkCount()
+        let tagCount = await sendGetTagCount()
+        console.timeEnd('before')
+        console.time('after')
+        await Promise.all([sendGetUserInfo(), sendGetBookmarkCount(), sendGetTagCount()])
+        console.timeEnd('after')
+
         const graphData = tagCount.data.tags.map((tag: any) => {
             return {
                 id: tag.tag,
@@ -116,13 +144,8 @@ export const UserInfo = () => {
             }
         })
         const user = userInfo.data.user;
-        userInfoHandle.updateId(user.id)
-        userInfoHandle.updateEmail(user.email)
-        userInfoHandle.updateNickname(user.nickname)
-        userInfoHandle.updateType(user.type)
-        userInfoHandle.updateBookmarkCount(bookmarkCount.data.count)
-        userInfoHandle.updateTagCount(tagCount.data.tags.length)
-        updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
+
+        userInfoHandle.updateUserInfo({ email: user.email, nickname: user.nickname, type: user.type, bookmarkCount: bookmarkCount.data.count, tagCount: tagCount.data.tags.length })
         updateTagGraphData(graphData)
 
         setLoad(false);
@@ -130,7 +153,8 @@ export const UserInfo = () => {
     const sendEditUserData = async (editUser: any) => {
         try {
             await customAxios.patch(`/user`, editUser)
-            setUserInfo((oldUserInfo) => { return { ...oldUserInfo, nickname: secureWrap.decryptWrapper(editUser.nickname) } })
+            userInfoHandle.updateUserInfo({ ...newUserInfo, nickname: secureWrap.decryptWrapper(editUser.nickname) })
+            // setUserInfo((oldUserInfo) => { return { ...oldUserInfo, nickname: secureWrap.decryptWrapper(editUser.nickname) } })
         } catch (error) {
             updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
         }
@@ -140,7 +164,7 @@ export const UserInfo = () => {
         return result.data.valid
     }
     const sendDeleteUser = async (password: string) => {
-        if (!await deletePasswordCheck(password) && userInfo.type === 'BASIC') {
+        if (!await deletePasswordCheck(password) && newUserInfo.type === 'BASIC') {
             updateErrorMessage('비밀번호가 다릅니다.')
             return { error: '비밀번호가 다릅니다.' }
         }
@@ -150,32 +174,27 @@ export const UserInfo = () => {
     useEffect(() => {
         getUserInfo()
     }, [])
-
     const UserInfoContent = () => {
-        const savedUser = useSelector((state: RootState) => {
-            return state.user
-        });
-        console.log(savedUser)
         return (
             <UserInfoContainer id="user-info">
                 <Helmet>MyPage | TAG-MARK</Helmet>
                 {useModal.isShowModal ? modalHandle.modalPage() : null}
                 <BookmarkAreaContainer className="bookmark-area">
-                    <div>총 북마크 개수 : {userInfo.bookmarkCount} </div>
+                    <div>총 북마크 개수 : {newUserInfo.bookmarkCount} </div>
                 </BookmarkAreaContainer>
                 <SubContainer id="sub-container">
                     <TagAreaContainer className="tag-area">
-                        <div>총 태그 개수 : {userInfo.tagCount}</div>
+                        <div>총 태그 개수 : {newUserInfo.tagCount}</div>
                         <GraphContainer className="graph_con">{MyResponsivePie(tagGraphData)}</GraphContainer>
                     </TagAreaContainer>
                     <MyDataContainer className="userinfo-area">
                         <div>내 정보</div>
                         <MyInfoContainer>
                             <div className="email-info">
-                                <div>이메일 : {userInfo.email}</div>
-                                {userInfo.type !== 'BASIC' ? <div>소셜로그인입니다</div> : <div>&nbsp;</div>}
+                                <div>이메일 : {newUserInfo.email}</div>
+                                {newUserInfo.type !== 'BASIC' ? <div>소셜로그인입니다</div> : <div>&nbsp;</div>}
                             </div>
-                            <div>닉네임 : {userInfo.nickname}</div>
+                            <div>닉네임 : {newUserInfo.nickname}</div>
                         </MyInfoContainer>
                         <MyDataButtonContainer>
                             <CommonButton className="edit-button" onClick={e => modalHandle.openModal('edit')}>정보변경 </CommonButton>
