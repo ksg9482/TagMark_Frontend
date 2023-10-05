@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AppRouter from "./routers/router";
 import './App.css';
-import Header from './componenets/blocks/header/Header';
+import Header from './components/blocks/header/Header';
 import styled from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';

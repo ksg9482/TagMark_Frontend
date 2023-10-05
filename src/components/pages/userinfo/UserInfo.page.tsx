@@ -127,15 +127,10 @@ export const UserInfo = () => {
     };
     const getUserInfo = async () => {
         setLoad(true);
-        console.time('before')
         let userInfo = await sendGetUserInfo();
         let bookmarkCount = await sendGetBookmarkCount()
         let tagCount = await sendGetTagCount()
-        console.timeEnd('before')
-        console.time('after')
-        await Promise.all([sendGetUserInfo(), sendGetBookmarkCount(), sendGetTagCount()])
-        console.timeEnd('after')
-
+        
         const graphData = tagCount.data.tags.map((tag: any) => {
             return {
                 id: tag.tag,
@@ -154,7 +149,6 @@ export const UserInfo = () => {
         try {
             await customAxios.patch(`/user`, editUser)
             userInfoHandle.updateUserInfo({ ...newUserInfo, nickname: secureWrap.decryptWrapper(editUser.nickname) })
-            // setUserInfo((oldUserInfo) => { return { ...oldUserInfo, nickname: secureWrap.decryptWrapper(editUser.nickname) } })
         } catch (error) {
             updateErrorMessage('유저 정보 업데이트에 실패했습니다.')
         }
