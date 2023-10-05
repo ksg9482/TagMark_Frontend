@@ -3,8 +3,7 @@ import serverConfig from '../../config';
 
 export const getRefresh = async (error: AxiosError | any) => {
     const accessToken: string = localStorage.getItem('accessToken') ? localStorage.getItem('accessToken')! : '';
-    
-     if(error.response?.data.message === 'TokenExpiredError') {
+     if(error.response?.data.message === 'Token expire') {
         let originalRequest = error.config;
         const getAccessToken: any = await axios.get(
             `${serverConfig.SERVER_HOST}/api/user/refresh`,
