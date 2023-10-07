@@ -7,7 +7,6 @@ import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
 import {
-  CommonButton,
   CommonInput,
   ContentBody,
   ContentTop,
@@ -16,6 +15,7 @@ import {
   SignUpBlock,
   SignupContainer,
 } from "./style";
+import { CommonButton } from "../../../common/style";
 
 export const Signup = (props: any) => {
   const useModal: UseModal = props.useModal;

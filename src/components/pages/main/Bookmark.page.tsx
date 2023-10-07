@@ -7,7 +7,6 @@ import {
   FindType,
 } from "../../../interface/bookmark";
 import "react-tooltip/dist/react-tooltip.css";
-import { Tooltip } from "react-tooltip";
 import { deepCopy, secure } from "../../../utils";
 import { customAxios } from "../../../utils/axios/customAxios";
 import Bookmarks from "../../blocks/bookmark/Bookmarks";
@@ -20,36 +19,34 @@ import {
   BookmarkManageContainer,
   CommonButton,
   ContentBox,
-  DisableCommonButton,
   ManageButtonContainer,
   TagText,
 } from "./styles";
-import { LoadingBar } from "../../blocks/common/loading/loading";
+import { LoadingBar } from "../../common/loading";
 import { Helmet } from "react-helmet-async";
 import { AlramModalPage } from "../modal/AlramModalPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import { 
-  updateBookmarks, 
-  updatePageCount as newUpdatePageCount, 
-  updateTotalCount as newUpdateTotalCount, 
-  updateOriginBookmarks, 
-  updateOriginPageCount, 
+import {
+  updateBookmarks,
+  updatePageCount,
+  updateTotalCount,
+  updateOriginBookmarks,
+  updateOriginPageCount,
   updateOriginTotalCount,
   updateBookmarkView,
-  updateFirstPage,
-  updateLocalBookmarkPage
+  updateLocalBookmarkPage,
 } from "../../../store/slices/bookmarkSlice";
-import { 
+import {
   updateCurrentPageNum,
-  updateCurrentTag as newUpdateCurrentTag,
-  updateCurrentSearch, 
+  updateCurrentTag,
+  updateCurrentSearch,
 } from "../../../store/slices/currentSlice";
 
-export const BookMark = (props: any) => {
+export const BookMark = () => {
   const dispach = useDispatch();
   const isLogin = useSelector((state: RootState) => {
-    return state.user.islogin
+    return state.user.islogin;
   });
   const originBookmarks = useSelector((state: RootState) => {
     return state.bookmark.originBookmarks;
@@ -78,101 +75,94 @@ export const BookMark = (props: any) => {
   const bookmarkView = useSelector((state: RootState) => {
     return state.bookmark.bookmarkView;
   });
-  const firstPage = useSelector((state: RootState) => {
-    return state.bookmark.firstPage;
-  });
   const localBookmarkPage = useSelector((state: RootState) => {
     return state.bookmark.localBookmarkPage;
   });
   const originBookmarkHandle = {
-    updateOriginBookmarks:(bookmarks: Bookmark[])=>{
-        dispach(updateOriginBookmarks(bookmarks))
-        return bookmarks;
+    updateOriginBookmarks: (bookmarks: Bookmark[]) => {
+      dispach(updateOriginBookmarks(bookmarks));
+      return bookmarks;
     },
-    updateOriginPageCount:(count: number)=>{
-      dispach(updateOriginPageCount(count))
+    updateOriginPageCount: (count: number) => {
+      dispach(updateOriginPageCount(count));
       return count;
     },
-    updateOriginTotalCount:(count: number)=>{
-      dispach(updateOriginTotalCount(count))
+    updateOriginTotalCount: (count: number) => {
+      dispach(updateOriginTotalCount(count));
       return count;
     },
   };
   const bookmarkHandle = {
-    updateBookmarks:(bookmarks: Bookmark[])=>{
-        dispach(updateBookmarks(bookmarks))
-        return bookmarks;
+    updateBookmarks: (bookmarks: Bookmark[]) => {
+      dispach(updateBookmarks(bookmarks));
+      return bookmarks;
     },
-    updatePageCount:(count: number)=>{
-      dispach(newUpdatePageCount(count))
+    updatePageCount: (count: number) => {
+      dispach(updatePageCount(count));
       return count;
     },
-    updateTotalCount:(count: number)=>{
-      dispach(newUpdateTotalCount(count))
+    updateTotalCount: (count: number) => {
+      dispach(updateTotalCount(count));
       return count;
     },
-    updateBookmarkView:(bookmarkView: Bookmark[])=>{
-      dispach(updateBookmarkView(bookmarkView))
+    updateBookmarkView: (bookmarkView: Bookmark[]) => {
+      dispach(updateBookmarkView(bookmarkView));
       return bookmarkView;
     },
-    updateFirstPage:(firstPage: Bookmark[])=>{
-      dispach(updateFirstPage(firstPage))
-      return firstPage;
-    },
-    updateLocalBookmarkPage:(firstPage: Bookmark[][])=>{
-      dispach(updateLocalBookmarkPage(firstPage))
-      return firstPage;
+    updateLocalBookmarkPage: (bookmarkPage: Bookmark[][]) => {
+      dispach(updateLocalBookmarkPage(bookmarkPage));
+      return bookmarkPage;
     },
   };
   const currentHandle = {
-    updateCurrentPageNum:(pagenum: number)=>{
-        dispach(updateCurrentPageNum(pagenum))
-        return pagenum;
+    updateCurrentPageNum: (pagenum: number) => {
+      dispach(updateCurrentPageNum(pagenum));
+      return pagenum;
     },
-    newUpdateCurrentTag:(tags: string[])=>{
-      dispach(newUpdateCurrentTag(tags))
+    updateCurrentTag: (tags: string[]) => {
+      dispach(updateCurrentTag(tags));
       return tags;
     },
-    updateCurrentSearch:(currentSearch: CurrentSearch)=>{
-      dispach(updateCurrentSearch(currentSearch))
+    updateCurrentSearch: (currentSearch: CurrentSearch) => {
+      dispach(updateCurrentSearch(currentSearch));
       return currentSearch;
     },
   };
   const secureStorage = secure().local();
   const secureWrap = secure().wrapper();
   const UseModal = () => {
-    const [isShowModal, setIsShowModal] = useState(false);
+    const [isShow, setIsShow] = useState(false);
 
-    const openModal = useCallback(() => {
-      setIsShowModal(true);
-    }, [setIsShowModal]);
+    const open = useCallback(() => {
+      setIsShow(true);
+    }, [setIsShow]);
 
-    const closeModal = useCallback(() => {
-      setIsShowModal(false);
-    }, [setIsShowModal]);
+    const close = useCallback(() => {
+      setIsShow(false);
+    }, [setIsShow]);
 
-    const toggleModal = useCallback(() => {
-      setIsShowModal((prev) => !prev);
-    }, [setIsShowModal]);
+    const toggle = useCallback(() => {
+      setIsShow((prev) => !prev);
+    }, [setIsShow]);
 
-    return { isShowModal, openModal, closeModal, toggleModal };
+    return { isShow, open, close, toggle };
   };
   const UseCreate = () => {
-    const [isShowModal, setIsShowModal] = useState(false);
+    const [isShow, setIsShow] = useState(false);
 
-    const openModal = useCallback(() => {
-      setIsShowModal(true);
-    }, [setIsShowModal]);
+    const open = useCallback(() => {
+      setIsShow(true);
+    }, [setIsShow]);
 
-    const closeModal = useCallback(() => {
-      setIsShowModal(false);
-    }, [setIsShowModal]);
+    const close = useCallback(() => {
+      setIsShow(false);
+    }, [setIsShow]);
 
-    const toggleModal = useCallback(() => {
-      setIsShowModal((prev) => !prev);
-    }, [setIsShowModal]);
+    const toggle = useCallback(() => {
+      setIsShow((prev) => !prev);
+    }, [setIsShow]);
 
-    return { isShowModal, openModal, closeModal, toggleModal };
+    return { isShow, open, close, toggle };
   };
   const useModal = UseModal();
   const useCreate = UseCreate();
@@ -188,7 +178,6 @@ export const BookMark = (props: any) => {
     ],
   };
 
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const [load, setLoad] = useState(true);
@@ -197,14 +186,14 @@ export const BookMark = (props: any) => {
     setErrorMessage(message);
   };
 
-  const updateCurrentTag = (targetTag: any) => {
+  const updateCurrentTagState = (targetTag: any) => {
     if (currentTag.includes(targetTag)) {
       return;
     }
     if (!currentTag[0]) {
-      currentHandle.newUpdateCurrentTag([targetTag]);
+      currentHandle.updateCurrentTag([targetTag]);
     } else {
-      currentHandle.newUpdateCurrentTag([...currentTag, targetTag]);
+      currentHandle.updateCurrentTag([...currentTag, targetTag]);
     }
   };
 
@@ -247,7 +236,7 @@ export const BookMark = (props: any) => {
   const getTagBookmark = async (targetTags: string[], findType: FindType) => {
     currentPageRefresh(1);
     if (!currentTag.includes(targetTags[0])) {
-      updateCurrentTag(targetTags.join());
+      updateCurrentTagState(targetTags.join());
     }
 
     let searched: Bookmark[];
@@ -266,7 +255,8 @@ export const BookMark = (props: any) => {
         targetTags = prevTag;
       }
 
-      const bookmarkArr: Bookmark[] = findType === "origin" ? originBookmarks : bookmarkView;
+      const bookmarkArr: Bookmark[] =
+        findType === "origin" ? originBookmarks : bookmarkView;
 
       const prevBookmark = bookmarkArr.map((bookmark) => {
         const tags = bookmark.tags ? bookmark.tags : [];
@@ -322,7 +312,7 @@ export const BookMark = (props: any) => {
       bookmarkHandle.updatePageCount(Math.ceil(bookmarkFilter.length / 20));
     }
     currentHandle.updateCurrentSearch(CurrentSearch.SideBarSearch);
-    currentHandle.newUpdateCurrentTag([targetTags.join()]);
+    currentHandle.updateCurrentTag([targetTags.join()]);
 
     bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(searched, 20));
     createBookmarkView(setLocalPagenation(searched, 20), currentPageNum - 1);
@@ -377,7 +367,6 @@ export const BookMark = (props: any) => {
     bookmarkHandle.updateBookmarkView(pagenationBookmark[targetPage] || []);
   };
 
-
   // 북마크 읽기
   const getLocalBookmarks = () => {
     const localBookmarks = secure().local().getItem("local-bookmark-storage")!;
@@ -406,12 +395,6 @@ export const BookMark = (props: any) => {
   const getBookmark = async (isLogin: boolean) => {
     const bookmark = isLogin ? await getDBBookmarks() : getLocalBookmarks();
 
-    if (isLogin) {
-      bookmarkHandle.updateFirstPage(bookmark);
-    } else {
-      bookmarkHandle.updateFirstPage(setLocalPagenation(bookmark, 20)[0]);
-    }
-
     originBookmarkHandle.updateOriginBookmarks(bookmark);
     bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(bookmark, 20));
     createBookmarkView(setLocalPagenation(bookmark, 20), currentPageNum - 1);
@@ -420,18 +403,20 @@ export const BookMark = (props: any) => {
 
   const bookmarkRefresh = () => {
     currentHandle.updateCurrentSearch(CurrentSearch.Bookmark);
-    bookmarkHandle.updateBookmarkView(firstPage);
+    bookmarkHandle.updateBookmarkView(originBookmarks.slice(0, 20));
 
-    currentHandle.newUpdateCurrentTag([]);
-    originBookmarkHandle.updateOriginPageCount(originPageCount)
-    originBookmarkHandle.updateOriginTotalCount(originTotalCount)
+    currentHandle.updateCurrentTag([]);
+    originBookmarkHandle.updateOriginPageCount(originPageCount);
+    originBookmarkHandle.updateOriginTotalCount(originTotalCount);
     currentHandle.updateCurrentPageNum(1);
     currentPageRefresh(1);
     if (isLogin) {
       bookmarkHandle.updatePageCount(originPageCount);
       bookmarkHandle.updateTotalCount(originTotalCount);
     } else {
-      bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(originBookmarks, 20));
+      bookmarkHandle.updateLocalBookmarkPage(
+        setLocalPagenation(originBookmarks, 20)
+      );
       bookmarkHandle.updatePageCount(Math.ceil(originBookmarks.length / 20));
       bookmarkHandle.updateTotalCount(originBookmarks.length);
     }
@@ -440,7 +425,7 @@ export const BookMark = (props: any) => {
   const bookmarkCreate = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    useCreate.openModal();
+    useCreate.open();
   };
   const saveNewBookmarkStorage = (newBookmarkData: Bookmark | Bookmark[]) => {
     if (!isLogin) {
@@ -473,7 +458,7 @@ export const BookMark = (props: any) => {
       return bookmarks;
     } catch (error: any) {
       updateErrorMessage(error.message);
-      useModal.openModal();
+      useModal.open();
     }
   };
   const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
@@ -508,9 +493,10 @@ export const BookMark = (props: any) => {
       const url = secureWrap.encryptWrapper(bookmark.url);
       return { ...bookmark, url: url };
     });
-    bookmarkHandle.updateFirstPage(newBookmarkArr);
     bookmarkSequence(newBookmarkArr);
-    bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(encryptedArr, 20));
+    bookmarkHandle.updateLocalBookmarkPage(
+      setLocalPagenation(encryptedArr, 20)
+    );
 
     createBookmarkView(
       setLocalPagenation(encryptedArr, 20),
@@ -525,7 +511,7 @@ export const BookMark = (props: any) => {
         : Math.ceil(newBookmarkArr.length / 20)
     );
 
-    useCreate.closeModal();
+    useCreate.close();
   };
 
   const getMachedIndex = (targetBookmarkId: any) => {
@@ -551,7 +537,7 @@ export const BookMark = (props: any) => {
       }
     } catch (error: any) {
       updateErrorMessage(error.message);
-      useModal.openModal();
+      useModal.open();
     }
   };
   const onBookmarkDelete = async (targetBookmarkId: any) => {
@@ -576,10 +562,11 @@ export const BookMark = (props: any) => {
           ...decrypted.slice(isMachedIndex + 1, length),
         ];
 
-    bookmarkHandle.updateFirstPage(deletedBookmark);
     bookmarkSequence(deletedBookmark);
 
-    bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(deletedBookmark, 20));
+    bookmarkHandle.updateLocalBookmarkPage(
+      setLocalPagenation(deletedBookmark, 20)
+    );
     bookmarkHandle.updateBookmarkView(
       setLocalPagenation(deletedBookmark, 20)[currentPageNum - 1]
     );
@@ -645,7 +632,7 @@ export const BookMark = (props: any) => {
       }
     } catch (error: any) {
       updateErrorMessage(error.message);
-      useModal.openModal();
+      useModal.open();
     }
   };
   const editSave = (
@@ -679,7 +666,9 @@ export const BookMark = (props: any) => {
     });
 
     bookmarkSequence(editedBookmark);
-    bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(encryptedArr, 20));
+    bookmarkHandle.updateLocalBookmarkPage(
+      setLocalPagenation(encryptedArr, 20)
+    );
     createBookmarkView(
       setLocalPagenation(encryptedArr, 20),
       currentPageNum - 1
@@ -692,7 +681,9 @@ export const BookMark = (props: any) => {
         const bookmarks = await customAxios.get(`/bookmark?pageNo=${num}`);
         currentHandle.updateCurrentSearch(CurrentSearch.Bookmark);
         originBookmarkHandle.updateOriginBookmarks(bookmarks.data.bookmarks);
-        bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(bookmarks.data.bookmarks, 20));
+        bookmarkHandle.updateLocalBookmarkPage(
+          setLocalPagenation(bookmarks.data.bookmarks, 20)
+        );
         bookmarkHandle.updateBookmarkView(bookmarks.data.bookmarks);
       }
       if (currentSearch === CurrentSearch.TagSearch) {
@@ -701,7 +692,9 @@ export const BookMark = (props: any) => {
         );
         currentHandle.updateCurrentSearch(CurrentSearch.TagSearch);
         originBookmarkHandle.updateOriginBookmarks(andSearch.data.bookmarks);
-        bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(andSearch.data.bookmarks, 20));
+        bookmarkHandle.updateLocalBookmarkPage(
+          setLocalPagenation(andSearch.data.bookmarks, 20)
+        );
         bookmarkHandle.updateBookmarkView(andSearch.data.bookmarks);
       }
       if (currentSearch === CurrentSearch.SideBarSearch) {
@@ -710,7 +703,9 @@ export const BookMark = (props: any) => {
         );
         currentHandle.updateCurrentSearch(CurrentSearch.SideBarSearch);
         originBookmarkHandle.updateOriginBookmarks(orSearch.data.bookmarks);
-        bookmarkHandle.updateLocalBookmarkPage(setLocalPagenation(orSearch.data.bookmarks, 20));
+        bookmarkHandle.updateLocalBookmarkPage(
+          setLocalPagenation(orSearch.data.bookmarks, 20)
+        );
         bookmarkHandle.updateBookmarkView(orSearch.data.bookmarks);
       }
       currentHandle.updateCurrentPageNum(num);
@@ -803,12 +798,10 @@ export const BookMark = (props: any) => {
     return (
       <BookmarkContainer id="main-content">
         <Helmet>TagMark | TAG-MARK</Helmet>
-        {useModal.isShowModal ? (
+        {useModal.isShow ? (
           <AlramModalPage useModal={useModal} errorMessage={errorMessage} />
         ) : null}
-        <SideBar
-          getTagBookmarkSideBar={getTagBookmarkSideBar}
-        />
+        <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} />
         <div></div>
         <BookmarkManageContainer>
           <ContentBox>
@@ -816,24 +809,10 @@ export const BookMark = (props: any) => {
               <div></div>
               <ManageButtonContainer>
                 <CommonButton onClick={bookmarkRefresh}>초기화</CommonButton>
-                {!isLogin && totalCount >= 100 ? (
-                  <DisableCommonButton disabled>
-                    <div
-                      id="bookmark-count"
-                      data-tooltip-content="로그인하시면 북마크를 무제한으로 이용하실 수 있습니다."
-                    >
-                      <div>북마크생성</div>
-                      <Tooltip anchorId="bookmark-count" variant="info" />
-                    </div>
-                  </DisableCommonButton>
-                ) : (
-                  <CommonButton onClick={bookmarkCreate}>
-                    <div>북마크생성</div>
-                  </CommonButton>
-                )}
+                <CommonButton onClick={bookmarkCreate}>북마크생성</CommonButton>
               </ManageButtonContainer>
             </BookmarkManagebuttonContainer>
-            {useCreate.isShowModal ? (
+            {useCreate.isShow ? (
               <BookmarkCreateBlock
                 useCreate={useCreate}
                 setNewBookmark={setNewBookmark}
@@ -852,10 +831,7 @@ export const BookMark = (props: any) => {
               editSave={editSave}
             />
           </ContentBox>
-          <PageMove
-            count={paginationCount()}
-            pagenationNum={pagenationNum}
-          />
+          <PageMove count={paginationCount()} pagenationNum={pagenationNum} />
         </BookmarkManageContainer>
       </BookmarkContainer>
     );

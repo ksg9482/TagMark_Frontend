@@ -1,52 +1,50 @@
 import styled from "styled-components";
 
 export const SignupInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
+  display: grid;
+  grid-template-columns: 100px auto;
 `;
 
 export const ModalTitle = styled.div`
-    margin-bottom: 55px;
-    font-size: large;
+  margin-bottom: 55px;
+  font-size: large;
 `;
 
-export const ModalText = styled.div`
-
-`;
+export const ModalText = styled.div``;
 
 export const SignupContainer = styled.div`
-   display: grid;
+  display: grid;
   grid-template-rows: min-content auto;
-  height: 700px;
-  width: 500px;
+  height: 550px;
+  width: 400px;
 `;
 
 export const CommonInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
-    gap:5px;
-    #input-name {
-        justify-self: flex-start;
-    }
+  display: grid;
+  grid-template-columns: 100px auto;
+  gap: 5px;
+  #input-name {
+    justify-self: flex-start;
+  }
 `;
 
 export const CommonButtonContainer = styled.div`
-    display: grid;
-    gap: 5px;
-    margin-top: 15px;
+  display: grid;
+  gap: 5px;
+  margin-top: 15px;
 `;
 
 export const ErrorMessageBlock = styled.div`
-    margin-top: 10px;
-    color: red;
-    font-size: small;
+  margin-top: 10px;
+  color: red;
+  font-size: small;
 `;
 
 export const SignUpBlock = styled.div`
-    display: grid;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-self: flex-start;
+  display: grid;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-self: flex-start;
 `;
 
 export const ContentTop = styled.div`
@@ -55,12 +53,12 @@ export const ContentTop = styled.div`
   border-bottom: 1px solid;
   border-color: #c5c5c5;
   padding: 8px 10px 8px 10px;
-  margin: 0 0 100px 0;
-  
+  margin: 0 0 80px 0;
+
   height: fit-content;
   #title {
     justify-self: left;
-    
+
     height: fit-content;
   }
   #exit {
@@ -81,8 +79,8 @@ export const ContentBody = styled.div`
 `;
 
 export const CommonButton = styled.button`
-    white-space: nowrap;
-    min-width: fit-content;
-    
-    height: fit-content;
+  white-space: nowrap;
+  min-width: fit-content;
+
+  height: fit-content;
 `;
