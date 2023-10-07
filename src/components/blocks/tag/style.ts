@@ -5,12 +5,12 @@ export const TagsContainer = styled.div`
 `;
 
 export const TagButton = styled.button`
-    background-color: #d5e6ff;
-    &:hover {
-      background-color: #acccfb;
-    };
-    border-color: #355ba3ef;
-    border-radius: 5px;
-    margin: 2px 5px 3px 5px;
-    transition: 0.2s;
+  background-color: #d5e6ff;
+  &:hover {
+    background-color: #acccfb;
+  }
+  border-color: #5d86d3;
+  border-radius: 5px;
+  margin: 2px 5px 3px 5px;
+  transition: 0.2s;
 `;

@@ -39,7 +39,7 @@ export const secure = () => {
     try {
       const result = decrypt(encryptStr);
       if (!result) {
-        throw false;
+        throw new Error();
       }
       return result;
     } catch (error) {

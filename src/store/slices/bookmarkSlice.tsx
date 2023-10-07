@@ -9,8 +9,7 @@ type InitialState = {
   pageCount: number;
   totalCount: number;
   bookmarkView: Bookmark[];
-  firstPage: Bookmark[];
-  localBookmarkPage:Bookmark[][];
+  localBookmarkPage: Bookmark[][];
 };
 
 const bookmarkInitData: Bookmark = {
@@ -32,8 +31,7 @@ const initialState: InitialState = {
   pageCount: 0,
   totalCount: 0,
   bookmarkView: [bookmarkInitData],
-  firstPage: [bookmarkInitData],
-  localBookmarkPage:[[bookmarkInitData]]
+  localBookmarkPage: [[bookmarkInitData]],
 };
 const bookmarkSlice = createSlice({
   name: "bookmark",
@@ -64,12 +62,6 @@ const bookmarkSlice = createSlice({
       }
       state.bookmarkView = action.payload;
     },
-    updateFirstPage: (state, action) => {
-      if (!action.payload || action.payload.length <= 0) {
-        action.payload = [];
-      }
-      state.firstPage = action.payload;
-    },
     updateLocalBookmarkPage: (state, action) => {
       state.localBookmarkPage = action.payload;
     },
@@ -77,7 +69,7 @@ const bookmarkSlice = createSlice({
 });
 
 export default bookmarkSlice;
-export const { 
+export const {
   updateOriginBookmarks,
   updateOriginPageCount,
   updateOriginTotalCount,
@@ -85,6 +77,5 @@ export const {
   updatePageCount,
   updateTotalCount,
   updateBookmarkView,
-  updateFirstPage,
-  updateLocalBookmarkPage
+  updateLocalBookmarkPage,
 } = bookmarkSlice.actions;

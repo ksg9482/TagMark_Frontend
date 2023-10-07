@@ -1,39 +1,37 @@
 import styled from "styled-components";
 
 export const LoginInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
+  display: grid;
+  grid-template-columns: 100px auto;
 `;
 
-
-
 export const ModalTitle = styled.div`
-    margin-bottom: 55px;
-    font-size: large;
+  margin-bottom: 55px;
+  font-size: large;
 `;
 
 export const MoveSignupPage = styled.div`
-    color: blue;
-    font-size: small;
-    text-decoration-line: underline;
-    margin-bottom: 40px;
+  color: blue;
+  font-size: small;
+  text-decoration-line: underline;
+  margin-bottom: 40px;
 `;
 
 export const LoginContainer = styled.div`
-    display: grid;
-    gap: 10px;
+  display: grid;
+  gap: 10px;
 `;
 
 export const CommonInput = styled.div`
-    display: grid;
-    grid-template-columns: 100px auto;
-    gap:5px;
+  display: grid;
+  grid-template-columns: 100px auto;
+  gap: 5px;
 `;
 
 export const CommonButtonContainer = styled.div`
-    display: grid;
-    gap: 5px;
-    margin-top: 15px;
+  display: grid;
+  gap: 5px;
+  margin-top: 15px;
 `;
 
 export const ContentTop = styled.div`
@@ -42,12 +40,12 @@ export const ContentTop = styled.div`
   border-bottom: 1px solid;
   border-color: #c5c5c5;
   padding: 8px 10px 8px 10px;
-  margin: 0 0 100px 0;
-  
+  margin: 0 0 80px 0;
+
   height: fit-content;
   #title {
     justify-self: left;
-    
+
     height: fit-content;
   }
   #exit {
@@ -62,8 +60,8 @@ export const ContentBody = styled.div`
   justify-self: center;
   align-items: center;
   width: 400px;
-  
-  #social-login{
+
+  #social-login {
     align-self: flex-start;
   }
 `;
@@ -71,13 +69,36 @@ export const ContentBody = styled.div`
 export const LoginContent = styled.div`
   display: grid;
   grid-template-rows: min-content auto;
-  height: 700px;
-  width: 500px;
+  height: 550px;
+  width: 400px;
 `;
 
 export const CommonButton = styled.button`
-    white-space: nowrap;
-    min-width: fit-content;
-    
-    height: fit-content;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  white-space: nowrap;
+  min-width: fit-content;
+  background-color: #f9f9f9;
+  &:hover {
+    background-color: #e7e7e7;
+  }
+
+  margin: 0;
+  padding: 0.2rem 0.5rem;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: auto;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.1),
+    3px 4px 2px -1px rgba(0, 0, 0, 0.06);
+
+  transition: 0.2s;
+  background-color: rgba(0, 0, 0, 0.03);
 `;
