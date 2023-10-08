@@ -1,11 +1,12 @@
 export const deepCopy = (obj: any) => {
-  if (obj instanceof Object) {
+  if (!Array.isArray(obj) && obj instanceof Object) {
     let result = new obj.constructor();
     Object.keys(obj).forEach((k) => {
       result[k] = deepCopy(obj[k]);
     });
     return result;
   } else if (obj instanceof Array) {
-    obj.map((element) => deepCopy(element));
+    const result: any[] = obj.map((element) => deepCopy(element));
+    return result;
   } else return obj;
 };

@@ -51,10 +51,12 @@ export const CommonTextArea = styled.textarea`
 
 export const CommonButtonContainer = styled.div`
   display: grid;
-  justify-items: center;
-  gap: 5px;
-  margin-top: 15px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto auto;
+  gap: 30px;
+  margin-top: 40px;
+  button {
+    min-width: 100px;
+  }
 `;
 
 export const CommonButton = styled.button`
@@ -85,4 +87,19 @@ export const CommonButton = styled.button`
 
   transition: 0.2s;
   background-color: rgba(0, 0, 0, 0.03);
+`;
+
+export const CommonInput = styled.div`
+  display: grid;
+  grid-template-columns: 100px auto;
+  gap: 5px;
+  text-align: left;
+`;
+
+export const CommonInputContainer = styled.div`
+  display: grid;
+  gap: 5px;
+  input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+  }
 `;

@@ -56,7 +56,6 @@ export const UnFocusedBookmarkComponentInner = styled.div`
   display: grid;
   grid-template-rows: auto auto;
   justify-items: center;
-  width: 90%;
   min-width: 330px;
   background-color: white;
 `;
@@ -128,14 +127,6 @@ export const BlockContentContainer = styled.div`
 export const CreateBookmarkContainer = styled.div`
   display: grid;
   gap: 5px;
-`;
-
-export const InputContainer = styled.div`
-  display: grid;
-  gap: 5px;
-  input::placeholder {
-    color: rgba(0, 0, 0, 0.4);
-  }
 `;
 
 export const ButtonContainer = styled.div`

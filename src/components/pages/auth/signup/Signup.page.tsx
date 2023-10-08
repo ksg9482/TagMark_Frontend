@@ -7,15 +7,13 @@ import { UseModal } from "../../../../interface/header";
 import { secure } from "../../../../utils/secure";
 import { SignUpButtonBlock } from "../../../blocks/auth/signup/SignupButton.block";
 import {
-  CommonInput,
   ContentBody,
-  ContentTop,
   ErrorMessageBlock,
-  ModalTitle,
   SignUpBlock,
   SignupContainer,
 } from "./style";
-import { CommonButton } from "../../../common/style";
+import { CommonButton, CommonInput } from "../../../common/style";
+import { ModalContentTop, ModalTitle } from "../../modal/style";
 
 export const Signup = (props: any) => {
   const useModal: UseModal = props.useModal;
@@ -113,12 +111,12 @@ export const Signup = (props: any) => {
   return (
     <SignupContainer>
       <Helmet>Signup | TAG-MARK</Helmet>
-      <ContentTop>
+      <ModalContentTop>
         <div id="title">Login</div>
         <CommonButton id="exit" onClick={onClose}>
           X
         </CommonButton>
-      </ContentTop>
+      </ModalContentTop>
       <ContentBody>
         <ModalTitle>TAG MARK 회원가입</ModalTitle>
         <SignUpBlock>

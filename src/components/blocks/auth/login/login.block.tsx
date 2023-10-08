@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { LoginData } from "../../../../interface/auth";
 import { secure } from "../../../../utils/secure";
-import { CommonInput, ErrorMessageBlock, LoginContainer } from "./styles";
-import { CommonButton, CommonButtonContainer } from "../../../common/style";
+import { ErrorMessageBlock, LoginContainer } from "./styles";
+import {
+  CommonButton,
+  CommonButtonContainer,
+  CommonInput,
+} from "../../../common/style";
 
 export const LoginBlock = (props: any) => {
   const onClose = props.onClose;
