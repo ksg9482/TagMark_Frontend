@@ -17,7 +17,6 @@ import { MyResponsivePie } from "../../blocks/userInfo/tagGraph";
 import { UserInfoModalPage } from "../modal/UserInfoModalPage";
 import {
   BookmarkAreaContainer,
-  CommonButton,
   GraphContainer,
   MyDataButtonContainer,
   MyDataContainer,
@@ -26,6 +25,7 @@ import {
   TagAreaContainer,
   UserInfoContainer,
 } from "./style";
+import { CommonButton } from "../../common/style";
 
 interface UserInfo {
   email: string;

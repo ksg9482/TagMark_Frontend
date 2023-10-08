@@ -6,9 +6,8 @@ import {
   BlockContentContainer,
   ButtonContainer,
   CreateBookmarkContainer,
-  InputContainer,
 } from "./style";
-import { CommonButton } from "../../pages/main/styles";
+import { CommonButton, CommonInputContainer } from "../../common/style";
 
 export const CreateBookmark = (props: any) => {
   const useCreate = props.useCreate;
@@ -17,9 +16,15 @@ export const CreateBookmark = (props: any) => {
   const [createInput, setCreateInput] = useState({ url: "", tags: "" });
 
   const tagStringToArray = (tagString: string) => {
-    tagString = tagString.replaceAll(", ", ",");
-    const result = tagString.split(",");
-    return result;
+    const result = new Set<string>();
+    tagString
+      .replaceAll(", ", ",")
+      .split(",")
+      .forEach((tagStr) => {
+        result.add(tagStr);
+      });
+
+    return Array.from(result);
   };
 
   const onCreateInput =
@@ -35,7 +40,7 @@ export const CreateBookmark = (props: any) => {
     };
 
   const onCancle = () => {
-    useCreate.closeModal();
+    useCreate.close();
   };
 
   const onCreate = () => {
@@ -49,7 +54,7 @@ export const CreateBookmark = (props: any) => {
 
   return (
     <CreateBookmarkContainer>
-      <InputContainer>
+      <CommonInputContainer>
         <input
           type="text"
           name="url"
@@ -64,7 +69,7 @@ export const CreateBookmark = (props: any) => {
           onChange={onCreateInput("tags")}
           placeholder={"Tag1, Tag2..."}
         />
-      </InputContainer>
+      </CommonInputContainer>
       <ButtonContainer>
         <CommonButton onClick={onCancle}>취소</CommonButton>
         <CommonButton onClick={onCreate}>생성</CommonButton>

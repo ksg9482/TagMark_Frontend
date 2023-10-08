@@ -10,21 +10,20 @@ import "react-tooltip/dist/react-tooltip.css";
 import { deepCopy, secure } from "../../../utils";
 import { customAxios } from "../../../utils/axios/customAxios";
 import Bookmarks from "../../blocks/bookmark/Bookmarks";
-import { PageMove } from "../../blocks/bookmark/pageMove/PageMove";
+import { PageMoveBlock } from "../../blocks/bookmark/pageMove/PageMoveBlock";
 import SideBar from "../../blocks/sidebar/Sidebar";
 import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
 import {
   BookmarkContainer,
   BookmarkManagebuttonContainer,
   BookmarkManageContainer,
-  CommonButton,
   ContentBox,
   ManageButtonContainer,
   TagText,
 } from "./styles";
 import { LoadingBar } from "../../common/loading";
 import { Helmet } from "react-helmet-async";
-import { AlramModalPage } from "../modal/AlramModalPage";
+import { ErrorAlramModal } from "../modal/ErrorAlramModalPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import {
@@ -42,6 +41,7 @@ import {
   updateCurrentTag,
   updateCurrentSearch,
 } from "../../../store/slices/currentSlice";
+import { CommonButton } from "../../common/style";
 
 export const BookMark = () => {
   const dispach = useDispatch();
@@ -227,12 +227,12 @@ export const BookMark = () => {
       `/bookmark/search-or?tags=${targetTags}&pageNo=1`
     );
 
-    if (orSearch.data.bookmarks.length <= 0) {
-      return bookmarkView;
-    }
-
+    // if (orSearch.data.bookmarks.length <= 0) {
+    //   return bookmarkView;
+    // }
     return orSearch.data;
   };
+
   const getTagBookmark = async (targetTags: string[], findType: FindType) => {
     currentPageRefresh(1);
     if (!currentTag.includes(targetTags[0])) {
@@ -307,6 +307,7 @@ export const BookMark = () => {
         });
         if (1 <= tagFilter.length) return tagFilter;
       });
+
       searched = bookmarkFilter;
       bookmarkHandle.updateTotalCount(bookmarkFilter.length);
       bookmarkHandle.updatePageCount(Math.ceil(bookmarkFilter.length / 20));
@@ -516,7 +517,7 @@ export const BookMark = () => {
 
   const getMachedIndex = (targetBookmarkId: any) => {
     let isMachedIndex: any;
-    const targetId = Number(targetBookmarkId);
+    const targetId = targetBookmarkId;
     const length = originBookmarks.length;
 
     for (let i = 0; i < length; i++) {
@@ -605,9 +606,11 @@ export const BookMark = () => {
       });
     });
 
-    if (decrypytedOrigin.url !== decrypytedEdit.url) {
-      changeForm.url = decrypytedEdit.url;
-    }
+    // if (decrypytedOrigin.url !== decrypytedEdit.url) {
+    //   changeForm.url = decrypytedEdit.url;
+    // }
+    changeForm.url = decrypytedEdit.url;
+
     if (addTag.length > 0) {
       changeForm.addTag = addTag.map((tag) => {
         return tag.tag;
@@ -732,6 +735,7 @@ export const BookMark = () => {
     }
     const dbBookmarkCount = await customAxios.get(`/bookmark/count`);
 
+    //여기 문제
     if (dbBookmarkCount.data.count <= 0) {
       const localBookmarkArr = bookmarkAdapter("local", localBookmarks);
       const localTagNamesSet = new Set();
@@ -799,7 +803,7 @@ export const BookMark = () => {
       <BookmarkContainer id="main-content">
         <Helmet>TagMark | TAG-MARK</Helmet>
         {useModal.isShow ? (
-          <AlramModalPage useModal={useModal} errorMessage={errorMessage} />
+          <ErrorAlramModal useModal={useModal} errorMessage={errorMessage} />
         ) : null}
         <SideBar getTagBookmarkSideBar={getTagBookmarkSideBar} />
         <div></div>
@@ -831,7 +835,10 @@ export const BookMark = () => {
               editSave={editSave}
             />
           </ContentBox>
-          <PageMove count={paginationCount()} pagenationNum={pagenationNum} />
+          <PageMoveBlock
+            count={paginationCount()}
+            pagenationNum={pagenationNum}
+          />
         </BookmarkManageContainer>
       </BookmarkContainer>
     );
