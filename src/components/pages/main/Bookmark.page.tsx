@@ -227,9 +227,6 @@ export const BookMark = () => {
       `/bookmark/search-or?tags=${targetTags}&pageNo=1`
     );
 
-    // if (orSearch.data.bookmarks.length <= 0) {
-    //   return bookmarkView;
-    // }
     return orSearch.data;
   };
 
@@ -368,7 +365,6 @@ export const BookMark = () => {
     bookmarkHandle.updateBookmarkView(pagenationBookmark[targetPage] || []);
   };
 
-  // 북마크 읽기
   const getLocalBookmarks = () => {
     const localBookmarks = secure().local().getItem("local-bookmark-storage")!;
     const bookmark = bookmarkAdapter("local", localBookmarks);
@@ -447,7 +443,6 @@ export const BookMark = () => {
     bookmarkHandle.updateBookmarkView(newBookmarks);
   };
 
-  // 북마크 생성
   const sendCreateBookmark = async (newBookmarkData: CreateBookmarkData) => {
     try {
       const bookmarks = await customAxios.post(`/bookmark`, {
@@ -529,7 +524,6 @@ export const BookMark = () => {
     return isMachedIndex;
   };
 
-  // 북마크 제거
   const sendDeleteBookmark = async (bookmarkId: any) => {
     try {
       const bookmarks = await customAxios.delete(`/bookmark/${bookmarkId}`);
@@ -582,7 +576,6 @@ export const BookMark = () => {
     );
   };
 
-  // 북마크 수정
   const editForm = (originBookmark: Bookmark, editContent: Bookmark) => {
     const decrypytedOrigin = {
       ...originBookmark,
@@ -606,9 +599,6 @@ export const BookMark = () => {
       });
     });
 
-    // if (decrypytedOrigin.url !== decrypytedEdit.url) {
-    //   changeForm.url = decrypytedEdit.url;
-    // }
     changeForm.url = decrypytedEdit.url;
 
     if (addTag.length > 0) {
@@ -735,7 +725,6 @@ export const BookMark = () => {
     }
     const dbBookmarkCount = await customAxios.get(`/bookmark/count`);
 
-    //여기 문제
     if (dbBookmarkCount.data.count <= 0) {
       const localBookmarkArr = bookmarkAdapter("local", localBookmarks);
       const localTagNamesSet = new Set();

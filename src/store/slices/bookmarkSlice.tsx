@@ -37,7 +37,6 @@ const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState,
   reducers: {
-    //prev가 더 정확할지도?
     updateOriginBookmarks: (state, action) => {
       state.originBookmarks = action.payload;
     },

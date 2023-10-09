@@ -33,9 +33,6 @@ export const ContentBox = styled.div`
 export const BookmarkManagebuttonContainer = styled.div`
   display: grid;
   grid-template-columns: 50% 50%;
-  /* @media (max-width: 1200px) {
-    grid-template-columns: 50% 50%;
-  } */
   align-items: center;
   justify-items: center;
   width: 98%;

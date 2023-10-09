@@ -7,7 +7,6 @@ import { UserInfo } from "../components/pages/userinfo/UserInfo.page";
 export const LoggedInRouter = () => {
     return (
             <Routes>
-                {/* <Route path="/" element={<Login />} /> */}
                 <Route path="/" element={<BookMark/>} />
                 <Route path="/me" element={<UserInfo />} />
             </Routes>

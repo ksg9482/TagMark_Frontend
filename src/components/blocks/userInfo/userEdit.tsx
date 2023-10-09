@@ -18,7 +18,7 @@ type EditKey = "nickName" | "password" | "passwordCheck";
 export const EditUserInfo = (props: any) => {
   const useModal: UseModal = props.useModal;
   const propsErrorMessage = props.errorMessage;
-  // const userData = props.userData;
+
   const userData = useSelector((state: RootState) => {
     return {
       email: state.user.email,

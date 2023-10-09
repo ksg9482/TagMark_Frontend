@@ -160,9 +160,7 @@ const SideBar = (props: any) => {
   useEffect(() => {
     getTags(isLogin);
   }, [originBookmarks]);
-  // useEffect(() => {
-  //     setOriginBookmarks(originBookmarks)
-  // })
+
   return (
     <SideBarContainer>
       <SideBarTextContainer>

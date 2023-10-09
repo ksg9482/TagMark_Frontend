@@ -38,7 +38,6 @@ export const secure = () => {
   const decryptWrapper = (encryptStr: string) => {
     try {
       const result = decrypt(encryptStr);
-      //url이 암호화, 비암호화 통일이 안됨. + 로컬, 온라인 인풋도 다름
       if (result.length <= 0) {
         return encryptStr;
       }

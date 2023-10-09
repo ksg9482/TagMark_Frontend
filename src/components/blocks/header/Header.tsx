@@ -149,10 +149,6 @@ const Header = () => {
     useModal.openModal();
   };
 
-  // useEffect(() => {
-  //     setIsLogin(props.isLogin)
-  // }, []);
-
   return login ? loginedHeader() : unLoginHeader();
 };
 

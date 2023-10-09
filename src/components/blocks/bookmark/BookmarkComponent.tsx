@@ -29,31 +29,7 @@ const BookmarkComponent = (props: any) => {
   const [editOn, setEditOn] = useState(false);
   const [view, setView] = useState({ url: url, tags: tags });
   const [editInput, setEditInput] = useState({ url: url, tags: tags });
-  // const secureEditInput = {
-  //   url: () => {
-  //     return secureWrap.decryptWrapper(editInput.url);
-  //   },
-  //   tags: () => {
-  //     return secureWrap.decryptWrapper(editInput.tags);
-  //   },
-  // };
-  // const secureSetEditInput = (
-  //   value: React.SetStateAction<{
-  //     url: any;
-  //     tags: any;
-  //   }>
-  // ) => {
-  //   /**
-  //  * {
-  //       ...editInput,
-  //       [key]: secureWrap.encryptWrapper(e.target.value),
-  //     }
-  //  */
-  // console.log(value)
-
-  //   setEditInput(secureWrap.encryptWrapper(value));
-  // };
-
+  
   const tagArrToStr = (tags: Tag[]) => {
     const result = [];
     for (let tag of tags) {
@@ -102,10 +78,6 @@ const BookmarkComponent = (props: any) => {
         ...editInput,
         [key]: secureWrap.encryptWrapper(e.target.value),
       });
-      // secureSetEditInput({
-      //   ...secureEditInput,
-      //   [key]: e.target.value,
-      // });
     };
 
   const editFocus = () => {
@@ -120,9 +92,6 @@ const BookmarkComponent = (props: any) => {
     const originBookmarkdata = deepCopy(view);
 
     const onComplete = () => {
-      //맨 처음 또는 가공 없으면 객체로 그대로 들어간다?
-      //태그 수정 안함 -> 객체로 들어가서 디크립트 안됨
-      //태그 수정 함   -> 문자열로 들어가서 디크립트 후 시퀸스 진행
       if (editInput.tags instanceof Object) {
         editInput.tags = secureWrap.encryptWrapper(
           editInput.tags
@@ -136,9 +105,7 @@ const BookmarkComponent = (props: any) => {
 
       const tagArr =
         tagStrDecrypted.length <= 0 ? [] : tagStrToArr(tagStrDecrypted);
-      //로컬일때 이거가 제대로 나옴
       const decryptedUrl = secureWrap.decryptWrapper(editInput.url);
-      // const bookmarkForm = { url: editInput.url, tags: tagArr };
       const bookmarkForm = { url: decryptedUrl, tags: tagArr };
       setView(bookmarkForm);
       editSave(bookmark.id, originBookmarkdata, bookmarkForm);

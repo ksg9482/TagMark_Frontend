@@ -21,7 +21,7 @@ export const DeleteUser = (props: any) => {
   const useModal: UseModal = props.useModal;
   const secureWrap = secure().wrapper();
   const sendDeleteUser = props.sendDeleteUser;
-  // const userData = props.userData;
+
   const userData = useSelector((state: RootState) => {
     return {
       email: state.user.email,
