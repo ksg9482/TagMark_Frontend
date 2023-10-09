@@ -9,6 +9,17 @@
 TAG-MARK는 태그를 기반으로 북마크를 '구분'하는데 초점을 맞추었습니다. 구분한 태그를 기준으로 AND/OR 검색을 통해 원하는 태그가 부여된 북마크만 나열할 수 있습니다.
 
 ### TAG-MARK 기술 스택
-* Client: HTML, CSS, TypeScript, React
+* Client: HTML, CSS, TypeScript, React, Redux
 * Design: Styled-Component
 
+## TAG-MARK 개발환경
+* Ubuntu - 20.04
+* node - 16.13.0
+* npm - 8.1.0
+
+## TAG-MARK 명령어
+* 종속성 설치: npm install
+* 종속성 설치중 ERESOLVE에러 발생시:
+    npm install --legacy-peer-deps
+    npm audit fix --legacy-peer-deps
+* 실행: npm run start
