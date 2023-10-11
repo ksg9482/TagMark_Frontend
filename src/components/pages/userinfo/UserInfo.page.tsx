@@ -208,49 +208,62 @@ export const UserInfo = () => {
   useEffect(() => {
     getUserInfo();
   }, []);
+  const BookmarkCountBlock = () => {
+    return (
+      <div>총 북마크 개수 : {newUserInfo.bookmarkCount} </div>
+    )
+  }
+  const TagGraphBlock = () => {
+    return (
+      <TagAreaContainer className="tag-area">
+        <div>총 태그 개수 : {newUserInfo.tagCount}</div>
+        <GraphContainer className="graph_con">
+          {MyResponsivePie(tagGraphData)}
+        </GraphContainer>
+      </TagAreaContainer>
+    )
+  }
+  const MyDataManageBlock = () => {
+    return (<MyDataContainer className="userinfo-area">
+      <div>내 정보</div>
+      <MyInfoContainer>
+        <div className="email-info">
+          <div>이메일 : {newUserInfo.email}</div>
+          {newUserInfo.type !== "BASIC" ? (
+            <div>소셜로그인입니다</div>
+          ) : (
+            <div>&nbsp;</div>
+          )}
+        </div>
+        <div>닉네임 : {newUserInfo.nickname}</div>
+      </MyInfoContainer>
+      <MyDataButtonContainer>
+        <CommonButton
+          className="edit-button"
+          onClick={(e) => modalHandle.openModal("edit")}
+        >
+          정보변경{" "}
+        </CommonButton>
+        <CommonButton
+          className="delete-button"
+          onClick={(e) => modalHandle.openModal("delete")}
+        >
+          회원탈퇴{" "}
+        </CommonButton>
+      </MyDataButtonContainer>
+    </MyDataContainer>)
+  }
   const UserInfoContent = () => {
     return (
       <UserInfoContainer id="user-info">
         <Helmet>MyPage | TAG-MARK</Helmet>
         {useModal.isShowModal ? modalHandle.modalPage() : null}
         <BookmarkAreaContainer className="bookmark-area">
-          <div>총 북마크 개수 : {newUserInfo.bookmarkCount} </div>
+          <BookmarkCountBlock />
         </BookmarkAreaContainer>
         <SubContainer id="sub-container">
-          <TagAreaContainer className="tag-area">
-            <div>총 태그 개수 : {newUserInfo.tagCount}</div>
-            <GraphContainer className="graph_con">
-              {MyResponsivePie(tagGraphData)}
-            </GraphContainer>
-          </TagAreaContainer>
-          <MyDataContainer className="userinfo-area">
-            <div>내 정보</div>
-            <MyInfoContainer>
-              <div className="email-info">
-                <div>이메일 : {newUserInfo.email}</div>
-                {newUserInfo.type !== "BASIC" ? (
-                  <div>소셜로그인입니다</div>
-                ) : (
-                  <div>&nbsp;</div>
-                )}
-              </div>
-              <div>닉네임 : {newUserInfo.nickname}</div>
-            </MyInfoContainer>
-            <MyDataButtonContainer>
-              <CommonButton
-                className="edit-button"
-                onClick={(e) => modalHandle.openModal("edit")}
-              >
-                정보변경{" "}
-              </CommonButton>
-              <CommonButton
-                className="delete-button"
-                onClick={(e) => modalHandle.openModal("delete")}
-              >
-                회원탈퇴{" "}
-              </CommonButton>
-            </MyDataButtonContainer>
-          </MyDataContainer>
+          <TagGraphBlock />
+          <MyDataManageBlock />
         </SubContainer>
       </UserInfoContainer>
     );
