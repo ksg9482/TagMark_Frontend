@@ -748,10 +748,15 @@ export const BookMark = () => {
         tagNames: localTagNamesArr,
       };
       await customAxios.post(`/bookmark/sync`, syncBookmarkBody);
+
+      /**
+       * 싱크된 데이터로 북마크 리로드. 북마크 내부 데이터 관리용
+       */
       // eslint-disable-next-line no-restricted-globals
       location.reload();
     }
   };
+
   const startsequence = async () => {
     setLoad(true);
     if (isLogin) {
@@ -760,19 +765,22 @@ export const BookMark = () => {
     await getBookmark(isLogin);
     setLoad(false);
   };
+  
+  const currentPageRefresh = (currentPage: number) => {
+    window.sessionStorage.removeItem("current-page");
+    window.sessionStorage.setItem("current-page", String(currentPage));
+  };
+
   useEffect(() => {
-    if (!isLogin && !secure().local().getItem("local-bookmark-storage")) {
+    const localItem = secure().local().getItem("local-bookmark-storage");
+
+    if (!isLogin && (!localItem || Array(...JSON.parse(localItem)).length <= 0)) {
       secure()
         .local()
         .setItem("local-bookmark-storage", JSON.stringify(defaultBookmark));
     }
     startsequence();
   }, []);
-
-  const currentPageRefresh = (currentPage: number) => {
-    window.sessionStorage.removeItem("current-page");
-    window.sessionStorage.setItem("current-page", String(currentPage));
-  };
 
   useEffect(() => {
     const isPage = Number(window.sessionStorage.getItem("current-page"));
@@ -781,12 +789,26 @@ export const BookMark = () => {
     } else {
       window.sessionStorage.setItem("current-page", String(currentPageNum));
     }
+
   }, []);
 
   const Loading = () => {
     return <LoadingBar />;
   };
-
+  const SelectedTag = () => {
+    return currentTag[0]?.length > 0 ? <div>{currentTag.join(", ")}</div> : <div>&nbsp;</div>
+  }
+  const BookmarkManageButtonBlock = () => {
+    return (
+      <BookmarkManagebuttonContainer>
+              <div></div>
+              <ManageButtonContainer>
+                <CommonButton onClick={bookmarkRefresh}>초기화</CommonButton>
+                <CommonButton onClick={bookmarkCreate}>북마크생성</CommonButton>
+              </ManageButtonContainer>
+            </BookmarkManagebuttonContainer>
+    )
+  }
   const MainContent = () => {
     return (
       <BookmarkContainer id="main-content">
@@ -798,13 +820,7 @@ export const BookMark = () => {
         <div></div>
         <BookmarkManageContainer>
           <ContentBox>
-            <BookmarkManagebuttonContainer>
-              <div></div>
-              <ManageButtonContainer>
-                <CommonButton onClick={bookmarkRefresh}>초기화</CommonButton>
-                <CommonButton onClick={bookmarkCreate}>북마크생성</CommonButton>
-              </ManageButtonContainer>
-            </BookmarkManagebuttonContainer>
+          <BookmarkManageButtonBlock />
             {useCreate.isShow ? (
               <BookmarkCreateBlock
                 useCreate={useCreate}
@@ -812,11 +828,7 @@ export const BookMark = () => {
               />
             ) : null}
             <TagText>
-              {currentTag[0]?.length > 0 ? (
-                <div>{currentTag.join(", ")}</div>
-              ) : (
-                <div>&nbsp;</div>
-              )}
+              <SelectedTag />
             </TagText>
             <Bookmarks
               getTagBookmark={getTagBookmark}
