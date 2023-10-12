@@ -9,16 +9,14 @@ import {
 import "react-tooltip/dist/react-tooltip.css";
 import { deepCopy, secure } from "../../../utils";
 import { customAxios } from "../../../utils/axios/customAxios";
-import Bookmarks from "../../blocks/bookmark/Bookmarks";
+import BookmarksBlock from "../../blocks/bookmark/BookmarksBlock";
 import { PageMoveBlock } from "../../blocks/bookmark/pageMove/PageMoveBlock";
 import SideBar from "../../blocks/sidebar/Sidebar";
 import { BookmarkCreateBlock } from "../../blocks/bookmark/BookmarkCreateBlock";
 import {
   BookmarkContainer,
-  BookmarkManagebuttonContainer,
   BookmarkManageContainer,
   ContentBox,
-  ManageButtonContainer,
   TagText,
 } from "./styles";
 import { LoadingBar } from "../../common/loading";
@@ -41,7 +39,7 @@ import {
   updateCurrentTag,
   updateCurrentSearch,
 } from "../../../store/slices/currentSlice";
-import { CommonButton } from "../../common/style";
+import { BookmarkManageButtonBlock } from "../../blocks/bookmark/BookmarkManageButtonBlock";
 
 export const BookMark = () => {
   const dispach = useDispatch();
@@ -458,9 +456,6 @@ export const BookMark = () => {
     }
   };
   const setNewBookmark = async (createBookmarkData: CreateBookmarkData) => {
-    if (!isLogin && totalCount >= 100) {
-      return;
-    }
     const lastId = originBookmarks[0]?.id || 1;
     const id = lastId + 1;
     const url = createBookmarkData.url;
@@ -668,38 +663,35 @@ export const BookMark = () => {
     );
   };
 
+  const currentSearchHandle = (currentSearch:CurrentSearch, bookmarks:any) => {
+    currentHandle.updateCurrentSearch(currentSearch);
+    originBookmarkHandle.updateOriginBookmarks(bookmarks);
+    bookmarkHandle.updateLocalBookmarkPage(
+      setLocalPagenation(bookmarks, 20)
+    );
+    bookmarkHandle.updateBookmarkView(bookmarks);
+    return currentSearch;
+  }
+
   const pagenationNum = async (num: number) => {
     if (isLogin) {
       if (currentSearch === CurrentSearch.Bookmark) {
         const bookmarks = await customAxios.get(`/bookmark?pageNo=${num}`);
-        currentHandle.updateCurrentSearch(CurrentSearch.Bookmark);
-        originBookmarkHandle.updateOriginBookmarks(bookmarks.data.bookmarks);
-        bookmarkHandle.updateLocalBookmarkPage(
-          setLocalPagenation(bookmarks.data.bookmarks, 20)
-        );
-        bookmarkHandle.updateBookmarkView(bookmarks.data.bookmarks);
+        currentSearchHandle(CurrentSearch.Bookmark, bookmarks.data.bookmarks);
       }
       if (currentSearch === CurrentSearch.TagSearch) {
         const andSearch = await customAxios.get(
           `/bookmark/search-and?tags=${currentTag.join("+")}&pageNo=${num}`
         );
-        currentHandle.updateCurrentSearch(CurrentSearch.TagSearch);
-        originBookmarkHandle.updateOriginBookmarks(andSearch.data.bookmarks);
-        bookmarkHandle.updateLocalBookmarkPage(
-          setLocalPagenation(andSearch.data.bookmarks, 20)
-        );
-        bookmarkHandle.updateBookmarkView(andSearch.data.bookmarks);
+        currentSearchHandle(CurrentSearch.TagSearch, andSearch.data.bookmarks);
+
       }
       if (currentSearch === CurrentSearch.SideBarSearch) {
         const orSearch = await customAxios.get(
           `/bookmark/search-or?tags=${currentTag.join("+")}&pageNo=${num}`
         );
-        currentHandle.updateCurrentSearch(CurrentSearch.SideBarSearch);
-        originBookmarkHandle.updateOriginBookmarks(orSearch.data.bookmarks);
-        bookmarkHandle.updateLocalBookmarkPage(
-          setLocalPagenation(orSearch.data.bookmarks, 20)
-        );
-        bookmarkHandle.updateBookmarkView(orSearch.data.bookmarks);
+        currentSearchHandle(CurrentSearch.SideBarSearch, orSearch.data.bookmarks);
+
       }
       currentHandle.updateCurrentPageNum(num);
       currentPageRefresh(num);
@@ -750,7 +742,7 @@ export const BookMark = () => {
       await customAxios.post(`/bookmark/sync`, syncBookmarkBody);
 
       /**
-       * 싱크된 데이터로 북마크 리로드. 북마크 내부 데이터 관리용
+       * 싱크된 데이터로 북마크 리로드.
        */
       // eslint-disable-next-line no-restricted-globals
       location.reload();
@@ -798,17 +790,6 @@ export const BookMark = () => {
   const SelectedTag = () => {
     return currentTag[0]?.length > 0 ? <div>{currentTag.join(", ")}</div> : <div>&nbsp;</div>
   }
-  const BookmarkManageButtonBlock = () => {
-    return (
-      <BookmarkManagebuttonContainer>
-              <div></div>
-              <ManageButtonContainer>
-                <CommonButton onClick={bookmarkRefresh}>초기화</CommonButton>
-                <CommonButton onClick={bookmarkCreate}>북마크생성</CommonButton>
-              </ManageButtonContainer>
-            </BookmarkManagebuttonContainer>
-    )
-  }
   const MainContent = () => {
     return (
       <BookmarkContainer id="main-content">
@@ -820,7 +801,11 @@ export const BookMark = () => {
         <div></div>
         <BookmarkManageContainer>
           <ContentBox>
-          <BookmarkManageButtonBlock />
+          <BookmarkManageButtonBlock 
+            buttonFn={{
+              bookmarkRefresh,
+              bookmarkCreate
+          }}/>
             {useCreate.isShow ? (
               <BookmarkCreateBlock
                 useCreate={useCreate}
@@ -830,7 +815,7 @@ export const BookMark = () => {
             <TagText>
               <SelectedTag />
             </TagText>
-            <Bookmarks
+            <BookmarksBlock
               getTagBookmark={getTagBookmark}
               onBookmarkDelete={onBookmarkDelete}
               editSave={editSave}
