@@ -155,10 +155,10 @@ export const UserInfo = () => {
   };
   const getUserInfo = async () => {
     setLoad(true);
-    let userInfo = await sendGetUserInfo();
-    let bookmarkCount = await sendGetBookmarkCount();
-    let tagCount = await sendGetTagCount();
-
+    // let userInfo = await sendGetUserInfo();
+    // let bookmarkCount = await sendGetBookmarkCount();
+    // let tagCount = await sendGetTagCount();
+    const [userInfo, bookmarkCount, tagCount] = await Promise.all([sendGetUserInfo(), sendGetBookmarkCount(), sendGetTagCount()])
     const graphData = tagCount.data.tags.map((tag: any) => {
       return {
         id: tag.tag,
