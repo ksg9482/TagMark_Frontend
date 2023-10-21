@@ -4,7 +4,7 @@ import { RootState } from "../../../store";
 import BookmarkComponent from "./BookmarkComponent";
 import { BookmarkComponentInner, BookmarksContainer } from "./style";
 
-const Bookmarks = (props: any) => {
+const BookmarksBlock = (props: any) => {
   const bookmarkView = useSelector((state: RootState) => {
     return state.bookmark.bookmarkView;
   });
@@ -28,4 +28,4 @@ const Bookmarks = (props: any) => {
   );
 };
 
-export default Bookmarks;
+export default BookmarksBlock;

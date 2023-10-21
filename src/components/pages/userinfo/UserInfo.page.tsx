@@ -13,30 +13,30 @@ import {
 import { customAxios } from "../../../utils/axios/customAxios";
 import { secure } from "../../../utils/secure";
 import { LoadingBar } from "../../common/loading";
-import { MyResponsivePie } from "../../blocks/userInfo/tagGraph";
 import { UserInfoModalPage } from "../modal/UserInfoModalPage";
 import {
   BookmarkAreaContainer,
-  GraphContainer,
-  MyDataButtonContainer,
-  MyDataContainer,
-  MyInfoContainer,
   SubContainer,
-  TagAreaContainer,
   UserInfoContainer,
 } from "./style";
-import { CommonButton } from "../../common/style";
+import { MyDataManageBlock } from "../../blocks/userInfo/myDataManage";
+import { TagGraphBlock } from "../../blocks/userInfo/tagGraph";
 
-interface UserInfo {
+export interface UserInfo {
   email: string;
   nickname: string;
   type: string;
   bookmarkCount: number;
   tagCount: number;
 }
+
+export interface ModalHandle {
+  modalPage: () => JSX.Element;
+  openModal: (key: "edit" | "delete") => void;
+}
 export const UserInfo = () => {
   const dispach = useDispatch();
-  const newUserInfo = useSelector((state: RootState) => {
+  const myInfo = useSelector((state: RootState) => {
     return {
       email: state.user.email,
       nickname: state.user.nickname,
@@ -135,7 +135,7 @@ export const UserInfo = () => {
       openModal,
     };
   };
-  const modalHandle = ModalHandle();
+  const modalHandle: ModalHandle = ModalHandle();
 
   const sendGetUserInfo = async () => {
     return await customAxios.get(`/user`);
@@ -155,10 +155,14 @@ export const UserInfo = () => {
   };
   const getUserInfo = async () => {
     setLoad(true);
-    let userInfo = await sendGetUserInfo();
-    let bookmarkCount = await sendGetBookmarkCount();
-    let tagCount = await sendGetTagCount();
-
+    // let userInfo = await sendGetUserInfo();
+    // let bookmarkCount = await sendGetBookmarkCount();
+    // let tagCount = await sendGetTagCount();
+    const [userInfo, bookmarkCount, tagCount] = await Promise.all([
+      sendGetUserInfo(),
+      sendGetBookmarkCount(),
+      sendGetTagCount(),
+    ]);
     const graphData = tagCount.data.tags.map((tag: any) => {
       return {
         id: tag.tag,
@@ -183,7 +187,7 @@ export const UserInfo = () => {
     try {
       await customAxios.patch(`/user`, editUser);
       userInfoHandle.updateUserInfo({
-        ...newUserInfo,
+        ...myInfo,
         nickname: secureWrap.decryptWrapper(editUser.nickname),
       });
     } catch (error) {
@@ -195,10 +199,7 @@ export const UserInfo = () => {
     return result.data.valid;
   };
   const sendDeleteUser = async (password: string) => {
-    if (
-      !(await deletePasswordCheck(password)) &&
-      newUserInfo.type === "BASIC"
-    ) {
+    if (!(await deletePasswordCheck(password)) && myInfo.type === "BASIC") {
       updateErrorMessage("비밀번호가 다릅니다.");
       return { error: "비밀번호가 다릅니다." };
     }
@@ -208,49 +209,21 @@ export const UserInfo = () => {
   useEffect(() => {
     getUserInfo();
   }, []);
+  const BookmarkCountBlock = () => {
+    return <div>총 북마크 개수 : {myInfo.bookmarkCount} </div>;
+  };
+
   const UserInfoContent = () => {
     return (
       <UserInfoContainer id="user-info">
         <Helmet>MyPage | TAG-MARK</Helmet>
         {useModal.isShowModal ? modalHandle.modalPage() : null}
         <BookmarkAreaContainer className="bookmark-area">
-          <div>총 북마크 개수 : {newUserInfo.bookmarkCount} </div>
+          <BookmarkCountBlock />
         </BookmarkAreaContainer>
         <SubContainer id="sub-container">
-          <TagAreaContainer className="tag-area">
-            <div>총 태그 개수 : {newUserInfo.tagCount}</div>
-            <GraphContainer className="graph_con">
-              {MyResponsivePie(tagGraphData)}
-            </GraphContainer>
-          </TagAreaContainer>
-          <MyDataContainer className="userinfo-area">
-            <div>내 정보</div>
-            <MyInfoContainer>
-              <div className="email-info">
-                <div>이메일 : {newUserInfo.email}</div>
-                {newUserInfo.type !== "BASIC" ? (
-                  <div>소셜로그인입니다</div>
-                ) : (
-                  <div>&nbsp;</div>
-                )}
-              </div>
-              <div>닉네임 : {newUserInfo.nickname}</div>
-            </MyInfoContainer>
-            <MyDataButtonContainer>
-              <CommonButton
-                className="edit-button"
-                onClick={(e) => modalHandle.openModal("edit")}
-              >
-                정보변경{" "}
-              </CommonButton>
-              <CommonButton
-                className="delete-button"
-                onClick={(e) => modalHandle.openModal("delete")}
-              >
-                회원탈퇴{" "}
-              </CommonButton>
-            </MyDataButtonContainer>
-          </MyDataContainer>
+          <TagGraphBlock tagGraphData={tagGraphData} />
+          <MyDataManageBlock modalHandle={modalHandle} />
         </SubContainer>
       </UserInfoContainer>
     );
